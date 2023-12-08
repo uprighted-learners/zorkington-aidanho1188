@@ -18,3 +18,18 @@ On the door is a handwritten sign.`;
   console.log('Now write your code to make this work!');
   process.exit();
 }
+
+//  state machine
+let locationCurrent = "here";
+
+let locationLookUp = {
+  // location : location
+};
+
+let locationStates= {
+  // location : [posible locations]
+}
+
+function moveLocation(newLocation) {
+  // using locationState, if location is valid, move! else return an error
+}
