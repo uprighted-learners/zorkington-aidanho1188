@@ -44,7 +44,7 @@ class player {
     this.inventory = inventory;
     this.status = status;
   }
-
+  // add player actions functions here, pick, drop, use item
 }
 
 class item {
@@ -55,8 +55,6 @@ class item {
     read = function() {
       return this.description;
     }
-    // can probably add a use/drop/take item function here
-    // but I still need to know the game logic first!
   }
 }
 
@@ -109,7 +107,7 @@ function take(item) {
 // >_open door
 // The door is locked. There is a keypad on the door handle.
 function isLocked(){
-  
+  // this is where we use the state machine!
 }
 
 // TODO: Speak friend and enter
@@ -121,7 +119,7 @@ function isLocked(){
 // You enter the foyer and the door shuts behind you.
 // **And** the player moves into the `next room`
 function isSolved(password) {
-  
+  // state machine again...
 }
 
 // TODO: Unauthorized Access
@@ -132,7 +130,7 @@ function isSolved(password) {
 // Bzzzzt! The door is still locked.
 // **And** the player remains in the `starting room`
 function isIncorrectPassword(password) {
-
+  // state machine, look up location and location password
 }
 
 
@@ -148,7 +146,8 @@ function isIncorrectPassword(password) {
 // Anyways, it's definitely not a mudroom. 
 // A copy of the local paper lies in a corner.
 function displayAvailableItems() {
-
+  // display location.description;
+  // display location.inventory
 }
 
 // TODO: Inventory
@@ -161,7 +160,7 @@ function displayAvailableItems() {
 // and ignoring the articles, just like everybody else does.
 // **And** the item is added to the player's `inventory`
 function pickUp(item){
-
+  // return player.inventory += player.pick(item);
 }
 
 // TODO: Display Inventory
@@ -171,9 +170,8 @@ function pickUp(item){
 // You are carrying:
 // A copy of the local paper
 function displayInventory(){
-
+  return console.log(player.inventory());
 }
-
 
 // TODO: Drop Inventory
 // **Given** an item is in the player's `inventory`
@@ -183,6 +181,7 @@ function displayInventory(){
 // You drop the paper
 // **And** that item is added to the current room's `inventory`
 function drop(item) {
+  player.drop(item);
   return console.log(`You drop the ${item.name}`);
 }
 
@@ -190,7 +189,8 @@ function drop(item) {
 // **Given** you have unlocked a door
 // **When** you try and open the door again
 // **Then** the door should still be unlocked, and allow you to pass to the next room
-function unlocked(door) {
+function unlocked(door) { // pass location into "door"
+  // state machines 
   return door.locked; // door aka door location is a object with locked as the property?
 }
 
