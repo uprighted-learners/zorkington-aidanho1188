@@ -14,8 +14,11 @@ function ask(questionText) {
 start();
 
 async function start() {
+  const startRoom = new Location(obj[0].name, obj[0].description, obj[0].inventory);
+
+
   const welcomeMessage = `182 Main St.
-You are standing on Main Street between Church and South Winooski.
+You are standing on Main Street between Church and South W;inooski.
 There is a door here. A keypad sits on the handle.
 On the door is a handwritten sign.`;
   let answer = await ask(welcomeMessage);
@@ -35,15 +38,18 @@ On the door is a handwritten sign.`;
 
 // * helper functions
 
-class location {
+class Location {
   constructor(description, connection, inventory) {
     this.description = description;
     this.connection = connection;
     this.inventory = inventory;
   }
+
+  getDescription = () => { return this.description; }
+  getAvailableItems = () =>{ return this.inventory; }
 }
 
-class player {
+class Player {
   constructor(inventory, status) {
     this.inventory = inventory;
     this.status = status;
@@ -72,13 +78,18 @@ class player {
   }
 }
 
-class item {
-  constructor(name, description){
+class Item {
+  constructor(name, description, isTakeable){
     this.name = name;
     this.description = description;
     this.location = location;
-    getDescription = function() {
+    this.isTakeable = isTakeable;
+    getDescription = () => {
       return this.description;
+    }
+
+    getIsTakeable = () => {
+      return this.isTakeable;
     }
   }
 }
@@ -116,25 +127,12 @@ function moveLocation(newLocation) {
 // **And** puts the player in the `starting room`
 // **And** returns to the prompt
 function interact(command, target) {
-  if (player.hasOwnProperty(command)) {
-    player.command(target);
+  if (Player.hasOwnProperty(command)) {
+    Player.command(target);
   } else {
     console.log("I don't know \"${command}\".")
   }
 }
-
-
-// TODO: Immovable Objects
-// **Given** the player is in the `starting room`
-// **When** the player attempts to take something that is not takeable
-// **Then** the game denies the player
-// >_take sign
-// That would be selfish. How will other students find their way?
-// (assume " **And** returns to the prompt" after this and all future stories)
-function isTakeable(item) {
-  return item.isTakeable;
-}
-
 
 // TODO: Locked Out
 // **Given** the player is in the `starting room`
