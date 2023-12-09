@@ -1,4 +1,8 @@
 const readline = require("readline");
+const fs = require("fs");
+const jsonData = fs.readFileSync("rooms.json");
+const obj = JSON.parse(jsonData);
+console.log(obj);
 const readlineInterface = readline.createInterface(process.stdin, process.stdout);
 
 function ask(questionText) {
@@ -15,7 +19,7 @@ You are standing on Main Street between Church and South Winooski.
 There is a door here. A keypad sits on the handle.
 On the door is a handwritten sign.`;
   let answer = await ask(welcomeMessage);
-  console.log("Now write your code to make this work!");
+  await prompt(answer);
   process.exit();
 }
 
@@ -62,25 +66,25 @@ class item {
 let locationCurrent = "startRoom";
 
 let locationLookUp = {
-  startRoom : startRoom,
-  room1: room1,
-  room2: room2,
-  room3: room3,
-  room4: room4
+  // startRoom : startRoom,
+  // room1: room1,
+  // room2: room2,
+  // room3: room3,
+  // room4: room4
 }
 
 let locationStates = {
-  startRoom : [room1, room2, room3, room4],
-  room1: [startRoom],
-  room2: [startRoom],
-  room3: [startRoom]
+  // startRoom : [room1, room2, room3, room4],
+  // room1: [startRoom],
+  // room2: [startRoom],
+  // room3: [startRoom]
 }
 
 function moveLocation(newLocation) {
   // using locationState, if location is valid, move! else return an error
 }
 
-// TODO: Interact With an Item
+// Interact With an Item
 // **Given** the player has been given introductory text
 // **When** the player enters a valid command, and target
 // **Then** the game should output accordingly
@@ -90,8 +94,12 @@ function moveLocation(newLocation) {
 // If the door is locked, use the code 12345."
 // **And** puts the player in the `starting room`
 // **And** returns to the prompt
-function action(item) {
-  return item.read();
+function interact(command, target) {
+  if (player.hasOwnProperty(command)) {
+    player.command(target);
+  } else {
+    console.log("I don't know ${command}.")
+  }
 }
 
 
@@ -211,16 +219,8 @@ function unlocked(door) { // pass location into "door"
 
 
 // from README.md
-async function prompt(message) {
+async function prompt(answer) {
   while (answer !== "exit") {
     answer = await ask(">_ ");
   }
 }
-
-// item object with properties
-// let sign = {
-//   description: "Welcome to Burlington Code Academy! Come on up to the third floor.\nIf the door is locked, use the code 12345.",
-//   read: () => {
-//     return this.description;
-//   },
-// };
