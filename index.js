@@ -59,14 +59,21 @@ class item {
 }
 
 //  state machine
-let locationCurrent = "here";
+let locationCurrent = "startRoom";
 
 let locationLookUp = {
-  // location : location
+  startRoom : startRoom,
+  room1: room1,
+  room2: room2,
+  room3: room3,
+  room4: room4
 }
 
 let locationStates = {
-  // location : [posible locations]
+  startRoom : [room1, room2, room3, room4],
+  room1: [startRoom],
+  room2: [startRoom],
+  room3: [startRoom]
 }
 
 function moveLocation(newLocation) {
