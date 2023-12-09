@@ -44,6 +44,20 @@ class player {
     this.inventory = inventory;
     this.status = status;
   }
+
+}
+
+class item {
+  constructor(name, description){
+    this.name = name;
+    this.description = description;
+    this.location = location;
+    read = function() {
+      return this.description;
+    }
+    // can probably add a use/drop/take item function here
+    // but I still need to know the game logic first!
+  }
 }
 
 //  state machine
@@ -51,15 +65,15 @@ let locationCurrent = "here";
 
 let locationLookUp = {
   // location : location
-};
+}
 
 let locationStates = {
   // location : [posible locations]
-};
+}
 
 function moveLocation(newLocation) {
   // using locationState, if location is valid, move! else return an error
-};
+}
 
 // TODO: Interact With an Item
 // **Given** the player has been given introductory text
@@ -71,8 +85,8 @@ function moveLocation(newLocation) {
 // If the door is locked, use the code 12345."
 // **And** puts the player in the `starting room`
 // **And** returns to the prompt
-function action() {
-
+function action(item) {
+  return item.read();
 }
 
 
@@ -84,7 +98,7 @@ function action() {
 // That would be selfish. How will other students find their way?
 // (assume " **And** returns to the prompt" after this and all future stories)
 function take(item) {
-
+  return player.inventory = item;
 }
 
 
@@ -169,7 +183,7 @@ function displayInventory(){
 // You drop the paper
 // **And** that item is added to the current room's `inventory`
 function drop(item) {
-
+  return console.log(`You drop the ${item.name}`);
 }
 
 // TODO: Keep Doors Open
@@ -177,7 +191,7 @@ function drop(item) {
 // **When** you try and open the door again
 // **Then** the door should still be unlocked, and allow you to pass to the next room
 function unlocked(door) {
-
+  return door.locked; // door aka door location is a object with locked as the property?
 }
 
 // TODO: Create More Rooms
@@ -194,12 +208,12 @@ async function prompt(message) {
   while (answer !== "exit") {
     answer = await ask(">_ ");
   }
-};
+}
 
 // item object with properties
-let sign = {
-  description: "Welcome to Burlington Code Academy! Come on up to the third floor.\nIf the door is locked, use the code 12345.",
-  read: () => {
-    return this.description;
-  },
-};
+// let sign = {
+//   description: "Welcome to Burlington Code Academy! Come on up to the third floor.\nIf the door is locked, use the code 12345.",
+//   read: () => {
+//     return this.description;
+//   },
+// };
