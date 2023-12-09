@@ -95,8 +95,8 @@ function action(item) {
 // >_take sign
 // That would be selfish. How will other students find their way?
 // (assume " **And** returns to the prompt" after this and all future stories)
-function take(item) {
-  return player.inventory = item;
+function isTakeable(item) {
+  return item.isTakeable;
 }
 
 
