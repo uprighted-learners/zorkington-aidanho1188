@@ -24,10 +24,11 @@ function ask(questionText) {
 // * helper functions
 
 class Location {
-  constructor(description, connection, inventory, isUnlocked) {
+  constructor(name, description, inventory, connection, isUnlocked) {
+    this.name = name;
     this.description = description;
-    this.connection = connection;
     this.inventory = inventory;
+    this.connection = connection;
     this.isUnlocked = isUnlocked;
   }
 
@@ -38,7 +39,7 @@ class Location {
 class Player {
   constructor(inventory, status) {
     this.inventory = inventory;
-    this.status = status;
+    this.status = status; // current location?
   }
   // player actions functions
   read = (item) => {
@@ -80,38 +81,47 @@ class Item {
   }
 }
 
+
+const startRoom = new Location(obj[0].name, obj[0].description, obj[0].inventory);
+const room1 = new Location(obj[1].name, obj[1].description, obj[1].inventory);
+const room2 = new Location(obj[2].name, obj[2].description, obj[2].inventory);
+const room3 = new Location(obj[3].name, obj[3].description, obj[3].inventory);
+const room4 = new Location(obj[4].name, obj[4].description, obj[4].inventory);
+
 //  state machine
 let locationCurrent = "startRoom";
 
 let locationLookUp = {
-  // startRoom : startRoom,
-  // room1: room1,
-  // room2: room2,
-  // room3: room3,
-  // room4: room4
+  startRoom : startRoom,
+  room1: room1,
+  room2: room2,
+  room3: room3,
+  room4: room4
 }
 
 let locationStates = {
-  // startRoom : [room1, room2, room3, room4],
-  // room1: [startRoom],
-  // room2: [startRoom],
-  // room3: [startRoom]
+  startRoom : [room1, room2, room3, room4],
+  room1: [startRoom],
+  room2: [startRoom],
+  room3: [startRoom],
+  room4: [startRoom]
 }
 
 function moveLocation(newLocation) {
   // using locationState, if location is valid, move! else return an error
+  if (locationStates[locationCurrent].includes(newLocation)){
+    locationCurrent = newLocation;
+    console.log(locationLookUp[locationCurrent].description);
+  } else {
+    console.log(`You can't move from ${locationCurrent} to ${newLocation}`);
+  }
 }
 
 start();
 
 async function start() {
-  const startRoom = new Location(obj[0].name, obj[0].description, obj[0].inventory);
-
-
-  const welcomeMessage = `182 Main St.
-You are standing on Main Street between Church and South W;inooski.
-There is a door here. A keypad sits on the handle.
-On the door is a handwritten sign.`;
+  const player = new Player();
+  const welcomeMessage = startRoom.getDescription();
   let answer = await ask(welcomeMessage);
   await prompt(answer);
   process.exit();

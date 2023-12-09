@@ -1,37 +1,37 @@
 [
     {
         "name": "Main Street",
-        "description": "182 Main St. You are standing on Main Street between Church and South Winooski.There is a door here. A keypad sits on the handle. On the door is a handwritten sign.",
-        "inventory": []
+        "description": "182 Main St. \nYou are standing on Main Street between Church and South Winooski.\nThere is a door here. A keypad sits on the handle. \nOn the door is a handwritten sign.",
+        "inventory": [""]
     },
     {
         "name" :"Church",
         "description": "Church describtion...",
-        "inventory": []
+        "inventory": [""]
     },
     {
         "name" :"South Winoosk",
         "description": "South Winoosk describtion...",
-        "inventory": []
+        "inventory": [""]
     },
     {
         "name" :"Church Basement",
         "description": "Church Basement describtion...",
-        "inventory": []
+        "inventory": [""]
     },
     {
         "name" :"Forrest",
         "description": "Forrest describtion...",
-        "inventory": []
+        "inventory": [""]
     },
     {
         "name" :"Mountain",
         "description": "Mountain describtion...",
-        "inventory": []
+        "inventory": [""]
     },
     {
         "name" :"Cliff",
         "description": "Cliff describtion...",
-        "inventory": []
+        "inventory": [""]
     }
 ]
