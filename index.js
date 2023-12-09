@@ -11,21 +11,6 @@ function ask(questionText) {
   });
 }
 
-start();
-
-async function start() {
-  const startRoom = new Location(obj[0].name, obj[0].description, obj[0].inventory);
-
-
-  const welcomeMessage = `182 Main St.
-You are standing on Main Street between Church and South W;inooski.
-There is a door here. A keypad sits on the handle.
-On the door is a handwritten sign.`;
-  let answer = await ask(welcomeMessage);
-  await prompt(answer);
-  process.exit();
-}
-
 // * current room
 //   * room descriptions (immutable)
 //   * room connections (immutable)
@@ -39,10 +24,11 @@ On the door is a handwritten sign.`;
 // * helper functions
 
 class Location {
-  constructor(description, connection, inventory) {
+  constructor(description, connection, inventory, isUnlocked) {
     this.description = description;
     this.connection = connection;
     this.inventory = inventory;
+    this.isUnlocked = isUnlocked;
   }
 
   getDescription = () => { return this.description; }
@@ -116,6 +102,21 @@ function moveLocation(newLocation) {
   // using locationState, if location is valid, move! else return an error
 }
 
+start();
+
+async function start() {
+  const startRoom = new Location(obj[0].name, obj[0].description, obj[0].inventory);
+
+
+  const welcomeMessage = `182 Main St.
+You are standing on Main Street between Church and South W;inooski.
+There is a door here. A keypad sits on the handle.
+On the door is a handwritten sign.`;
+  let answer = await ask(welcomeMessage);
+  await prompt(answer);
+  process.exit();
+}
+
 // Interact With an Item
 // **Given** the player has been given introductory text
 // **When** the player enters a valid command, and target
@@ -168,7 +169,7 @@ function isIncorrectPassword(password) {
 }
 
 
-// TODO: Foyer
+// Foyer
 // **Given** the player is in the `next room`
 // **Then** the game displays a description, with at least one (takeable) item in said description
 // You are in a foyer. Or maybe it's an antechamber. 
@@ -179,12 +180,12 @@ function isIncorrectPassword(password) {
 // But let's forget all that fancy vocabulary, and just call it a foyer.
 // Anyways, it's definitely not a mudroom. 
 // A copy of the local paper lies in a corner.
-function displayAvailableItems() {
-  // display location.description;
-  // display location.inventory
+function displayRoom() {
+  console.log(Location.getDescription()); 
+  console.log(Location.getAvailableItems());
 }
 
-// TODO: Inventory
+// Inventory
 // **Given** the player is in the `next room`
 // **And** the player has not yet picked up the item
 // **When** the player enters a command to pick it up
@@ -194,7 +195,11 @@ function displayAvailableItems() {
 // and ignoring the articles, just like everybody else does.
 // **And** the item is added to the player's `inventory`
 function pickUp(item){
-  // return player.inventory += player.pick(item);
+  if (item.isTakeable){
+    Player.addItem(item);
+  } else {
+    console.log("I can't take this item");
+  }
 }
 
 // TODO: Display Inventory
@@ -204,19 +209,7 @@ function pickUp(item){
 // You are carrying:
 // A copy of the local paper
 function displayInventory(){
-  return console.log(player.inventory());
-}
-
-// TODO: Drop Inventory
-// **Given** an item is in the player's `inventory`
-// **When** the player types `drop <ITEM>`
-// **Then** that item is removed from the player's `inventory`
-// >_drop paper
-// You drop the paper
-// **And** that item is added to the current room's `inventory`
-function drop(item) {
-  player.drop(item);
-  return console.log(`You drop the ${item.name}`);
+  return console.log(Player.inventory());
 }
 
 // TODO: Keep Doors Open
@@ -225,7 +218,7 @@ function drop(item) {
 // **Then** the door should still be unlocked, and allow you to pass to the next room
 function unlocked(door) { // pass location into "door"
   // state machines 
-  return door.locked; // door aka door location is a object with locked as the property?
+  return door.isUnlocked === false;
 }
 
 // TODO: Create More Rooms
