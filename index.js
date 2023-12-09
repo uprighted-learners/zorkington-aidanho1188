@@ -48,7 +48,28 @@ class player {
     this.inventory = inventory;
     this.status = status;
   }
-  // add player actions functions here, pick, drop, use item
+  // player actions functions
+  read = (item) => {
+    return item.getDescription();
+  }
+
+  pickUp = (item) => {
+    this.inventory = inventory.push(item);
+  }
+
+  drop = (dropItem) => {
+    for (let i = 0; i < this.inventory.length; i++) {
+      if( this.inventory[i] === dropItem){
+        this.inventory.slice(i, 1);
+      }
+    }
+  }
+
+  use = (item) => {
+    if(this.inventory.hasOwnProperty(item) ){
+      // use item logic
+    }
+  }
 }
 
 class item {
@@ -56,7 +77,7 @@ class item {
     this.name = name;
     this.description = description;
     this.location = location;
-    read = function() {
+    getDescription = function() {
       return this.description;
     }
   }
@@ -98,7 +119,7 @@ function interact(command, target) {
   if (player.hasOwnProperty(command)) {
     player.command(target);
   } else {
-    console.log("I don't know ${command}.")
+    console.log("I don't know \"${command}\".")
   }
 }
 
