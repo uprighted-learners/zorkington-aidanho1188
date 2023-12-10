@@ -2,7 +2,7 @@ const readline = require("readline");
 const fs = require("fs");
 const jsonData = fs.readFileSync("rooms.json");
 const obj = JSON.parse(jsonData);
-console.log(obj);
+// console.log(obj);
 const readlineInterface = readline.createInterface(process.stdin, process.stdout);
 
 function ask(questionText) {
@@ -37,23 +37,21 @@ class Location {
 }
 
 class Player {
-  constructor(inventory, status) {
-    this.inventory = inventory;
+  constructor(inventory, status = "startRoom") {
+    this.inventory = [];
     this.status = status; // current location?
   }
   // player actions functions
-  read = (item) => {
-    return item.getDescription();
-  }
+  read = (item) => { return item.getDescription(); }
 
-  pickUp = (item) => {
-    this.inventory = inventory.push(item);
-  }
+  // test passed
+  pickup = (item) => { this.inventory.push(item); }
 
+  // test passed
   drop = (dropItem) => {
     for (let i = 0; i < this.inventory.length; i++) {
       if( this.inventory[i] === dropItem){
-        this.inventory.slice(i, 1);
+        console.log(this.inventory.splice(i, 1));
       }
     }
   }
@@ -71,6 +69,11 @@ class Player {
     } else {
       console.log(`You can't move from ${locationCurrent} to ${newLocation}`);
     }
+  }
+
+  // test passed
+  i = () => {
+    console.log(`You open your inventory and it has ${this.inventory}`);
   }
 }
 
@@ -116,23 +119,13 @@ let locationStates = {
   room4: [startRoom]
 }
 
-// function moveLocation(newLocation) {
-//   // using locationState, if location is valid, move! else return an error
-//   if (locationStates[locationCurrent].includes(newLocation)){
-//     locationCurrent = newLocation;
-//     console.log(locationLookUp[locationCurrent].description);
-//   } else {
-//     console.log(`You can't move from ${locationCurrent} to ${newLocation}`);
-//   }
-// }
-
 start();
 
 async function start() {
   const player = new Player();
   const welcomeMessage = startRoom.getDescription();
   console.log(welcomeMessage);
-  await prompt();
+  await prompt(player, "");
   process.exit();
 }
 
@@ -150,7 +143,7 @@ function interact(command, target) {
   if (Player.hasOwnProperty(command)) {
     Player.command(target);
   } else {
-    console.log("I don't know \"${command}\".")
+    console.log(`I don't know "${command}".`)
   }
 }
 
@@ -160,8 +153,8 @@ function interact(command, target) {
 // **Then** the game denies the player
 // >_open door
 // The door is locked. There is a keypad on the door handle.
-function isLocked(){
-  // this is where we use the state machine!
+function isLocked(room){
+  return room.isLocked;
 }
 
 // TODO: Speak friend and enter
@@ -199,9 +192,9 @@ function isIncorrectPassword(password) {
 // But let's forget all that fancy vocabulary, and just call it a foyer.
 // Anyways, it's definitely not a mudroom. 
 // A copy of the local paper lies in a corner.
-function displayRoom() {
-  console.log(Location.getDescription()); 
-  console.log(Location.getAvailableItems());
+function displayRoom(room) {
+  console.log(room.getDescription()); 
+  console.log(room.getAvailableItems());
 }
 
 // Inventory
@@ -250,8 +243,17 @@ function unlocked(door) { // pass location into "door"
 
 
 // from README.md
-async function prompt(answer) {
+async function prompt(player, answer) {
   while (answer !== "exit") {
     answer = await ask(">_ ");
+    // more logic here
+    // if answer contains command, go to command
+    let input = answer.trim().split(" ");
+    let command = input[0].toLowerCase();
+    let item = input[1];
+    if (player.hasOwnProperty(command)) {
+      player[command](item);
+    }
+    // else
   }
 }
