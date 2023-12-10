@@ -51,14 +51,15 @@ class Player {
   drop = (dropItem) => {
     for (let i = 0; i < this.inventory.length; i++) {
       if( this.inventory[i] === dropItem){
-        console.log(this.inventory.splice(i, 1));
+        console.log(`You dropped ${dropItem}`)
+        this.inventory.splice(i, 1);
       }
     }
   }
 
   use = (item) => {
     if(this.inventory.hasOwnProperty(item) ){
-      // use item logic
+      // item object must pass in the parameter for us to check for it description
     }
   }
 
@@ -139,11 +140,11 @@ async function start() {
 // If the door is locked, use the code 12345."
 // **And** puts the player in the `starting room`
 // **And** returns to the prompt
-function interact(command, target) {
-  if (Player.hasOwnProperty(command)) {
-    Player.command(target);
+function interact(player, command, target) {
+  if (player.hasOwnProperty(command)) {
+    player[command](target);
   } else {
-    console.log(`I don't know "${command}".`)
+    console.log(`I don't know "${command}" command.`)
   }
 }
 
@@ -246,14 +247,14 @@ function unlocked(door) { // pass location into "door"
 async function prompt(player, answer) {
   while (answer !== "exit") {
     answer = await ask(">_ ");
+    if (answer === "exit") {
+      break;
+    }
     // more logic here
     // if answer contains command, go to command
     let input = answer.trim().split(" ");
     let command = input[0].toLowerCase();
     let item = input[1];
-    if (player.hasOwnProperty(command)) {
-      player[command](item);
-    }
-    // else
+    interact(player, command, item);
   }
 }
