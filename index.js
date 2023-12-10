@@ -45,7 +45,7 @@ class Player {
   read = (item) => { return item.getDescription(); }
 
   // test passed
-  pickup = (item) => { this.inventory.push(item); }
+  take = (item) => { this.inventory.push(item); }
 
   // test passed
   drop = (dropItem) => {
@@ -79,18 +79,13 @@ class Player {
 }
 
 class Item {
-  constructor(name, description, isTakeable){
+  constructor(name, description, location, isTakeable){
     this.name = name;
     this.description = description;
     this.location = location;
     this.isTakeable = isTakeable;
-    getDescription = () => {
-      return this.description;
-    }
-
-    getIsTakeable = () => {
-      return this.isTakeable;
-    }
+    getDescription = () =>{ return this.description; }
+    getIsTakeable = () => { return this.isTakeable; }
   }
 }
 
@@ -100,6 +95,9 @@ const room1 = new Location(obj[1].name, obj[1].description, obj[1].inventory);
 const room2 = new Location(obj[2].name, obj[2].description, obj[2].inventory);
 const room3 = new Location(obj[3].name, obj[3].description, obj[3].inventory);
 const room4 = new Location(obj[4].name, obj[4].description, obj[4].inventory);
+
+// ReferenceError: getDescription is not defined
+const sign = new Item("Sign",'The sign says "Welcome to Burlington Code Academy! Come on up to the third floor. If the door is locked, use the code 12345."', "startRoom", false);
 
 //  state machine
 let locationCurrent = "startRoom";
@@ -130,16 +128,6 @@ async function start() {
   process.exit();
 }
 
-// Interact With an Item
-// **Given** the player has been given introductory text
-// **When** the player enters a valid command, and target
-// **Then** the game should output accordingly
-// >_ read sign
-// The sign says "Welcome to Burlington Code Academy!
-// Come on up to the third floor.
-// If the door is locked, use the code 12345."
-// **And** puts the player in the `starting room`
-// **And** returns to the prompt
 function interact(player, command, target) {
   if (player.hasOwnProperty(command)) {
     player[command](target);
@@ -182,7 +170,7 @@ function isIncorrectPassword(password) {
 }
 
 
-// Foyer
+// Foyer (not tested yet)
 // **Given** the player is in the `next room`
 // **Then** the game displays a description, with at least one (takeable) item in said description
 // You are in a foyer. Or maybe it's an antechamber. 
@@ -196,23 +184,6 @@ function isIncorrectPassword(password) {
 function displayRoom(room) {
   console.log(room.getDescription()); 
   console.log(room.getAvailableItems());
-}
-
-// Inventory
-// **Given** the player is in the `next room`
-// **And** the player has not yet picked up the item
-// **When** the player enters a command to pick it up
-// **Then** the game allows the player to do so
-// >_take paper
-// You pick up the paper and leaf through it looking for comics 
-// and ignoring the articles, just like everybody else does.
-// **And** the item is added to the player's `inventory`
-function pickUp(item){
-  if (item.isTakeable){
-    Player.addItem(item);
-  } else {
-    console.log("I can't take this item");
-  }
 }
 
 // TODO: Display Inventory
