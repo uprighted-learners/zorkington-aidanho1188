@@ -63,6 +63,15 @@ class Player {
       // use item logic
     }
   }
+
+  go = (newLocation) => {
+    if (locationStates[locationCurrent].includes(newLocation)){
+      locationCurrent = newLocation;
+      console.log(locationLookUp[locationCurrent].description);
+    } else {
+      console.log(`You can't move from ${locationCurrent} to ${newLocation}`);
+    }
+  }
 }
 
 class Item {
@@ -107,23 +116,23 @@ let locationStates = {
   room4: [startRoom]
 }
 
-function moveLocation(newLocation) {
-  // using locationState, if location is valid, move! else return an error
-  if (locationStates[locationCurrent].includes(newLocation)){
-    locationCurrent = newLocation;
-    console.log(locationLookUp[locationCurrent].description);
-  } else {
-    console.log(`You can't move from ${locationCurrent} to ${newLocation}`);
-  }
-}
+// function moveLocation(newLocation) {
+//   // using locationState, if location is valid, move! else return an error
+//   if (locationStates[locationCurrent].includes(newLocation)){
+//     locationCurrent = newLocation;
+//     console.log(locationLookUp[locationCurrent].description);
+//   } else {
+//     console.log(`You can't move from ${locationCurrent} to ${newLocation}`);
+//   }
+// }
 
 start();
 
 async function start() {
   const player = new Player();
   const welcomeMessage = startRoom.getDescription();
-  let answer = await ask(welcomeMessage);
-  await prompt(answer);
+  console.log(welcomeMessage);
+  await prompt();
   process.exit();
 }
 
@@ -219,7 +228,7 @@ function pickUp(item){
 // You are carrying:
 // A copy of the local paper
 function displayInventory(){
-  return console.log(Player.inventory());
+  return console.log(Player.inventory);
 }
 
 // TODO: Keep Doors Open
