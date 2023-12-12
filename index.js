@@ -1,8 +1,11 @@
 const readline = require("readline");
 const fs = require("fs");
-const jsonData = fs.readFileSync("rooms.json");
-const obj = JSON.parse(jsonData);
-// console.log(obj);
+const { Item } = require("./Item");
+const { Location } = require("./Location");
+const roomsJsonData = fs.readFileSync("roomsList.json");
+const itemsJsonData = fs.readFileSync("itemsList.json");
+const rooms = JSON.parse(roomsJsonData);
+const items = JSON.parse(itemsJsonData);
 const readlineInterface = readline.createInterface(process.stdin, process.stdout);
 
 function ask(questionText) {
@@ -11,38 +14,13 @@ function ask(questionText) {
   });
 }
 
-// * current room
-//   * room descriptions (immutable)
-//   * room connections (immutable)
-//   * room inventory (mutable)
-// * current player
-//   * player inventory (mutable)
-//   * player status (mutable)
-
-// * Main game functions
-
-// * helper functions
-
-class Location {
-  constructor(name, description, inventory, connection, isUnlocked) {
-    this.name = name;
-    this.description = description;
-    this.inventory = inventory;
-    this.connection = connection;
-    this.isUnlocked = isUnlocked;
-  }
-
-  getDescription = () => { return this.description; }
-  getAvailableItems = () =>{ return this.inventory; }
-}
-
 class Player {
   constructor(inventory, status = "startRoom") {
     this.inventory = [];
     this.status = status; // current location?
   }
   // player actions functions
-  read = (item) => { return item.getDescription(); }
+  read = (item) => { return item.getDescription(); } // should I move this to the Item class? and check for item if it has this property? then use it?
 
   // test passed
   take = (item) => { this.inventory.push(item); }
@@ -59,7 +37,7 @@ class Player {
 
   use = (item) => {
     if(this.inventory.hasOwnProperty(item) ){
-      // item object must pass in the parameter for us to check for it description
+      // item object must pass in the parameter for us to check for its description
     }
   }
 
@@ -78,26 +56,13 @@ class Player {
   }
 }
 
-class Item {
-  constructor(name, description, location, isTakeable){
-    this.name = name;
-    this.description = description;
-    this.location = location;
-    this.isTakeable = isTakeable;
-    getDescription = () =>{ return this.description; }
-    getIsTakeable = () => { return this.isTakeable; }
-  }
-}
+const startRoom = new Location(rooms[0].name, rooms[0].description, rooms[0].inventory);
+const room1 = new Location(rooms[1].name, rooms[1].description, rooms[1].inventory);
+const room2 = new Location(rooms[2].name, rooms[2].description, rooms[2].inventory);
+const room3 = new Location(rooms[3].name, rooms[3].description, rooms[3].inventory);
+const room4 = new Location(rooms[4].name, rooms[4].description, rooms[4].inventory);
 
-
-const startRoom = new Location(obj[0].name, obj[0].description, obj[0].inventory);
-const room1 = new Location(obj[1].name, obj[1].description, obj[1].inventory);
-const room2 = new Location(obj[2].name, obj[2].description, obj[2].inventory);
-const room3 = new Location(obj[3].name, obj[3].description, obj[3].inventory);
-const room4 = new Location(obj[4].name, obj[4].description, obj[4].inventory);
-
-// ReferenceError: getDescription is not defined
-const sign = new Item("Sign",'The sign says "Welcome to Burlington Code Academy! Come on up to the third floor. If the door is locked, use the code 12345."', "startRoom", false);
+const sign = new Item(items[0].name, items[0].description, items[0].location, items[0].isTakeable);
 
 //  state machine
 let locationCurrent = "startRoom";
@@ -226,6 +191,9 @@ async function prompt(player, answer) {
     let input = answer.trim().split(" ");
     let command = input[0].toLowerCase();
     let item = input[1];
-    interact(player, command, item);
+    // interact(player, command, item);  // we should pass item object in here? like sign as an item so player can interact with it?
+    if(typeof item !== "undefined"){
+      interact(player, command, item);
+    }
   }
 }

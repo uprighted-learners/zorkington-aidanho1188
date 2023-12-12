@@ -1,0 +1,8 @@
+[
+    {
+        "name": "Sign",
+        "describtion": "The sign says \"Welcome to Burlington Code Academy! Come on up to the third floor. If the door is locked, use the code 12345.",
+        "location": "startRoom",
+        "takeable": false
+    }
+]
