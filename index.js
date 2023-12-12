@@ -1,12 +1,8 @@
 const readline = require("readline");
-const fs = require("fs");
 const { Item } = require("./Item");
 const { Location } = require("./Location");
 const { Player } = require("./Player");
-const roomsJsonData = fs.readFileSync("./data/roomsList.json");
-const itemsJsonData = fs.readFileSync("./data/itemsList.json");
-const rooms = JSON.parse(roomsJsonData);
-const items = JSON.parse(itemsJsonData);
+
 const readlineInterface = readline.createInterface(process.stdin, process.stdout);
 
 function ask(questionText) {
@@ -15,25 +11,11 @@ function ask(questionText) {
   });
 }
 
-const startRoom = new Location(rooms[0].name, rooms[0].description, rooms[0].inventory);
-const room1 = new Location(rooms[1].name, rooms[1].description, rooms[1].inventory);
-const room2 = new Location(rooms[2].name, rooms[2].description, rooms[2].inventory);
-const room3 = new Location(rooms[3].name, rooms[3].description, rooms[3].inventory);
-const room4 = new Location(rooms[4].name, rooms[4].description, rooms[4].inventory);
-
-const sign = new Item(items[0].name, items[0].description, items[0].location, items[0].isTakeable);
-const paper = new Item(items[1].name, items[1].description, items[1].location, items[1].isTakeable);
-
-let itemLookUp = {
-  sign: sign,
-  paper: paper
-}
-
 start();
 
 async function start() {
   const player = new Player([]);
-  const welcomeMessage = startRoom.getDescription();
+  const welcomeMessage = player.getLocation.getDescription;
   console.log(welcomeMessage);
   await prompt(player, "");
   process.exit();
@@ -125,8 +107,7 @@ function unlocked(door) { // pass location into "door"
 // * Optionally you can add more puzzles, locked doors, and interactive items
 
 
-// from README.md
-async function prompt(player, answer) {
+async function prompt(player, answer) { // this function is doing more than one task, rename or break down!
   while (answer !== "exit") {
     answer = await ask(">_ ");
     if (answer === "exit") {

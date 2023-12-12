@@ -1,3 +1,4 @@
+const { Location } = require("./Location");
 class Player {
   constructor(inventory, status = "startRoom") {
     this.inventory = inventory;
@@ -38,15 +39,20 @@ class Player {
     }
   };
 
-  // how to make this talk to index.js?
-  go = (locationStates, locationLookUp) => {
-    if (locationStates[locationCurrent].includes(newLocation)) {
-      locationCurrent = newLocation;
-      console.log(locationLookUp[locationCurrent].description);
-    } else {
-      console.log(`You can't move from ${locationCurrent} to ${newLocation}`);
-    }
-  };
+  // this is part of the state machine
+  // need to make this talkto location class
+  // go = (locationStates, locationLookUp) => {
+  //   if (locationStates[locationCurrent].includes(newLocation)) {
+  //     locationCurrent = newLocation;
+  //     console.log(locationLookUp[locationCurrent].description);
+  //   } else {
+  //     console.log(`You can't move from ${locationCurrent} to ${newLocation}`);
+  //   }
+  // };
+
+  getLocation = () => {
+    return this.status;
+  }
 
   // test passed
   i = () => {
