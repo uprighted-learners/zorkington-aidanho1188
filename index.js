@@ -20,7 +20,7 @@ class Player {
     this.status = status; // current location?
   }
   // player actions functions
-  read = (item) => { return item.getDescription(); } // should I move this to the Item class? and check for item if it has this property? then use it?
+  read = (item) => { console.log(item.getDescription()); } // should I move this to the Item class? and check for item if it has this property? then use it?
 
   // test passed
   take = (item) => { this.inventory.push(item); }
@@ -81,6 +81,11 @@ let locationStates = {
   room2: [startRoom],
   room3: [startRoom],
   room4: [startRoom]
+}
+
+// is this a good name?
+let objectLookUp = {
+  sign: sign
 }
 
 start();
@@ -191,9 +196,9 @@ async function prompt(player, answer) {
     let input = answer.trim().split(" ");
     let command = input[0].toLowerCase();
     let item = input[1];
-    // interact(player, command, item);  // we should pass item object in here? like sign as an item so player can interact with it?
-    if(typeof item !== "undefined"){
-      interact(player, command, item);
+    if(objectLookUp.hasOwnProperty(item)){
+      item = objectLookUp[item];
+      interact(player, command, item);  // we should pass item object in here? like sign as an item so player can interact with it
     }
   }
 }
