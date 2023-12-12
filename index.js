@@ -2,6 +2,7 @@ const readline = require("readline");
 const fs = require("fs");
 const { Item } = require("./Item");
 const { Location } = require("./Location");
+const { Player } = require("./Player");
 const roomsJsonData = fs.readFileSync("roomsList.json");
 const itemsJsonData = fs.readFileSync("itemsList.json");
 const rooms = JSON.parse(roomsJsonData);
@@ -10,50 +11,8 @@ const readlineInterface = readline.createInterface(process.stdin, process.stdout
 
 function ask(questionText) {
   return new Promise((resolve, reject) => {
-    readlineInterface.question(questionText, resolve);
+    readlineInterface.question(questionText, resolve); // (node:23612) Warning: Accessing non-existent property 'splice' of module exports inside circular dependency
   });
-}
-
-class Player {
-  constructor(inventory, status = "startRoom") {
-    this.inventory = [];
-    this.status = status; // current location?
-  }
-  // player actions functions
-  read = (item) => { console.log(item.getDescription()); } // should I move this to the Item class? and check for item if it has this property? then use it?
-
-  // test passed
-  take = (item) => { this.inventory.push(item); }
-
-  // test passed
-  drop = (dropItem) => {
-    for (let i = 0; i < this.inventory.length; i++) {
-      if( this.inventory[i] === dropItem){
-        console.log(`You dropped ${dropItem}`)
-        this.inventory.splice(i, 1);
-      }
-    }
-  }
-
-  use = (item) => {
-    if(this.inventory.hasOwnProperty(item) ){
-      // item object must pass in the parameter for us to check for its description
-    }
-  }
-
-  go = (newLocation) => {
-    if (locationStates[locationCurrent].includes(newLocation)){
-      locationCurrent = newLocation;
-      console.log(locationLookUp[locationCurrent].description);
-    } else {
-      console.log(`You can't move from ${locationCurrent} to ${newLocation}`);
-    }
-  }
-
-  // test passed
-  i = () => {
-    console.log(`You open your inventory and it has ${this.inventory}`);
-  }
 }
 
 const startRoom = new Location(rooms[0].name, rooms[0].description, rooms[0].inventory);
@@ -63,35 +22,18 @@ const room3 = new Location(rooms[3].name, rooms[3].description, rooms[3].invento
 const room4 = new Location(rooms[4].name, rooms[4].description, rooms[4].inventory);
 
 const sign = new Item(items[0].name, items[0].description, items[0].location, items[0].isTakeable);
-
-//  state machine
-let locationCurrent = "startRoom";
-
-let locationLookUp = {
-  startRoom : startRoom,
-  room1: room1,
-  room2: room2,
-  room3: room3,
-  room4: room4
-}
-
-let locationStates = {
-  startRoom : [room1, room2, room3, room4],
-  room1: [startRoom],
-  room2: [startRoom],
-  room3: [startRoom],
-  room4: [startRoom]
-}
+const paper = new Item(items[1].name, items[1].description, items[1].location, items[1].isTakeable);
 
 // is this a good name?
-let objectLookUp = {
-  sign: sign
+let itemLookUp = {
+  sign: sign,
+  paper: paper
 }
 
 start();
 
 async function start() {
-  const player = new Player();
+  const player = new Player([]);
   const welcomeMessage = startRoom.getDescription();
   console.log(welcomeMessage);
   await prompt(player, "");
@@ -196,9 +138,9 @@ async function prompt(player, answer) {
     let input = answer.trim().split(" ");
     let command = input[0].toLowerCase();
     let item = input[1];
-    if(objectLookUp.hasOwnProperty(item)){
-      item = objectLookUp[item];
-      interact(player, command, item);  // we should pass item object in here? like sign as an item so player can interact with it
+    if(itemLookUp.hasOwnProperty(item)){
+      item = itemLookUp[item];
     }
+    interact(player, command, item);
   }
 }

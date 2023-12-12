@@ -1,12 +1,4 @@
-// * current room
-//   * room descriptions (immutable)
-//   * room connections (immutable)
-//   * room inventory (mutable)
-// * current player
-//   * player inventory (mutable)
-//   * player status (mutable)
-// * Main game functions
-// * helper functions
+// TODO: this class should talk to all classes and index.js
 class Location {
   constructor(name, description, inventory, connection, isUnlocked) {
     this.name = name;
