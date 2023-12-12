@@ -3,15 +3,15 @@ const fs = require("fs");
 const { Item } = require("./Item");
 const { Location } = require("./Location");
 const { Player } = require("./Player");
-const roomsJsonData = fs.readFileSync("roomsList.json");
-const itemsJsonData = fs.readFileSync("itemsList.json");
+const roomsJsonData = fs.readFileSync("./data/roomsList.json");
+const itemsJsonData = fs.readFileSync("./data/itemsList.json");
 const rooms = JSON.parse(roomsJsonData);
 const items = JSON.parse(itemsJsonData);
 const readlineInterface = readline.createInterface(process.stdin, process.stdout);
 
 function ask(questionText) {
   return new Promise((resolve, reject) => {
-    readlineInterface.question(questionText, resolve); // (node:23612) Warning: Accessing non-existent property 'splice' of module exports inside circular dependency
+    readlineInterface.question(questionText, resolve);
   });
 }
 
@@ -24,7 +24,6 @@ const room4 = new Location(rooms[4].name, rooms[4].description, rooms[4].invento
 const sign = new Item(items[0].name, items[0].description, items[0].location, items[0].isTakeable);
 const paper = new Item(items[1].name, items[1].description, items[1].location, items[1].isTakeable);
 
-// is this a good name?
 let itemLookUp = {
   sign: sign,
   paper: paper
@@ -133,8 +132,7 @@ async function prompt(player, answer) {
     if (answer === "exit") {
       break;
     }
-    // more logic here
-    // if answer contains command, go to command
+
     let input = answer.trim().split(" ");
     let command = input[0].toLowerCase();
     let item = input[1];
