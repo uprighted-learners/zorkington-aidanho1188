@@ -15,6 +15,7 @@ function ask(questionText) {
   });
 }
 
+// hmm its so dry here 
 const startRoom = new Location(rooms[0].name, rooms[0].description, rooms[0].inventory);
 const room1 = new Location(rooms[1].name, rooms[1].description, rooms[1].inventory);
 const room2 = new Location(rooms[2].name, rooms[2].description, rooms[2].inventory);
@@ -31,14 +32,14 @@ let itemLookUp = {
 
 let commandLookUp = {
   read: ["r", "read"],
-  inventory: ["i","inventory"],
+  getInventory: ["i","inventory"],
   use: ["r", "use"],
   drop: ["d", "drop"],
   take: ["t", "take"],
   go: ["go", "g", "move"]
 }
 
-let roomLookUp = {
+let locationLookUp = {
   startRoom: startRoom,
   room1: room1,
   room2: room2,
@@ -46,20 +47,29 @@ let roomLookUp = {
   room4: room4
 }
 
+let locationState = {
+  startRoom: ["room1"],
+  room1: ["startRoom", "room2"],
+  room2: ["room1", "room3"],
+  room3: ["room2", "room4"],
+  room4: ["room3"]
+}
+
 start();
 
 async function start() {
   const player = new Player();
-  const welcomeMessage = roomLookUp[player.getLocation()].description;
+  const welcomeMessage = locationLookUp[player.getLocation()].description;
   console.log(welcomeMessage);
-  await gameLoop(player, "");
+  await gameLoop(player);
   process.exit();
 }
 
-async function gameLoop(player, answer) {
+async function gameLoop(player, answer = "") {
   // this function is doing more than one task, rename or break down!
   do {
-    displayRoom(roomLookUp[player.getLocation()]);
+    displayRoom(locationLookUp[player.getLocation()]);
+    // changeRoom(player, room2);
     answer = await ask(">_ ");
     let input = answer.trim().split(" ");
     let command = input[0].toLowerCase();
@@ -67,12 +77,14 @@ async function gameLoop(player, answer) {
     let value = Object.values(commandLookUp).find(value => value.includes(command));
     let key = Object.keys(commandLookUp).find(key => commandLookUp[key] === value);
     // console.log(key,value); // for debugging
+
     if(value.includes(command)){
       command = key;
       if (itemLookUp.hasOwnProperty(item)) {
         item = itemLookUp[item];
-        interact(player, command, item);
       }
+
+      interact(player, command, item);
     }
   } while (answer !== "exit");
 }
@@ -80,8 +92,21 @@ async function gameLoop(player, answer) {
 function interact(player, command, target) {
   if (player.hasOwnProperty(command)) {
     player[command](target);
-  } else {
+  } else if(command === "go") {
+    // TODO: should structure this better
+    changeRoom(player, target);
+  } else{
     console.log(`I don't know "${command}" command.`);
+  }
+}
+
+
+function changeRoom(player, targetedRoom){
+  let currentRoom = player.getLocation();
+  if(locationState[currentRoom].includes(targetedRoom)){
+    player.setLocation(targetedRoom);
+  } else {
+    console.log("I can't move to this room!");
   }
 }
 

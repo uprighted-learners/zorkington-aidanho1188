@@ -35,16 +35,16 @@ class Player {
     }
   };
 
-  changeLocation = (newLocation) => {
-    this.status = newLocation;
+  setLocation = (newLocation) => {
+    this.location = newLocation;
   }
 
   getLocation = () => {
     return this.location;
   }
 
-  i = () => {
-    console.log("Inventory: ", this.inventory.join);
+  getInventory = () => {
+    console.log("Inventory: ", this.inventory.map(item => item.name));
   };
 }
 exports.Player = Player;
