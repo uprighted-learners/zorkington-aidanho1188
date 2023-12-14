@@ -1,14 +1,11 @@
-const { Location } = require("./Location");
 class Player {
-  constructor(inventory, status = "startRoom") {
+  constructor(inventory= [], location = "startRoom") {
     this.inventory = inventory;
-    this.status = status; // current location?
+    this.location = location;
   }
 
-  // test passed
   read = (item) => { console.log(item.getDescription()); }; 
 
-  // test passed
   take = (item) => { 
     try {
       if(item.isTakeable){
@@ -23,7 +20,6 @@ class Player {
     }
   };
 
-  // test passed
   drop = (dropItem) => {
     for (let i = 0; i < this.inventory.length; i++) {
       if (this.inventory[i] === dropItem) {
@@ -39,28 +35,16 @@ class Player {
     }
   };
 
-  // this is part of the state machine
-  // need to make this talkto location class
-  // go = (locationStates, locationLookUp) => {
-  //   if (locationStates[locationCurrent].includes(newLocation)) {
-  //     locationCurrent = newLocation;
-  //     console.log(locationLookUp[locationCurrent].description);
-  //   } else {
-  //     console.log(`You can't move from ${locationCurrent} to ${newLocation}`);
-  //   }
-  // };
-
-  getLocation = () => {
-    return this.status;
+  changeLocation = (newLocation) => {
+    this.status = newLocation;
   }
 
-  // test passed
+  getLocation = () => {
+    return this.location;
+  }
+
   i = () => {
-    console.log("Inventory: ");
-    this.inventory.forEach(item => {
-      // TODO: make it print all on one line
-      console.log(`${item.name}`);
-    });
+    console.log("Inventory: ", this.inventory.join);
   };
 }
 exports.Player = Player;
