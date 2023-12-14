@@ -52,13 +52,14 @@ async function start() {
   const player = new Player();
   const welcomeMessage = roomLookUp[player.getLocation()].description;
   console.log(welcomeMessage);
-  await prompt(player, "");
+  await gameLoop(player, "");
   process.exit();
 }
 
-async function prompt(player, answer) {
+async function gameLoop(player, answer) {
   // this function is doing more than one task, rename or break down!
   do {
+    displayRoom(roomLookUp[player.getLocation()]);
     answer = await ask(">_ ");
     let input = answer.trim().split(" ");
     let command = input[0].toLowerCase();
@@ -70,9 +71,9 @@ async function prompt(player, answer) {
       command = key;
       if (itemLookUp.hasOwnProperty(item)) {
         item = itemLookUp[item];
+        interact(player, command, item);
       }
     }
-    interact(player, command, item);
   } while (answer !== "exit");
 }
 
@@ -129,8 +130,7 @@ function checkPassword(password) {
 // Anyways, it's definitely not a mudroom.
 // A copy of the local paper lies in a corner.
 function displayRoom(room) {
-  console.log(room.getDescription());
-  console.log(room.getAvailableItems());
+  console.log(`Room name: ${room.name}              Available items: ${room.inventory}`);
 }
 
 // TODO: Display Inventory
@@ -139,8 +139,8 @@ function displayRoom(room) {
 // **Then** the game displays the player's `inventory`
 // You are carrying:
 // A copy of the local paper
-function displayInventory() {
-  return console.log(Player.inventory);
+function displayInventory(player) {
+  return console.log(player.inventory);
 }
 
 // TODO: Keep Doors Open

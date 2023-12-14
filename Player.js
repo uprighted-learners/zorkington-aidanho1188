@@ -16,7 +16,7 @@ class Player {
         throw error();
       }
     } catch (error) {
-      console.log(`I can't take this item!`);
+      console.log(`I can't take this item! `);
     }
   };
 
