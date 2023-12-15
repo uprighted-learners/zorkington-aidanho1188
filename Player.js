@@ -4,34 +4,34 @@ class Player {
     this.location = location;
   }
 
-  takeItem = (item) => {
+  takeItem(item) {
     this.inventory.push(item); 
     console.log(`You take the ${item.name}.`);
   }
 
-  dropItem = (Item) => {
+  dropItem(item) {
     const itemIndex = this.inventory.indexOf(dropItem);
     this.inventory.splice(itemIndex, 1);
     console.log(`You dropped ${dropItem}`);
-  };
+  }
 
-  hasItem = (item) => {
+  hasItem(item) {
     if (this.inventory.hasOwnProperty(item)) {
       return true;
     }
     return false;
-  };
+  }
 
-  setLocation = (newLocation) => {
+  setLocation(newLocation) {
     this.location = newLocation;
   }
 
-  getLocation = () => {
+  getLocation() {
     return this.location;
   }
 
-  getInventory = () => {
+  getInventory() {
     console.log("Inventory: ", this.inventory.map(item => item.name));
-  };
+  }
 }
 exports.Player = Player;

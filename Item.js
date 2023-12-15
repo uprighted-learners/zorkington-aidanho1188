@@ -5,7 +5,7 @@ class Item {
     this.location = location;
     this.isTakeable = isTakeable;
   }
-  getDescription = () => { return this.description; };
-  getIsTakeable = () => { return this.isTakeable; };
+  getDescription() { return this.description; }
+  getIsTakeable() { return this.isTakeable; }
 }
 exports.Item = Item;
