@@ -6,20 +6,24 @@ class Location {
     this.isUnlocked = isUnlocked;
   }
 
-  getLocationName() { 
+  set isUnlocked(newState) {
+    this.isUnlocked = newState;
+  }
+
+  get name() {
     return this.name;
   }
 
-  getLocationDescription() {
+  get description() {
     return this.description;
   }
 
-  getLocationStatus() {
+  get isUnlocked() {
     return this.isUnlocked;
   }
 
-  getAvailableItems() {
-    console.log("Available items: ", this.inventory.map(item => item.name));
+  get inventory() {
+    return this.inventory;
   }
 }
 exports.Location = Location;
