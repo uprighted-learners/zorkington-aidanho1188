@@ -1,25 +1,25 @@
 class Item {
   constructor(name, description, location, isTakeable) {
-    this.name = name;
-    this.description = description;
-    this.location = location;
-    this.isTakeable = isTakeable;
+    this._name = name;
+    this._description = description;
+    this._location = location;
+    this._isTakeable = isTakeable;
   }
 
   get name() {
-    return this.name;
+    return this.__name;
   }
 
   get description() {
-    return this.description;
+    return this._description;
   }
 
   get location() {
-    return this.location;
+    return this._location;
   }
 
   get isTakeable() {
-    return this.isTakeable;
+    return this._isTakeable;
   }
 }
 exports.Item = Item;

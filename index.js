@@ -68,14 +68,14 @@ async function start() {
 async function gameLoop(player, answer = "") {
   do {
     displayRoom(locationLookUp[player.getLocation()]);
-    // changeRoom(player, room2);
-    answer = await ask(">_ ");
+    answer = prompt();
     let input = answer.trim().split(" ");
-    let command = input[0].toLowerCase();
-    let item = input[1];
+    let command = getCommand(input);
+    let item = getTarget(input);
+
+    // look up for command and item 
     let value = Object.values(commandLookUp).find(value => value.includes(command));
     let key = Object.keys(commandLookUp).find(key => commandLookUp[key] === value);
-    // console.log(key,value); // for debugging
 
     if(value.includes(command)){
       command = key;
@@ -86,6 +86,18 @@ async function gameLoop(player, answer = "") {
       interact(player, command, item);
     }
   } while (answer !== "exit");
+}
+
+async function prompt(){
+  return ask(">_");
+}
+
+function getCommand(input) {
+ return input[0].toLowerCase();
+} 
+
+function getTarget(input) {
+  return input[1].toLowerCase();
 }
 
 function interact(player, command, target) {

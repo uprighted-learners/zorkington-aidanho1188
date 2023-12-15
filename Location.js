@@ -1,29 +1,29 @@
 class Location {
   constructor(name, description, inventory, isUnlocked) {
-    this.name = name;
-    this.description = description;
-    this.inventory = inventory;
-    this.isUnlocked = isUnlocked;
+    this._name = name;
+    this._description = description;
+    this._inventory = inventory;
+    this._isUnlocked = isUnlocked;
   }
 
   set isUnlocked(newState) {
-    this.isUnlocked = newState;
+    this._isUnlocked = newState;
   }
 
   get name() {
-    return this.name;
+    return this._name;
   }
 
   get description() {
-    return this.description;
+    return this._description;
+  }
+  
+  get inventory() {
+    return this._inventory;
   }
 
   get isUnlocked() {
-    return this.isUnlocked;
-  }
-
-  get inventory() {
-    return this.inventory;
+    return this._isUnlocked;
   }
 }
 exports.Location = Location;

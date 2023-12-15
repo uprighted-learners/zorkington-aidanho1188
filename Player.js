@@ -1,19 +1,19 @@
 class Player {
   constructor(inventory = [], location = "startRoom") {
-    this.inventory = inventory;
-    this.location = location;
+    this._inventory = inventory;
+    this._location = location;
   }
 
   get inventory() {
-    return this.inventory;
+    return this._inventory;
   }
 
   set location(newLocation) {
-    this.location = newLocation;
+    this._location = newLocation;
   }
   
   get location() {
-    return this.location;
+    return this._location;
   }
 }
 exports.Player = Player;
