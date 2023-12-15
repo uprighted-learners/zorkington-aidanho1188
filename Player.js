@@ -4,35 +4,22 @@ class Player {
     this.location = location;
   }
 
-  read = (item) => { console.log(item.getDescription()); }; 
+  takeItem = (item) => {
+    this.inventory.push(item); 
+    console.log(`You take the ${item.name}.`);
+  }
 
-  take = (item) => { 
-    try {
-      if(item.isTakeable){
-        this.inventory.push(item); 
-        console.log(`You take the ${item.name}.`);
-        // TODO: we should remove this item from item list after taking it
-      } else {
-        throw error();
-      }
-    } catch (error) {
-      console.log(`I can't take this item! `);
-    }
+  dropItem = (Item) => {
+    const itemIndex = this.inventory.indexOf(dropItem);
+    this.inventory.splice(itemIndex, 1);
+    console.log(`You dropped ${dropItem}`);
   };
 
-  drop = (dropItem) => {
-    for (let i = 0; i < this.inventory.length; i++) {
-      if (this.inventory[i] === dropItem) {
-        console.log(`You dropped ${dropItem}`);
-        this.inventory.splice(i, 1);
-      }
-    }
-  };
-
-  use = (item) => {
+  hasItem = (item) => {
     if (this.inventory.hasOwnProperty(item)) {
-      // item object must pass in the parameter for us to check for its description
+      return true;
     }
+    return false;
   };
 
   setLocation = (newLocation) => {

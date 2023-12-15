@@ -36,7 +36,7 @@ let commandLookUp = {
   use: ["r", "use"],
   drop: ["d", "drop"],
   take: ["t", "take"],
-  go: ["go", "g", "move"]
+  go: ["go", "g", "move", "open", "o"]
 }
 
 let locationLookUp = {
@@ -66,7 +66,6 @@ async function start() {
 }
 
 async function gameLoop(player, answer = "") {
-  // this function is doing more than one task, rename or break down!
   do {
     displayRoom(locationLookUp[player.getLocation()]);
     // changeRoom(player, room2);
@@ -99,7 +98,6 @@ function interact(player, command, target) {
     console.log(`I don't know "${command}" command.`);
   }
 }
-
 
 function changeRoom(player, targetedRoom){
   let currentRoom = player.getLocation();
