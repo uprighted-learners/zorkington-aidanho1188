@@ -7,7 +7,7 @@ class Item {
   }
 
   get name() {
-    return this.__name;
+    return this._name;
   }
 
   get description() {

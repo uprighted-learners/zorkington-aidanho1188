@@ -2,7 +2,7 @@
     {
         "name": "Main Street",
         "description": "182 Main St. \nYou are standing on Main Street between Church and South Winooski.\nThere is a door here. A keypad sits on the handle. \nOn the door is a handwritten sign.",
-        "inventory": ["Sign", "Paper"]
+        "inventory": ["sign", "paper"]
     },
     {
         "name" :"Church",

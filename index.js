@@ -24,6 +24,7 @@ const room4 = new Location(rooms[4].name, rooms[4].description, rooms[4].invento
 
 const sign = new Item(items[0].name, items[0].description, items[0].location, items[0].isTakeable);
 const paper = new Item(items[1].name, items[1].description, items[1].location, items[1].isTakeable);
+const player = new Player();
 
 let itemLookUp = {
   sign: sign,
@@ -32,11 +33,22 @@ let itemLookUp = {
 
 let commandLookUp = {
   read: ["r", "read"],
-  getInventory: ["i","inventory"],
-  use: ["r", "use"],
+  inventory: ["i","inventory"],
+  use: ["use", "u"],
   drop: ["d", "drop"],
   take: ["t", "take"],
-  go: ["go", "g", "move", "open", "o"]
+  go: ["go", "g", "move", "open", "o"],
+  endGame: ["exit"]
+}
+
+let commandFunctionLookUp =  {
+  "read": read,
+  "inventory": showPlayerInventory,
+  "use": use,
+  "drop": drop,
+  "take": take,
+  "go": moveRoom,
+  "endGame": endGame
 }
 
 let locationLookUp = {
@@ -58,8 +70,7 @@ let locationState = {
 start();
 
 async function start() {
-  const player = new Player();
-  const welcomeMessage = locationLookUp[player.getLocation()].description;
+  const welcomeMessage = locationLookUp[player.location].description;
   console.log(welcomeMessage);
   await gameLoop(player);
   process.exit();
@@ -67,56 +78,117 @@ async function start() {
 
 async function gameLoop(player, answer = "") {
   do {
-    displayRoom(locationLookUp[player.getLocation()]);
-    answer = prompt();
-    let input = answer.trim().split(" ");
-    let command = getCommand(input);
-    let item = getTarget(input);
-
-    // look up for command and item 
-    let value = Object.values(commandLookUp).find(value => value.includes(command));
-    let key = Object.keys(commandLookUp).find(key => commandLookUp[key] === value);
-
-    if(value.includes(command)){
-      command = key;
-      if (itemLookUp.hasOwnProperty(item)) {
-        item = itemLookUp[item];
-      }
-
-      interact(player, command, item);
-    }
+    answer = await prompt();
+    interact(answer);
+    console.log("\n\n\n\n\n\n\n\n", displayRoom(locationLookUp[player.location]));
   } while (answer !== "exit");
 }
 
 async function prompt(){
-  return ask(">_");
+  return ask(">_ ");
 }
 
 function getCommand(input) {
- return input[0].toLowerCase();
+  return input[0].toLowerCase();
 } 
 
 function getTarget(input) {
-  return input[1].toLowerCase();
-}
-
-function interact(player, command, target) {
-  if (player.hasOwnProperty(command)) {
-    player[command](target); // TODO: command(object,target), need to handle all other commands here, write more functions in this files
-  } else if(command === "go") {
-    // TODO: should structure this better
-    changeRoom(player, target);
-  } else{
-    console.log(`I don't know "${command}" command.`);
+  if(input.length > 1){
+    return input[1];
+  } else {
+    return null;
   }
 }
 
-function changeRoom(player, targetedRoom){
-  let currentRoom = player.getLocation();
+function interact(answer) {
+  let answerArr = answer.trim().split(" ");
+  // make sure to make these 2 more flexible with user input
+  let command = getCommand(answerArr);
+  let target = getTarget(answerArr);
+
+  // look up for command and item 
+  let commandValue = Object.values(commandLookUp).find(value => value.includes(command));
+  let commandKey = Object.keys(commandLookUp).find(key => commandLookUp[key] === commandValue);
+  let commandFunction = commandFunctionLookUp[commandKey];
+  try {
+    commandFunction(target);
+  } catch (error) {
+    console.log(`I don't know this "${command}" command. 😕`);
+  }
+}
+
+function endGame(){
+  return player._answer = "exit";
+}
+
+function moveRoom(targetedRoom){
+  let currentRoom = player.location;
   if(locationState[currentRoom].includes(targetedRoom)){
-    player.setLocation(targetedRoom);
+    player._location = targetedRoom;
   } else {
     console.log("I can't move to this room!");
+  }
+}
+
+
+function read(item){
+  if(itemLookUp.hasOwnProperty(item)){
+    item = itemLookUp[item];
+    return console.log(item._description);
+  } else {
+    return console.log(`I can't read this ${item} 😔`);
+  }
+}
+
+function use(item){
+  // if item is usuable???
+  if(itemLookUp.hasOwnProperty(item)){
+    // in order to use this item, there must be two objects with present in this room
+    // lookup table or lookup state machine? 
+  } else{
+    console.log(`I can't use this ${item} 😔`);
+  }
+  return;
+}
+
+// too dry here
+function drop(item){
+  if (itemLookUp.hasOwnProperty(item)){
+    itemIndex = player._inventory.indexOf(item);
+    player._inventory.splice(itemIndex, 1);
+    addItemToRoom(player._location, item);
+    return console.log(`You dropped ${item} 🤚`);
+  } else {
+    return console.log(`You can't take ${item}`);
+  }
+}
+
+function take(item){
+  if (itemLookUp.hasOwnProperty(item) && itemLookUp[item]._isTakeable){
+    player._inventory.push(item);
+    removeItemFromRoom(player._location, item);
+    return console.log(`You take ${item} 🤚`);
+  } else {
+    return console.log(`You can't take ${item}`);
+  }
+}
+
+function removeItemFromRoom(currentLocation, removeItem){
+  let room = locationLookUp[currentLocation];
+  let itemIndex = room._inventory.indexOf(removeItem);
+  room._inventory.splice(itemIndex, 1);
+}
+
+function addItemToRoom(currentLocation, addItem){
+  let room = locationLookUp[currentLocation];
+  room._inventory.push(addItem);
+}
+
+function showPlayerInventory(){
+  if(player._inventory.length){
+    console.log([...player._inventory].map(item => item));
+  } else {
+    console.log(`Your inventory is empty 😔`);
   }
 }
 
@@ -165,7 +237,7 @@ function checkPassword(password) {
 // Anyways, it's definitely not a mudroom.
 // A copy of the local paper lies in a corner.
 function displayRoom(room) {
-  console.log(`Room name: ${room.name}              Available items: ${room.inventory}`);
+  return `Room name: ${room.name}              Available items: ${room.inventory}`;
 }
 
 // TODO: Display Inventory
