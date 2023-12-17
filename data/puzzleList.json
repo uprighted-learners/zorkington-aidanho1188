@@ -1,0 +1,8 @@
+[
+    {
+        "name": "lockpad",
+        "location": "room1",
+        "puzzleMessage": "There is a door here. A keypad sits on the handle. I need a passcode to unlock the door.",
+        "puzzleSolved" : "You successfully unlocked the door."
+    }
+]

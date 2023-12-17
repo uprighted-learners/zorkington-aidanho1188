@@ -7,31 +7,32 @@
     {
         "name" :"Church",
         "description": "Church describtion...",
+        "inventory": [""],
+        "puzzle": "There is a door here. A keypad sits on the handle. I need a passcode to unlock the door."
+    },
+    {
+        "name" :"First Floor",
+        "description": "Floor describtion...",
         "inventory": [""]
     },
     {
-        "name" :"South Winoosk",
-        "description": "South Winoosk describtion...",
+        "name" :"Second Floor",
+        "description": "Floor describtion...",
         "inventory": [""]
     },
     {
-        "name" :"Church Basement",
-        "description": "Church Basement describtion...",
-        "inventory": [""]
-    },
-    {
-        "name" :"Forrest",
-        "description": "Forrest describtion...",
+        "name" :"Third Floor",
+        "description": "Floor describtion...",
         "inventory": [""]
     },
     {
         "name" :"Mountain",
-        "description": "Mountain describtion...",
+        "description": "Floor describtion...",
         "inventory": [""]
     },
     {
         "name" :"Cliff",
-        "description": "Cliff describtion...",
+        "description": "Floor describtion...",
         "inventory": [""]
     }
 ]

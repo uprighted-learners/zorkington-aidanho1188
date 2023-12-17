@@ -1,9 +1,10 @@
 class Location {
-  constructor(name, description, inventory, isUnlocked) {
+  constructor(name, description, inventory, isUnlocked, puzzle) {
     this._name = name;
     this._description = description;
     this._inventory = inventory;
     this._isUnlocked = isUnlocked;
+    this._puzzle = puzzle;
   }
 
   set isUnlocked(newState) {
@@ -24,6 +25,10 @@ class Location {
 
   get isUnlocked() {
     return this._isUnlocked;
+  }
+
+  get puzzle() {
+    return this._puzzle;
   }
 }
 exports.Location = Location;
