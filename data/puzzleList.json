@@ -3,6 +3,9 @@
         "name": "lockpad",
         "location": "room1",
         "puzzleMessage": "There is a door here. A keypad sits on the handle. I need a passcode to unlock the door.",
-        "puzzleSolved" : "You successfully unlocked the door."
+        "puzzleSolved" : "You successfully unlocked the door.",
+        "puzzleAnswer": "12345",
+        "puzzleWrongAnswer": "Incorrect passcode, please try again or type \"back\" to exit.",
+        "puzzleIsSolved": false
     }
 ]

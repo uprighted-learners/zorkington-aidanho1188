@@ -6,14 +6,14 @@
     },
     {
         "name" :"Church",
-        "description": "Church describtion...",
+        "description": "You stand within the sacred walls of the church, a place of tranquility and contemplation. The soft glow of candlelight flickers, casting shadows on the ornate stained glass windows that adorn the walls. Wooden pews stretch out before you, worn with the passage of time and echoes of countless prayers.\nAt the back of the church, you notice two doors:\n1. A grand door, adorned with mystical symbols, stands firmly locked. It beckons you to unravel its secrets, hinting at a stairway beyond that leads to unknown heights.\n2. Adjacent to it, a humble wooden door stands slightly ajar, revealing a set of stairs that descend into darkness. The passage to the basement lies open, inviting exploration.",
         "inventory": [""],
         "puzzle": "There is a door here. A keypad sits on the handle. I need a passcode to unlock the door."
     },
     {
         "name" :"First Floor",
-        "description": "Floor describtion...",
-        "inventory": [""]
+        "description": "Basement describtion...",
+        "inventory": ["Ornate Key"]
     },
     {
         "name" :"Second Floor",
@@ -21,13 +21,13 @@
         "inventory": [""]
     },
     {
-        "name" :"Third Floor",
-        "description": "Floor describtion...",
+        "name" :"Basement one",
+        "description": "Basement describtion...",
         "inventory": [""]
     },
     {
-        "name" :"Mountain",
-        "description": "Floor describtion...",
+        "name" :"Basement two",
+        "description": "Basement describtion...",
         "inventory": [""]
     },
     {
