@@ -2,6 +2,7 @@ class Player {
   constructor(inventory = [], location = "startRoom") {
     this._inventory = inventory;
     this._location = location;
+    this._answer = "";
   }
 
   get inventory() {
@@ -14,6 +15,14 @@ class Player {
   
   get location() {
     return this._location;
+  }
+
+  set answer(input) {
+    this._answer = input;
+  }
+
+  get answer() {
+    return this._answer;
   }
 }
 exports.Player = Player;

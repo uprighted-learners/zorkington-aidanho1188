@@ -1,37 +1,41 @@
 class Puzzle {
-    // puzzles[0].name, puzzles[0].location, puzzles[0].puzzleMessage, puzzles[0].puzzleSolved, puzzles[0].puzzleAnswer, puzzles[0].puzzleWrongAnswer, puzzles[0].puzzleIsSolved);
-    constructor(puzzleName, puzzleLocation, puzzleMessage, puzzleSolvedMessage, puzzleAnswer, puzzleWrongAnswer , puzzleIsSolved){
-        this._puzzleName = puzzleName;
-        this._puzzleLocation = puzzleLocation;
-        this._puzzleMessage = puzzleMessage;
-        this._puzzleSolvedMessage = puzzleSolvedMessage;
-        this._puzzleAnswer = puzzleAnswer;
-        this._puzzleWrongAnswer = puzzleWrongAnswer;
-        this._puzzleIsSolved = false;
+    constructor(name, location, message, promptMessage, solvedMessage, answer, wrongAnswer , isSolved){
+        this._name = name;
+        this._location = location;
+        this._message = message;
+        this._promptMessage = promptMessage;
+        this._solvedMessage = solvedMessage;
+        this._answer = answer;
+        this._wrongAnswer = wrongAnswer;
+        this._isSolved = false;
     }
 
-    get puzzleName(){
-        return this._puzzleName;
+    get name(){
+        return this._name;
     }
 
-    get puzzleLocation(){
-        return this._puzzleLocation;
+    get location(){
+        return this._location;
     }
 
-    get puzzleMessage(){
-        return this._puzzleMessage;
+    get message(){
+        return this._message;
+    }
+
+    get promptMessage() {
+        return this._promptMessage;
     }
         
-    get puzzleSolvedMessage(){
-        return this._puzzleSolvedMessage;
+    get solvedMessage(){
+        return this._solvedMessage;
     }
 
-    get puzzleAnswer(){
-        return this._puzzleAnswer;
+    get answer(){
+        return this._answer;
     }
 
-    get puzzleWrongAnswer(){
-        return this._puzzleWrongAnswer;
+    get wrongAnswer(){
+        return this._wrongAnswer;
     }
 
     get isSolved(){

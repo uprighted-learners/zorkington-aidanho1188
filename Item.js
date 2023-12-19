@@ -1,9 +1,10 @@
 class Item {
-  constructor(name, description, location, isTakeable) {
+  constructor(name, description, location, isTakeable, puzzleCode = null) {
     this._name = name;
     this._description = description;
     this._location = location;
     this._isTakeable = isTakeable;
+    this._puzzleCode = puzzleCode;
   }
 
   get name() {
@@ -20,6 +21,10 @@ class Item {
 
   get isTakeable() {
     return this._isTakeable;
+  }
+
+  get puzzleCode() {
+    return this._puzzleCode;
   }
 }
 exports.Item = Item;

@@ -1,38 +1,40 @@
 [
     {
         "name": "Main Street",
-        "description": "182 Main St. \nYou are standing on Main Street between Church and South Winooski.\nThere is a door here. A keypad sits on the handle. \nOn the door is a handwritten sign.",
+        "description1": "182 Main St. \nYou are standing on Main Street between Church and South Winooski.",
+        "description2": "There is a door here. A keypad sits on the handle. \nOn the door is a handwritten sign.",
         "inventory": ["sign", "paper"]
     },
     {
         "name" :"Church",
-        "description": "You stand within the sacred walls of the church, a place of tranquility and contemplation. The soft glow of candlelight flickers, casting shadows on the ornate stained glass windows that adorn the walls. Wooden pews stretch out before you, worn with the passage of time and echoes of countless prayers.\nAt the back of the church, you notice two doors:\n1. A grand door, adorned with mystical symbols, stands firmly locked. It beckons you to unravel its secrets, hinting at a stairway beyond that leads to unknown heights.\n2. Adjacent to it, a humble wooden door stands slightly ajar, revealing a set of stairs that descend into darkness. The passage to the basement lies open, inviting exploration.",
+        "description1": "You stand within the sacred walls of the church, a place of tranquility and contemplation. The soft glow of candlelight flickers, casting shadows on the ornate stained glass windows that adorn the walls. Wooden pews stretch out before you, worn with the passage of time and echoes of countless prayers.",
+        "description2": "At the back of the church, you notice two doors:\n1(Floor one): A grand door, adorned with mystical symbols, stands firmly locked. It beckons you to unravel its secrets, hinting at a stairway beyond that leads to unknown heights.\n2(Basement one): Adjacent to it, a humble wooden door stands slightly ajar, revealing a set of stairs that descend into darkness. The passage to the basement lies open, inviting exploration.",
         "inventory": [""],
-        "puzzle": "There is a door here. A keypad sits on the handle. I need a passcode to unlock the door."
+        "puzzle": ["lockpad"]
     },
     {
         "name" :"First Floor",
-        "description": "Basement describtion...",
-        "inventory": ["Ornate Key"]
+        "description1": "You find yourself on the first floor of the building. The air is filled with a quiet hum, and soft footsteps echo in the distance. The walls are adorned with framed artwork, and large windows allow sunlight to filter into the corridor. A reception desk is situated near the entrance, and hallways lead to various rooms and offices. You notice a staircase nearby, hinting at more levels to explore. Take a moment to absorb the atmosphere of this bustling and organized first floor.",
+        "description2": "In one corner of the room, a display case draws your attention. Within it rests an intriguing item: the Shadow Amulet. The Shadow Amulet is the key to unlocking the hidden passage in the basement. When you possess the amulet, you can use it in proximity to the peculiar wall, and it will reveal the entrance to the next level.",
+        "inventory": ["shadow amulet"],
+        "puzzle" : ["grandDoor"]
     },
     {
         "name" :"Second Floor",
-        "description": "Floor describtion...",
+        "description1": "As you ascend the staircase, you find yourself in the attic space filled with an air of nostalgia and mystery. Sunlight filters through small, dusty windows, casting long shadows on forgotten trinkets and antique furniture. Wooden beams crisscross the ceiling, and old, creaky floorboards groan beneath your weight. Dusty cobwebs hang in the corners, and the faint scent of aged paper fills the air. Forgotten relics from a bygone era are scattered throughout, telling stories of days long past. Take a moment to explore this attic, where time seems to have stood still.",
+        "description2": "",
         "inventory": [""]
     },
     {
         "name" :"Basement one",
-        "description": "Basement describtion...",
-        "inventory": [""]
+        "description1": "You descend a creaky staircase, entering the dimly lit confines of the basement. The air is cool and slightly damp, and the faint scent of earth permeates the space. Dim, flickering light bulbs barely illuminate the area, casting long shadows along the concrete walls. You notice a peculiar wall in the basement, different from the others.",
+        "description2": "As you explore the dimly lit basement, your eyes catch a glint of metal on an old wooden table. Moving closer, you discover an ornate key resting on the surface. The key is intricately designed, with winding patterns and delicate engravings that give it an air of elegance.",
+        "inventory": ["ornate key"]
     },
     {
         "name" :"Basement two",
-        "description": "Basement describtion...",
-        "inventory": [""]
-    },
-    {
-        "name" :"Cliff",
-        "description": "Floor describtion...",
+        "description1": "You descend even deeper into the building, reaching the final basement level. The air becomes colder, and the surroundings grow darker as you navigate the labyrinthine corridors. The flickering light bulbs barely illuminate the narrow passageways, revealing the remnants of forgotten machinery and discarded storage. The faint sound of dripping water echoes through the cold, stale air, creating an eerie atmosphere. The walls seem to close in around you, and the floor is uneven beneath your feet. As you explore, you sense that this last basement holds the deepest secrets, shrouded in darkness and mystery. Proceed with caution, for the unknown awaits in the depths below.",
+        "description2": "",
         "inventory": [""]
     }
 ]
