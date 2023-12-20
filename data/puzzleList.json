@@ -28,6 +28,16 @@
         "answer": "0981",
         "wrongAnswer": "Nothing happened, please try again with other items or type \"back\" to exit.",
         "isSolved": false
+    },
+    {
+        "name": "oldAltar",
+        "location": "room6",
+        "message": "As you step toward the altar an ominous presence fills the air.S",
+        "promptMessage": "To unlock its secrets, you must burn a magical artifact and recite the ancient incantation. Be warned: a single mistake will bring forth a malevolent force, sealing your fate.: ",
+        "solved" : "The portal trembles and then opens, revealing the path to victory!",
+        "answer": "In shadows bound, secrets unchain. Speak the words to unveil the path.",
+        "wrongAnswer": "Your incantation falters, and a malevolent force emerges from the shadows, enveloping you. The world fades away as you succumb to the darkness. Game over.",
+        "isSolved": false
     }
     
 ]

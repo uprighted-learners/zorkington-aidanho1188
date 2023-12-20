@@ -7,8 +7,8 @@
     },
     {
         "name": "paper",
-        "description": "Say this magic phase \"Insert magic phase here idk\"",
-        "location": "startRoom",
+        "description": "A spell scroll with intricate symbols. Burn it at the right place, and a powerful energy will reveal a hidden magical item with a secret waiting to be unlocked.",
+        "location": "room1",
         "isTakeable": true
     },
     {

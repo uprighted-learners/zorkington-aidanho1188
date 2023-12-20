@@ -3,13 +3,13 @@
         "name": "Main Street",
         "description1": "182 Main St. \nYou are standing on Main Street between Church and South Winooski.",
         "description2": "There is a door here. A keypad sits on the handle. \nOn the door is a handwritten sign.",
-        "inventory": ["sign", "paper"]
+        "inventory": ["sign"]
     },
     {
         "name" :"Church",
-        "description1": "You stand within the sacred walls of the church, a place of tranquility and contemplation. The soft glow of candlelight flickers, casting shadows on the ornate stained glass windows that adorn the walls. Wooden pews stretch out before you, worn with the passage of time and echoes of countless prayers.",
+        "description1": "You stand within the sacred walls of the church, soft candlelight casts shadows on ornate stained glass. Worn pews echo with countless prayers. In a corner, a piece of paper radiates powerful energy, concealing a mysterious secret within its magical symbols.",
         "description2": "At the back of the church, you notice two doors:\n1(Floor one): A grand door, adorned with mystical symbols, stands firmly locked. It beckons you to unravel its secrets, hinting at a stairway beyond that leads to unknown heights.\n2(Basement one): Adjacent to it, a humble wooden door stands slightly ajar, revealing a set of stairs that descend into darkness. The passage to the basement lies open, inviting exploration.",
-        "inventory": [""],
+        "inventory": ["paper"],
         "puzzle": ["lockpad"]
     },
     {
@@ -21,8 +21,8 @@
     },
     {
         "name" :"Second Floor",
-        "description1": "As you ascend the staircase, you find yourself in the attic space filled with an air of nostalgia and mystery. Sunlight filters through small, dusty windows, casting long shadows on forgotten trinkets and antique furniture. Wooden beams crisscross the ceiling, and old, creaky floorboards groan beneath your weight. Dusty cobwebs hang in the corners, and the faint scent of aged paper fills the air. Forgotten relics from a bygone era are scattered throughout, telling stories of days long past. Take a moment to explore this attic, where time seems to have stood still.",
-        "description2": "",
+        "description1": "As you ascend the staircases, you find yourself on the second floor, a place steeped in mystery and ancient secrets. The air is thick with the scent of old books and the soft glow of mystical runes illuminates the walls.",
+        "description2": "You notice a writing of cryptic phrases repeating on the walls: 'In shadows bound, secrets unchain. Speak the words to unveil the path.' The room seems to respond to these arcane words.",
         "inventory": [""]
     },
     {
@@ -33,8 +33,14 @@
     },
     {
         "name" :"Basement two",
-        "description1": "You descend even deeper into the building, reaching the final basement level. The air becomes colder, and the surroundings grow darker as you navigate the labyrinthine corridors. The flickering light bulbs barely illuminate the narrow passageways, revealing the remnants of forgotten machinery and discarded storage. The faint sound of dripping water echoes through the cold, stale air, creating an eerie atmosphere. The walls seem to close in around you, and the floor is uneven beneath your feet. As you explore, you sense that this last basement holds the deepest secrets, shrouded in darkness and mystery. Proceed with caution, for the unknown awaits in the depths below.",
-        "description2": "",
+        "description1": "You descend even deeper into the building, reaching the final basement level. A dimly lit room in the basement reveals ancient stone walls covered in mysterious runes.",
+        "description2": "In the center, on an old altar, a magical, eternal fire flickers, casting dancing shadows across the runes. The altar's surface is worn with time. A hint of magic lingers in the air.",
+        "inventory": [""]
+    },
+    {
+        "name" :"Final room",
+        "description1": "As you step into the final room, an ominous presence fills the air. Before you, a mystical portal shrouded in darkness awaits. To unlock its secrets, you must recite the ancient incantation. Be warned: a single mistake will bring forth a malevolent force, sealing your fate.",
+        "description2": "This is the place to unveil hidden secrets. With caution, you decide to burn the magic paper here, anticipating the release of a powerful energy.",
         "inventory": [""]
     }
 ]

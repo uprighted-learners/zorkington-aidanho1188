@@ -4,7 +4,6 @@ const {Item} = require("./Item");
 const {Location} = require("./Location");
 const {Player} = require("./Player");
 const {Puzzle} = require("./Puzzle");
-const { resolve } = require("path");
 const roomsJsonData = fs.readFileSync("./data/roomsList.json");
 const itemsJsonData = fs.readFileSync("./data/itemsList.json");
 const puzzleJsonData = fs.readFileSync("./data/puzzleList.json");
@@ -24,9 +23,10 @@ function ask(questionText) {
 const startRoom = new Location(rooms[0].name, rooms[0].description1, rooms[0].description2, rooms[0].inventory, true);
 const room1 = new Location(rooms[1].name, rooms[1].description1, rooms[1].description2, rooms[1].inventory);
 const room2 = new Location(rooms[2].name, rooms[2].description1, rooms[2].description2, rooms[2].inventory);
-const room3 = new Location(rooms[3].name, rooms[3].description1, rooms[3].description2, rooms[3].inventory);
+const room3 = new Location(rooms[3].name, rooms[3].description1, rooms[3].description2, rooms[3].inventory, true);
 const room4 = new Location(rooms[4].name, rooms[4].description1, rooms[4].description2, rooms[4].inventory, true);
 const room5 = new Location(rooms[5].name, rooms[5].description1, rooms[5].description2, rooms[5].inventory);
+const room6 = new Location(rooms[6].name, rooms[6].description1, rooms[6].description2, rooms[6].inventory);
 
 const sign = new Item(items[0].name, items[0].description, items[0].location, items[0].isTakeable);
 const paper = new Item(items[1].name, items[1].description, items[1].location, items[1].isTakeable);
@@ -35,7 +35,8 @@ const amulet = new Item(items[3].name, items[3].description, items[3].location, 
 
 const lockpad = new Puzzle(puzzles[0].name, puzzles[0].location, puzzles[0].message, puzzles[0].promptMessage, puzzles[0].solved, puzzles[0].answer, puzzles[0].wrongAnswer, puzzles[0].isSolved);
 const grandDoor = new Puzzle(puzzles[1].name, puzzles[1].location, puzzles[1].message, puzzles[1].promptMessage, puzzles[1].solved, puzzles[1].answer, puzzles[1].wrongAnswer, puzzles[1].isSolved);
-const hiddenPassage = new Puzzle(puzzles[2].name, puzzles[2].location, puzzles[2].message, puzzles[2].promptMessage, puzzles[2].solved, puzzles[2].answer, puzzles[2].wrongAnswer, puzzles[2].isSolved)
+const hiddenPassage = new Puzzle(puzzles[2].name, puzzles[2].location, puzzles[2].message, puzzles[2].promptMessage, puzzles[2].solved, puzzles[2].answer, puzzles[2].wrongAnswer, puzzles[2].isSolved);
+const oldAltar = new Puzzle(puzzles[3].name, puzzles[3].location, puzzles[3].message, puzzles[3].promptMessage, puzzles[3].solved, puzzles[3].answer, puzzles[3].wrongAnswer, puzzles[3].isSolved);
 
 const player = new Player();
 
@@ -46,7 +47,7 @@ let itemLookUp = {
   amulet: amulet
 };
 
-// future features: display item name in a more descriptive way
+// future feature: display item name in a more descriptive way
 let itemNameLookUp = {
   sign: ["sign"],
   paper: ["piece of paper", "paper"],
@@ -58,13 +59,14 @@ let commandLookUp = {
   read: ["r", "read"],
   look: ["l", "look", "examine"],
   inventory: ["i", "inventory"],
-  use: ["use", "u"],
+  use: ["use", "u", "burn"],
   drop: ["d", "drop"],
   take: ["t", "take"],
   go: ["go", "g", "move", "open", "o", "enter"],
   endGame: ["exit"],
 };
 
+// future feature: write a help function to display all the commands
 let commandFunctionLookUp = {
   read: read,
   look: look,
@@ -83,6 +85,7 @@ let locationLookUp = {
   room3: room3,
   room4: room4,
   room5: room5,
+  room6: room6,
 };
 
 let locationState = {
@@ -91,10 +94,11 @@ let locationState = {
   room2: ["room1", "room3"], // floor1
   room3: ["room2"], // floor2
   room4: ["room1", "room5"], // basement1
-  room5: ["room4"], // basement2
+  room5: ["room4", "room6"], // basement2
+  room6: ["room5"], // finnal room
 };
 
-// Future feature: should write a function to deal with these cases sensitive room names
+// Future feature: should write a function to deal with these case sensitive room names
 let roomNameLookup = {
   startRoom: ["street", "outside"],
   room1: ["church"],
@@ -102,12 +106,14 @@ let roomNameLookup = {
   room3: ["floor2", "floor two", "second floor", "floor 2", "Floor two"],
   room4: ["basement1", "basement 1", "basement one", "first basement", "Basement one"],
   room5: ["basement2", "basement 2", "basement two", "second basement", "Basement two", "passage", "hidden passage", "Hidden passage"],
+  room6: ["basement3", "basement 3", "basement three", "altar", "Altar"]
 };
 
 let puzzleLocation = {
   room1: lockpad,
   room2: grandDoor,
   room5: hiddenPassage,
+  room6: oldAltar,
 };
 
 start();
@@ -185,7 +191,7 @@ async function displayRoomPuzzle(targetedRoom) {
   let puzzle = puzzleLocation[targetedRoom]
   console.log(`${puzzle.message}`);
   // prompt for password / back / use items
-  while (true) {
+  while (!puzzle.isSolved) {
     let input = await prompt(puzzle.promptMessage);
     if (input === puzzle.answer) {
       setPuzzleIsSolved(puzzle, targetedRoom);
@@ -196,7 +202,8 @@ async function displayRoomPuzzle(targetedRoom) {
     } else if(hasUseCommand(input)) {
       let inputArr = input.trim().split(" ");
       let item = getTarget(inputArr);
-      if(use(item, targetedRoom) ==  true){
+      let usuable = await use(item, targetedRoom);
+      if(usuable === true) {
         return true;
       }
     } else {
@@ -215,13 +222,17 @@ function hasUseCommand(input) {
   }
 }
 
+// dry
 function getRoomObjectName(targetedRoom) {
   return Object.keys(roomNameLookup).find((key) => roomNameLookup[key].includes(targetedRoom));
 }
 
 function getItemObjectName(item) {
   return Object.keys(itemNameLookUp).find((key) => itemNameLookUp[key].includes(item));
-
+}
+// TODO: replace those 2 above with this one
+function getObjectName(item, nameLookUp) {
+  return Object.keys(nameLookUp).find((key) => nameLookUp[key].includes(item));
 }
 
 function read(item) {
@@ -233,6 +244,8 @@ function read(item) {
   }
 }
 
+
+// TODO: write a word wrap function that let us print out string with the length of 80 or less per line
 async function look() {
   let room = locationLookUp[player.location];
   console.log(`${room.description1}`);
@@ -247,7 +260,7 @@ function setPuzzleIsSolved(puzzle, targetedRoom) {
   console.log(`${puzzle.solvedMessage}`);
 }
 
-function use(item, targetedRoom) {
+async function use(item, targetedRoom) {
   let puzzle = puzzleLocation[targetedRoom];
   if (itemLookUp.hasOwnProperty(item) && [...player.inventory].includes(item)) {
     item = itemLookUp[item];
@@ -255,6 +268,16 @@ function use(item, targetedRoom) {
       setPuzzleIsSolved(puzzle, targetedRoom);
       player.location = targetedRoom;
       return true;
+    } else if (puzzle.name === "oldAltar" && item.name === "paper"){
+      console.log("You burned the magical paper");
+      let answer = await ask("Now you must recite the ancient incantation: ");
+      if(puzzle.answer === answer){
+        console.log(puzzle.solvedMessage);
+        process.exit(0);
+      } else {
+        console.log(puzzle.wrongAnswer);
+        process.exit(0);
+      }
     }
   } else {
     console.log(`You can't use this ${item} here 😔`);
@@ -324,5 +347,5 @@ function showPlayerInventory() {
 
 function displayRoom() {
   let room = locationLookUp[player.location];
-  return console.log(`\n\n\n\n\n\n\n\nRoom name: ${room.name}   Available items: ${room.inventory}`);
+  return console.log(`\n\n\n\n\n\n\n\nRoom name: ${room.name}   Available items: ${room.inventory}    Commands: go, i, look, read, open, burn, drop, use...`);
 }

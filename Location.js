@@ -7,6 +7,10 @@ class Location {
     this._isUnlocked = isUnlocked;
   }
 
+  set inventory(item) {
+    return this._inventory.push(item);
+  }
+  
   set isUnlocked(newState) {
     this._isUnlocked = newState;
   }
