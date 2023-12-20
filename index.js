@@ -127,7 +127,7 @@ let puzzleLocation = {
 
 start();
 
-// * game main logics
+// * Main game logics
 async function start() {
   displayRoom();
   await gameLoop(player);
@@ -136,7 +136,7 @@ async function start() {
 
 function displayRoom() {
   let room = locationLookUp[player.location];
-  return console.log(`\n\n\n\n\n\n\n\nRoom name: ${room.name}   Available items: ${room.inventory}    Commands: go, i, look, read, open, burn, drop, use...`);
+  return console.log(`\n\n\n\nRoom name: ${room.name}   Available items: ${room.inventory}    Commands: go, i, look, read, open, burn, drop, use...`);
 }
 
 async function gameLoop(player) {
@@ -168,11 +168,7 @@ function validateCommandKey(command) {
   return Object.keys(commandLookUp).find((key) => commandLookUp[key].includes(command)) || false;
 }
 
-// * User commands
-function endGame() {
-  return player.answer = "exit";
-}
-
+// * User in game commands functions
 async function moveRoom(targetedRoom) {
   let currentRoom = player.location;
   targetedRoom = getObjectName(targetedRoom, roomNameLookup);
@@ -191,14 +187,31 @@ async function moveRoom(targetedRoom) {
   }
 }
 
-function hasUseCommand(input) {
-  let inputArr = input.trim().split(" ");
-  let command = getCommand(inputArr);
-  if(validateCommandKey(command)){
-    return true;
-  } else {
-    return false;
+async function use(item, targetedRoom) {
+  let puzzle = puzzleLocation[targetedRoom];
+  if (itemLookUp.hasOwnProperty(item) && [...player.inventory].includes(item)) {
+    item = itemLookUp[item];
+    if (item.puzzleCode === puzzle.answer) {
+      setPuzzleIsSolved(puzzle, targetedRoom);
+      return true;
+    } else if (puzzle.name === "oldAltar" && item.name === "paper"){ // special case for the last puzzle
+      print("You burned the magical paper");
+      removeItemFromPlayer(item);
+      promptForLastPuzzle(puzzle);
+      return true;
+    }
   }
+  print(`You can't use this item here 😔`);
+}
+
+async function promptForLastPuzzle(puzzle) {
+  let answer = await ask("Now you must recite the ancient incantation: ");
+  if(puzzle.answer === answer){
+    print(puzzle.solvedMessage);
+  } else {
+    print(puzzle.wrongAnswer);
+  }
+  endGame();
 }
 
 function read(item) {
@@ -210,35 +223,16 @@ function read(item) {
   }
 }
 
-async function use(item, targetedRoom) {
-  let puzzle = puzzleLocation[targetedRoom];
-  if (itemLookUp.hasOwnProperty(item) && [...player.inventory].includes(item)) {
-    item = itemLookUp[item];
-    if (item.puzzleCode === puzzle.answer) {
-      setPuzzleIsSolved(puzzle, targetedRoom);
-      return true;
-    } else if (puzzle.name === "oldAltar" && item.name === "paper"){
-      print("You burned the magical paper");
-      let answer = await ask("Now you must recite the ancient incantation: ");
-      if(puzzle.answer === answer){
-        print(puzzle.solvedMessage);
-        process.exit(0);
-      } else {
-        print(puzzle.wrongAnswer);
-        process.exit(0);
-      }
-    }
-  } else {
-    print(`You can't use this ${item} here 😔`);
-  }
-}
-
 async function look() {
   let room = locationLookUp[player.location];
   print(`${room.description1}`);
   await ask("Press enter to continue...");
   print(`${room.description2}`);
   await ask("Press enter to continue...");
+}
+
+function endGame() {
+  return player.answer = "exit";
 }
 
 function showPlayerInventory() {
@@ -249,7 +243,7 @@ function showPlayerInventory() {
   }
 }
 
-// * take/drop function
+// ? take/drop functions
 function take(item) {
   let itemObjectName = getObjectName(item, itemNameLookUp);
   if (itemIsPresent(item) && itemLookUp[itemObjectName].isTakeable) {
@@ -265,8 +259,7 @@ function take(item) {
 
 function drop(item) {
   if (itemLookUp.hasOwnProperty(item) && [...player.inventory].includes(item)) {
-    itemIndex = player.inventory.indexOf(item);
-    player.inventory.splice(itemIndex, 1);
+    removeItemFromPlayer(item);
     addItemToRoom(player.location, itemNameLookUp[item][0]);
     return print(`You dropped a ${item} 🤚`);
   } else if(![...player.inventory].includes(item)){
@@ -276,6 +269,7 @@ function drop(item) {
   }
 }
 
+// helper functions for take/drop functions
 function itemIsPresent(item){
   let itemObjectName = getObjectName(item, itemNameLookUp);
   let locationItems = locationLookUp[player.location].inventory;
@@ -303,7 +297,7 @@ function addItemToRoom(currentLocation, addedItem) {
   location.inventory.push(addedItem);
 }
 
-// * puzzle functions
+// * Puzzle functions
 async function displayRoomPuzzle(targetedRoom) {
   let puzzle = puzzleLocation[targetedRoom]
   print(`${puzzle.message}`);
@@ -325,6 +319,16 @@ async function displayRoomPuzzle(targetedRoom) {
     } else {
       print(puzzle.wrongAnswer);
     }
+  }
+}
+
+function hasUseCommand(input) {
+  let inputArr = input.trim().split(" ");
+  let command = getCommand(inputArr);
+  if(validateCommandKey(command)){
+    return true;
+  } else {
+    return false;
   }
 }
 
@@ -350,6 +354,11 @@ function getTarget(input) {
   } else {
     return null;
   }
+}
+
+function removeItemFromPlayer(item) {
+  itemIndex = player.inventory.indexOf(item);
+  player.inventory.splice(itemIndex, 1);
 }
 
 function print(text) {

@@ -7,7 +7,7 @@ class Puzzle {
         this._solvedMessage = solvedMessage;
         this._answer = answer;
         this._wrongAnswer = wrongAnswer;
-        this._isSolved = false;
+        this._isSolved = isSolved;
     }
 
     get name(){
