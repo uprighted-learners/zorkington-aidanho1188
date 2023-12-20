@@ -1,7 +1,7 @@
 [
     {
         "name": "sign",
-        "description": "The sign says \"Welcome to Burlington Code Academy! Come on up to the third floor. If the door is locked, use the code 12345.\"",
+        "description": "The sign says \"Welcome to the Mystical Church of Wonders! If the door is locked, use the code 12345.\"",
         "location": "startRoom",
         "isTakeable": false
     },

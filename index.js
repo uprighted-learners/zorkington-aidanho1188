@@ -33,6 +33,7 @@ const paper = new Item(items[1].name, items[1].description, items[1].location, i
 const key = new Item(items[2].name, items[2].description, items[2].location, items[2].isTakeable, items[2].puzzleCode);
 const amulet = new Item(items[3].name, items[3].description, items[3].location, items[3].isTakeable, items[3].puzzleCode);
 
+// probably a good idea to put these puzzles inside the rooms list as a nested property
 const lockpad = new Puzzle(puzzles[0].name, puzzles[0].location, puzzles[0].message, puzzles[0].promptMessage, puzzles[0].solved, puzzles[0].answer, puzzles[0].wrongAnswer, puzzles[0].isSolved);
 const grandDoor = new Puzzle(puzzles[1].name, puzzles[1].location, puzzles[1].message, puzzles[1].promptMessage, puzzles[1].solved, puzzles[1].answer, puzzles[1].wrongAnswer, puzzles[1].isSolved);
 const hiddenPassage = new Puzzle(puzzles[2].name, puzzles[2].location, puzzles[2].message, puzzles[2].promptMessage, puzzles[2].solved, puzzles[2].answer, puzzles[2].wrongAnswer, puzzles[2].isSolved);
@@ -66,7 +67,7 @@ let commandLookUp = {
   endGame: ["exit"],
 };
 
-// future feature: write a help function to display all the commands
+// Future feature: write a help function to display all the commands
 let commandFunctionLookUp = {
   read: read,
   look: look,
@@ -98,7 +99,7 @@ let locationState = {
   room6: ["room5"], // finnal room
 };
 
-// Future feature: should write a function to deal with these case sensitive room names
+// Future feature: should write a function to deal with these case sensitive room's names
 let roomNameLookup = {
   startRoom: ["street", "outside"],
   room1: ["church"],
@@ -171,7 +172,7 @@ function endGame() {
 
 async function moveRoom(targetedRoom) {
   let currentRoom = player.location;
-  targetedRoom = getRoomObjectName(targetedRoom);
+  targetedRoom = getObjectName(targetedRoom, roomNameLookup);
   try {
     let isUnLocked = locationLookUp[targetedRoom].isUnlocked;
     if (locationState[currentRoom].includes(targetedRoom) && isUnLocked) {
@@ -200,11 +201,11 @@ async function displayRoomPuzzle(targetedRoom) {
     } else if (input === "back") {
       return false;
     } else if(hasUseCommand(input)) {
-      let inputArr = input.trim().split(" ");
+      let inputArr = input.trim().split(" "); // bad code, should write this in another function
       let item = getTarget(inputArr);
       let usuable = await use(item, targetedRoom);
       if(usuable === true) {
-        return true;
+        return true; 
       }
     } else {
       console.log(puzzle.wrongAnswer);
@@ -223,9 +224,9 @@ function hasUseCommand(input) {
 }
 
 // dry
-function getRoomObjectName(targetedRoom) {
-  return Object.keys(roomNameLookup).find((key) => roomNameLookup[key].includes(targetedRoom));
-}
+// functi(targetedRoom) {
+//   return Object.keys(roomNameLookup).find((key) => roomNameLookup[key].includes(targetedRoom));
+// }
 
 function getItemObjectName(item) {
   return Object.keys(itemNameLookUp).find((key) => itemNameLookUp[key].includes(item));
@@ -298,7 +299,7 @@ function drop(item) {
 }
 
 function take(item) {
-  let itemObjectName = getItemObjectName(item);
+  let itemObjectName = getObjectName(item, itemNameLookUp);
   if (itemIsPresent(item) && itemLookUp[itemObjectName].isTakeable) {
     player.inventory.push(itemObjectName);
     removeItemFromRoom(player.location, itemObjectName);
@@ -311,14 +312,14 @@ function take(item) {
 }
 
 function itemIsPresent(item){
-  let itemObjectName = getItemObjectName(item);
+  let itemObjectName = getObjectName(item, itemNameLookUp);
   let locationItems = locationLookUp[player.location].inventory;
   return itemLookUp.hasOwnProperty(itemObjectName) &&  checkAvailableItem(itemObjectName, locationItems);
 }
 
 function checkAvailableItem(itemObjectName, availableItems) {
   for (var i = 0; i < availableItems.length; i++) {
-    if(getItemObjectName(availableItems[i]) == itemObjectName) {
+    if(getObjectName(availableItems[i], itemNameLookUp) == itemObjectName) {
       return true;
     }
   }
@@ -326,7 +327,7 @@ function checkAvailableItem(itemObjectName, availableItems) {
 }
 
 function removeItemFromRoom(currentLocation, removeItem) {
-  removeItem = getItemObjectName(removeItem);
+  removeItem = getObjectName(removeItem, itemNameLookUp);
   let location = locationLookUp[currentLocation];
   let itemIndex = location.inventory.indexOf(removeItem);
   location.inventory.splice(itemIndex, 1);
