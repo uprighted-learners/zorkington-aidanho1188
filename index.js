@@ -20,34 +20,29 @@ function ask(questionText) {
   });
 }
 
-const startRoom = new Location(rooms[0].name, rooms[0].description1, rooms[0].description2, rooms[0].inventory, rooms[0].isUnlocked);
-const room1 = new Location(rooms[1].name, rooms[1].description1, rooms[1].description2, rooms[1].inventory, rooms[1].isUnlocked);
-const room2 = new Location(rooms[2].name, rooms[2].description1, rooms[2].description2, rooms[2].inventory, rooms[2].isUnlocked);
-const room3 = new Location(rooms[3].name, rooms[3].description1, rooms[3].description2, rooms[3].inventory, rooms[3].isUnlocked);
-const room4 = new Location(rooms[4].name, rooms[4].description1, rooms[4].description2, rooms[4].inventory, rooms[4].isUnlocked);
-const room5 = new Location(rooms[5].name, rooms[5].description1, rooms[5].description2, rooms[5].inventory, rooms[5].isUnlocked);
-const room6 = new Location(rooms[6].name, rooms[6].description1, rooms[6].description2, rooms[6].inventory, rooms[6].isUnlocked);
+let roomsList = {...rooms};
+let itemsList = {...items};
+let puzzlesList = {...puzzles};
 
-const sign = new Item(items[0].name, items[0].description, items[0].location, items[0].isTakeable);
-const paper = new Item(items[1].name, items[1].description, items[1].location, items[1].isTakeable);
-const key = new Item(items[2].name, items[2].description, items[2].location, items[2].isTakeable, items[2].puzzleCode);
-const amulet = new Item(items[3].name, items[3].description, items[3].location, items[3].isTakeable, items[3].puzzleCode);
+const startRoom = new Location(...Object.values(roomsList[0]));
+const room1 = new Location(...Object.values(roomsList[1]));
+const room2 = new Location(...Object.values(roomsList[2]));
+const room3 = new Location(...Object.values(roomsList[3]));
+const room4 = new Location(...Object.values(roomsList[4]));
+const room5 = new Location(...Object.values(roomsList[5]));
+const room6 = new Location(...Object.values(roomsList[6]));
 
-// probably a good idea to put these puzzles inside the rooms list as a nested property
-const lockpad = new Puzzle(puzzles[0].name, puzzles[0].location, puzzles[0].message, puzzles[0].promptMessage, puzzles[0].solved, puzzles[0].answer, puzzles[0].wrongAnswer, puzzles[0].isSolved);
-const grandDoor = new Puzzle(puzzles[1].name, puzzles[1].location, puzzles[1].message, puzzles[1].promptMessage, puzzles[1].solved, puzzles[1].answer, puzzles[1].wrongAnswer, puzzles[1].isSolved);
-const hiddenPassage = new Puzzle(puzzles[2].name, puzzles[2].location, puzzles[2].message, puzzles[2].promptMessage, puzzles[2].solved, puzzles[2].answer, puzzles[2].wrongAnswer, puzzles[2].isSolved);
-const oldAltar = new Puzzle(puzzles[3].name, puzzles[3].location, puzzles[3].message, puzzles[3].promptMessage, puzzles[3].solved, puzzles[3].answer, puzzles[3].wrongAnswer, puzzles[3].isSolved);
+const sign = new Item(...Object.values(itemsList[0]));
+const paper = new Item(...Object.values(itemsList[1]));
+const key = new Item(...Object.values(itemsList[2]));
+const amulet = new Item(...Object.values(itemsList[3]));
+
+const lockpad = new Puzzle(...Object.values(puzzlesList[0]));
+const grandDoor = new Puzzle(...Object.values(puzzlesList[1]));
+const hiddenPassage = new Puzzle(...Object.values(puzzlesList[2]));
+const oldAltar = new Puzzle(...Object.values(puzzlesList[3]));
 
 const player = new Player();
-
-// Initialize objects
-// use loop, room name = room+i
-// new Location(room[i].name ...)
-function initialize(object){
-  let result;
-  return result;
-}
 
 let itemLookUp = {
   sign: sign,
@@ -183,7 +178,7 @@ async function moveRoom(targetedRoom) {
       print("You can't move to this room! 🚫");
     }
   } catch (error) {
-    print(`This ${targetedRoom} room does not exist! 🚫`);
+    print(`This room does not exist! 🚫`);
   }
 }
 
