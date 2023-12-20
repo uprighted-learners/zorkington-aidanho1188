@@ -4,9 +4,11 @@ const {Item} = require("./classes/Item");
 const {Location} = require("./classes/Location");
 const {Player} = require("./classes/Player");
 const {Puzzle} = require("./classes/Puzzle");
+
 const roomsJsonData = fs.readFileSync("./data/roomsList.json");
 const itemsJsonData = fs.readFileSync("./data/itemsList.json");
 const puzzleJsonData = fs.readFileSync("./data/puzzleList.json");
+
 const items = JSON.parse(itemsJsonData);
 const rooms = JSON.parse(roomsJsonData);
 const puzzles = JSON.parse(puzzleJsonData);
@@ -38,6 +40,14 @@ const hiddenPassage = new Puzzle(puzzles[2].name, puzzles[2].location, puzzles[2
 const oldAltar = new Puzzle(puzzles[3].name, puzzles[3].location, puzzles[3].message, puzzles[3].promptMessage, puzzles[3].solved, puzzles[3].answer, puzzles[3].wrongAnswer, puzzles[3].isSolved);
 
 const player = new Player();
+
+// Initialize objects
+// use loop, room name = room+i
+// new Location(room[i].name ...)
+function initialize(object){
+  let result;
+  return result;
+}
 
 let itemLookUp = {
   sign: sign,
@@ -150,19 +160,7 @@ async function handleUserCommand(answer) {
   try {
     await commandFunction(target);
   } catch (error) {
-    console.log(`I don't know this "${command}" command. 😕`);
-  }
-}
-
-function getCommand(input) {
-  return input[0].toLowerCase();
-}
-
-function getTarget(input) {
-  if (input.length > 1) {
-    return input.splice(1).join(" ");
-  } else {
-    return null;
+    print(`I don't know this "${command}" command. 😕`);
   }
 }
 
@@ -183,13 +181,13 @@ async function moveRoom(targetedRoom) {
     if (locationState[currentRoom].includes(targetedRoom) && isUnLocked) {
       player.location = targetedRoom;
     } else if (locationState[currentRoom].includes(targetedRoom) && isUnLocked === false) {
-      console.log("\n\n\nPlease solve this puzzle first!");
+      print("\n\n\nPlease solve this puzzle first!");
       await displayRoomPuzzle(targetedRoom);
     } else {
-      console.log("You can't move to this room!");
+      print("You can't move to this room! 🚫");
     }
   } catch (error) {
-    console.log(`This ${targetedRoom} room does not exist!`);
+    print(`This ${targetedRoom} room does not exist! 🚫`);
   }
 }
 
@@ -203,16 +201,12 @@ function hasUseCommand(input) {
   }
 }
 
-function getObjectName(item, nameLookUp) {
-  return Object.keys(nameLookUp).find((key) => nameLookUp[key].includes(item));
-}
-
 function read(item) {
   if (itemIsPresent(item)) {
     item = itemLookUp[item];
-    return console.log(item.description);
+    return print(item.description);
   } else {
-    return console.log(`You can't read this ${item} 😔`);
+    return print(`You can't read this ${item} 😔`);
   }
 }
 
@@ -224,35 +218,34 @@ async function use(item, targetedRoom) {
       setPuzzleIsSolved(puzzle, targetedRoom);
       return true;
     } else if (puzzle.name === "oldAltar" && item.name === "paper"){
-      console.log("You burned the magical paper");
+      print("You burned the magical paper");
       let answer = await ask("Now you must recite the ancient incantation: ");
       if(puzzle.answer === answer){
-        console.log(puzzle.solvedMessage);
+        print(puzzle.solvedMessage);
         process.exit(0);
       } else {
-        console.log(puzzle.wrongAnswer);
+        print(puzzle.wrongAnswer);
         process.exit(0);
       }
     }
   } else {
-    console.log(`You can't use this ${item} here 😔`);
+    print(`You can't use this ${item} here 😔`);
   }
 }
 
-// TODO: write a word wrap function that let us print out string with the length of 80 or less per line
 async function look() {
   let room = locationLookUp[player.location];
-  console.log(`${room.description1}`);
+  print(`${room.description1}`);
   await ask("Press enter to continue...");
-  console.log(`${room.description2}`);
+  print(`${room.description2}`);
   await ask("Press enter to continue...");
 }
 
 function showPlayerInventory() {
   if (player.inventory.length) {
-    console.log([...player.inventory].map((item) => item));
+    console.log(`Your inventory: ${[...player.inventory].map((item) => item)}`);
   } else {
-    console.log(`Your inventory is empty 😔`);
+    print(`Your inventory is empty 😔`);
   }
 }
 
@@ -262,11 +255,11 @@ function take(item) {
   if (itemIsPresent(item) && itemLookUp[itemObjectName].isTakeable) {
     player.inventory.push(itemObjectName);
     removeItemFromRoom(player.location, itemObjectName);
-    return console.log(`You take a ${item} 🤚`);
+    return print(`You take a ${item} 🤚`);
   } else if (item === null){
-    return console.log(`You can't take nothing 🚫`);
+    return print(`You can't take nothing 🚫`);
   } else {
-    return console.log(`You can't take this ${item} 🚫`);
+    return print(`You can't take this ${item} 🚫`);
   }
 }
 
@@ -275,11 +268,11 @@ function drop(item) {
     itemIndex = player.inventory.indexOf(item);
     player.inventory.splice(itemIndex, 1);
     addItemToRoom(player.location, itemNameLookUp[item][0]);
-    return console.log(`You dropped a ${item} 🤚`);
+    return print(`You dropped a ${item} 🤚`);
   } else if(![...player.inventory].includes(item)){
-    return console.log(`You don't have this ${item} to drop 😕`);
+    return print(`You don't have this ${item} to drop 😕`);
   } else {
-    return console.log(`You can't drop this ${itemName} 🚫`);
+    return print(`You can't drop this ${itemName} 🚫`);
   }
 }
 
@@ -313,7 +306,7 @@ function addItemToRoom(currentLocation, addedItem) {
 // * puzzle functions
 async function displayRoomPuzzle(targetedRoom) {
   let puzzle = puzzleLocation[targetedRoom]
-  console.log(`${puzzle.message}`);
+  print(`${puzzle.message}`);
   // prompt for password / back / use items
   while (!puzzle.isSolved) {
     let input = await prompt(puzzle.promptMessage);
@@ -330,7 +323,7 @@ async function displayRoomPuzzle(targetedRoom) {
         return true; 
       }
     } else {
-      console.log(puzzle.wrongAnswer);
+      print(puzzle.wrongAnswer);
     }
   }
 }
@@ -339,5 +332,44 @@ function setPuzzleIsSolved(puzzle, targetedRoom) {
   locationLookUp[targetedRoom].isUnlocked = true;
   player.location = targetedRoom;
   puzzle.isSolved = true;
-  console.log(`${puzzle.solvedMessage}`);
+  print(`${puzzle.solvedMessage}`);
+}
+
+// * Helper functions
+function getObjectName(item, nameLookUp) {
+  return Object.keys(nameLookUp).find((key) => nameLookUp[key].includes(item));
+}
+
+function getCommand(input) {
+  return input[0].toLowerCase();
+}
+
+function getTarget(input) {
+  if (input.length > 1) {
+    return input.splice(1).join(" ");
+  } else {
+    return null;
+  }
+}
+
+function print(text) {
+  let wordArr = text.split(" ");
+  let size = 0;
+  let phrase = "";
+
+  for (let i = 0; i < wordArr.length; i++) {
+    if (size <= 80) {
+      phrase += wordArr[i] + " ";
+      size += wordArr[i].length + 1;
+    } else {
+      console.log(phrase);
+      size = 0;
+      phrase = "";
+      i--;
+    }
+  }
+
+  if (phrase.trim() !== "") {
+    console.log(phrase);
+  }
 }
