@@ -1,9 +1,9 @@
 const fs = require("fs");
 const readline = require("readline");
-const {Item} = require("./Item");
-const {Location} = require("./Location");
-const {Player} = require("./Player");
-const {Puzzle} = require("./Puzzle");
+const {Item} = require("./Classes/Item");
+const {Location} = require("./Classes/Location");
+const {Player} = require("./Classes/Player");
+const {Puzzle} = require("./Classes/Puzzle");
 const roomsJsonData = fs.readFileSync("./data/roomsList.json");
 const itemsJsonData = fs.readFileSync("./data/itemsList.json");
 const puzzleJsonData = fs.readFileSync("./data/puzzleList.json");
@@ -223,15 +223,6 @@ function hasUseCommand(input) {
   }
 }
 
-// dry
-// functi(targetedRoom) {
-//   return Object.keys(roomNameLookup).find((key) => roomNameLookup[key].includes(targetedRoom));
-// }
-
-function getItemObjectName(item) {
-  return Object.keys(itemNameLookUp).find((key) => itemNameLookUp[key].includes(item));
-}
-// TODO: replace those 2 above with this one
 function getObjectName(item, nameLookUp) {
   return Object.keys(nameLookUp).find((key) => nameLookUp[key].includes(item));
 }
@@ -244,7 +235,6 @@ function read(item) {
     return console.log(`You can't read this ${item} 😔`);
   }
 }
-
 
 // TODO: write a word wrap function that let us print out string with the length of 80 or less per line
 async function look() {
