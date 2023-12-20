@@ -1,5 +1,5 @@
 class Location {
-  constructor(name, description1, description2, inventory, isUnlocked = false) {
+  constructor(name, description1, description2, inventory, isUnlocked) {
     this._name = name;
     this._description1 = description1;
     this._description2 = description2;

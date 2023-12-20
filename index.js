@@ -1,9 +1,9 @@
 const fs = require("fs");
 const readline = require("readline");
-const {Item} = require("./Classes/Item");
-const {Location} = require("./Classes/Location");
-const {Player} = require("./Classes/Player");
-const {Puzzle} = require("./Classes/Puzzle");
+const {Item} = require("./classes/Item");
+const {Location} = require("./classes/Location");
+const {Player} = require("./classes/Player");
+const {Puzzle} = require("./classes/Puzzle");
 const roomsJsonData = fs.readFileSync("./data/roomsList.json");
 const itemsJsonData = fs.readFileSync("./data/itemsList.json");
 const puzzleJsonData = fs.readFileSync("./data/puzzleList.json");
@@ -18,15 +18,13 @@ function ask(questionText) {
   });
 }
 
-// hmm its so dry here 
-// TODO: fix this and put all classes into a folder
-const startRoom = new Location(rooms[0].name, rooms[0].description1, rooms[0].description2, rooms[0].inventory, true);
-const room1 = new Location(rooms[1].name, rooms[1].description1, rooms[1].description2, rooms[1].inventory);
-const room2 = new Location(rooms[2].name, rooms[2].description1, rooms[2].description2, rooms[2].inventory);
-const room3 = new Location(rooms[3].name, rooms[3].description1, rooms[3].description2, rooms[3].inventory, true);
-const room4 = new Location(rooms[4].name, rooms[4].description1, rooms[4].description2, rooms[4].inventory, true);
-const room5 = new Location(rooms[5].name, rooms[5].description1, rooms[5].description2, rooms[5].inventory);
-const room6 = new Location(rooms[6].name, rooms[6].description1, rooms[6].description2, rooms[6].inventory);
+const startRoom = new Location(rooms[0].name, rooms[0].description1, rooms[0].description2, rooms[0].inventory, rooms[0].isUnlocked);
+const room1 = new Location(rooms[1].name, rooms[1].description1, rooms[1].description2, rooms[1].inventory, rooms[1].isUnlocked);
+const room2 = new Location(rooms[2].name, rooms[2].description1, rooms[2].description2, rooms[2].inventory, rooms[2].isUnlocked);
+const room3 = new Location(rooms[3].name, rooms[3].description1, rooms[3].description2, rooms[3].inventory, rooms[3].isUnlocked);
+const room4 = new Location(rooms[4].name, rooms[4].description1, rooms[4].description2, rooms[4].inventory, rooms[4].isUnlocked);
+const room5 = new Location(rooms[5].name, rooms[5].description1, rooms[5].description2, rooms[5].inventory, rooms[5].isUnlocked);
+const room6 = new Location(rooms[6].name, rooms[6].description1, rooms[6].description2, rooms[6].inventory, rooms[6].isUnlocked);
 
 const sign = new Item(items[0].name, items[0].description, items[0].location, items[0].isTakeable);
 const paper = new Item(items[1].name, items[1].description, items[1].location, items[1].isTakeable);
@@ -119,22 +117,41 @@ let puzzleLocation = {
 
 start();
 
+// * game main logics
 async function start() {
   displayRoom();
   await gameLoop(player);
   process.exit();
 }
 
+function displayRoom() {
+  let room = locationLookUp[player.location];
+  return console.log(`\n\n\n\n\n\n\n\nRoom name: ${room.name}   Available items: ${room.inventory}    Commands: go, i, look, read, open, burn, drop, use...`);
+}
+
 async function gameLoop(player) {
   do {
     let answer = await prompt();
-    await interact(answer);
+    await handleUserCommand(answer);
     displayRoom();
   } while (player.answer !== "exit");
 }
 
 async function prompt(question = "") {
   return ask(`${question}>_ `);
+}
+
+async function handleUserCommand(answer) {
+  let answerArr = answer.trim().split(" ");
+  let command = getCommand(answerArr);
+  let target = getTarget(answerArr);
+  let commandKey = validateCommandKey(command); 
+  let commandFunction = commandFunctionLookUp[commandKey];
+  try {
+    await commandFunction(target);
+  } catch (error) {
+    console.log(`I don't know this "${command}" command. 😕`);
+  }
 }
 
 function getCommand(input) {
@@ -149,23 +166,11 @@ function getTarget(input) {
   }
 }
 
-async function interact(answer) {
-  let answerArr = answer.trim().split(" ");
-  let command = getCommand(answerArr);
-  let target = getTarget(answerArr);
-  let commandKey = validateCommandKey(command); 
-  let commandFunction = commandFunctionLookUp[commandKey];
-  try {
-    await commandFunction(target);
-  } catch (error) {
-    console.log(`I don't know this "${command}" command. 😕`);
-  }
-}
-
 function validateCommandKey(command) {
   return Object.keys(commandLookUp).find((key) => commandLookUp[key].includes(command)) || false;
 }
 
+// * User commands
 function endGame() {
   return player.answer = "exit";
 }
@@ -185,31 +190,6 @@ async function moveRoom(targetedRoom) {
     }
   } catch (error) {
     console.log(`This ${targetedRoom} room does not exist!`);
-  }
-}
-
-async function displayRoomPuzzle(targetedRoom) {
-  let puzzle = puzzleLocation[targetedRoom]
-  console.log(`${puzzle.message}`);
-  // prompt for password / back / use items
-  while (!puzzle.isSolved) {
-    let input = await prompt(puzzle.promptMessage);
-    if (input === puzzle.answer) {
-      setPuzzleIsSolved(puzzle, targetedRoom);
-      player.location = targetedRoom;
-      return true;
-    } else if (input === "back") {
-      return false;
-    } else if(hasUseCommand(input)) {
-      let inputArr = input.trim().split(" "); // bad code, should write this in another function
-      let item = getTarget(inputArr);
-      let usuable = await use(item, targetedRoom);
-      if(usuable === true) {
-        return true; 
-      }
-    } else {
-      console.log(puzzle.wrongAnswer);
-    }
   }
 }
 
@@ -236,28 +216,12 @@ function read(item) {
   }
 }
 
-// TODO: write a word wrap function that let us print out string with the length of 80 or less per line
-async function look() {
-  let room = locationLookUp[player.location];
-  console.log(`${room.description1}`);
-  await ask("Press enter to continue...");
-  console.log(`${room.description2}`);
-  await ask("Press enter to continue...");
-}
-
-function setPuzzleIsSolved(puzzle, targetedRoom) {
-  locationLookUp[targetedRoom].isUnlocked = true;
-  puzzle.isSolved = true;
-  console.log(`${puzzle.solvedMessage}`);
-}
-
 async function use(item, targetedRoom) {
   let puzzle = puzzleLocation[targetedRoom];
   if (itemLookUp.hasOwnProperty(item) && [...player.inventory].includes(item)) {
     item = itemLookUp[item];
     if (item.puzzleCode === puzzle.answer) {
       setPuzzleIsSolved(puzzle, targetedRoom);
-      player.location = targetedRoom;
       return true;
     } else if (puzzle.name === "oldAltar" && item.name === "paper"){
       console.log("You burned the magical paper");
@@ -275,19 +239,24 @@ async function use(item, targetedRoom) {
   }
 }
 
-function drop(item) {
-  if (itemLookUp.hasOwnProperty(item) && [...player.inventory].includes(item)) {
-    itemIndex = player.inventory.indexOf(item);
-    player.inventory.splice(itemIndex, 1);
-    addItemToRoom(player.location, itemNameLookUp[item][0]);
-    return console.log(`You dropped a ${item} 🤚`);
-  } else if(![...player.inventory].includes(item)){
-    return console.log(`You don't have this ${item} to drop 😕`);
+// TODO: write a word wrap function that let us print out string with the length of 80 or less per line
+async function look() {
+  let room = locationLookUp[player.location];
+  console.log(`${room.description1}`);
+  await ask("Press enter to continue...");
+  console.log(`${room.description2}`);
+  await ask("Press enter to continue...");
+}
+
+function showPlayerInventory() {
+  if (player.inventory.length) {
+    console.log([...player.inventory].map((item) => item));
   } else {
-    return console.log(`You can't drop this ${itemName} 🚫`);
+    console.log(`Your inventory is empty 😔`);
   }
 }
 
+// * take/drop function
 function take(item) {
   let itemObjectName = getObjectName(item, itemNameLookUp);
   if (itemIsPresent(item) && itemLookUp[itemObjectName].isTakeable) {
@@ -298,6 +267,19 @@ function take(item) {
     return console.log(`You can't take nothing 🚫`);
   } else {
     return console.log(`You can't take this ${item} 🚫`);
+  }
+}
+
+function drop(item) {
+  if (itemLookUp.hasOwnProperty(item) && [...player.inventory].includes(item)) {
+    itemIndex = player.inventory.indexOf(item);
+    player.inventory.splice(itemIndex, 1);
+    addItemToRoom(player.location, itemNameLookUp[item][0]);
+    return console.log(`You dropped a ${item} 🤚`);
+  } else if(![...player.inventory].includes(item)){
+    return console.log(`You don't have this ${item} to drop 😕`);
+  } else {
+    return console.log(`You can't drop this ${itemName} 🚫`);
   }
 }
 
@@ -328,15 +310,34 @@ function addItemToRoom(currentLocation, addedItem) {
   location.inventory.push(addedItem);
 }
 
-function showPlayerInventory() {
-  if (player.inventory.length) {
-    console.log([...player.inventory].map((item) => item));
-  } else {
-    console.log(`Your inventory is empty 😔`);
+// * puzzle functions
+async function displayRoomPuzzle(targetedRoom) {
+  let puzzle = puzzleLocation[targetedRoom]
+  console.log(`${puzzle.message}`);
+  // prompt for password / back / use items
+  while (!puzzle.isSolved) {
+    let input = await prompt(puzzle.promptMessage);
+    if (input === puzzle.answer) {
+      setPuzzleIsSolved(puzzle, targetedRoom);
+      return true;
+    } else if (input === "back") {
+      return false;
+    } else if(hasUseCommand(input)) {
+      let inputArr = input.trim().split(" "); // bad code, should write this in another function
+      let item = getTarget(inputArr);
+      let usuable = await use(item, targetedRoom);
+      if(usuable === true) {
+        return true; 
+      }
+    } else {
+      console.log(puzzle.wrongAnswer);
+    }
   }
 }
 
-function displayRoom() {
-  let room = locationLookUp[player.location];
-  return console.log(`\n\n\n\n\n\n\n\nRoom name: ${room.name}   Available items: ${room.inventory}    Commands: go, i, look, read, open, burn, drop, use...`);
+function setPuzzleIsSolved(puzzle, targetedRoom) {
+  locationLookUp[targetedRoom].isUnlocked = true;
+  player.location = targetedRoom;
+  puzzle.isSolved = true;
+  console.log(`${puzzle.solvedMessage}`);
 }
