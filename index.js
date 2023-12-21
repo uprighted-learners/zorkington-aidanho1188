@@ -14,12 +14,6 @@ const rooms = JSON.parse(roomsJsonData);
 const puzzles = JSON.parse(puzzleJsonData);
 const readlineInterface = readline.createInterface(process.stdin, process.stdout);
 
-function ask(questionText) {
-  return new Promise((resolve, reject) => {
-    readlineInterface.question(questionText, resolve);
-  });
-}
-
 let roomsList = {...rooms};
 let itemsList = {...items};
 let puzzlesList = {...puzzles};
@@ -159,10 +153,6 @@ async function handleUserCommand(answer) {
   }
 }
 
-function validateCommandKey(command) {
-  return Object.keys(commandLookUp).find((key) => commandLookUp[key].includes(command)) || false;
-}
-
 // * User in game commands functions
 async function moveRoom(targetedRoom) {
   let currentRoom = player.location;
@@ -206,7 +196,7 @@ async function promptForLastPuzzle(puzzle) {
   } else {
     print(puzzle.wrongAnswer);
   }
-  endGame();
+  process.exit();
 }
 
 function read(item) {
@@ -335,6 +325,16 @@ function setPuzzleIsSolved(puzzle, targetedRoom) {
 }
 
 // * Helper functions
+function ask(questionText) {
+  return new Promise((resolve, reject) => {
+    readlineInterface.question(questionText, resolve);
+  });
+}
+
+function validateCommandKey(command) {
+  return Object.keys(commandLookUp).find((key) => commandLookUp[key].includes(command)) || false;
+}
+
 function getObjectName(item, nameLookUp) {
   return Object.keys(nameLookUp).find((key) => nameLookUp[key].includes(item));
 }
