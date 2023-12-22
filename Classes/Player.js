@@ -1,5 +1,5 @@
 class Player {
-  constructor(inventory = [], location = "startRoom") {
+  constructor(inventory = [], location = "room0") {
     this._inventory = inventory;
     this._location = location;
     this._answer = "";

@@ -18,13 +18,13 @@ let roomsList = {...rooms};
 let itemsList = {...items};
 let puzzlesList = {...puzzles};
 
-const startRoom = new Location(...Object.values(roomsList[0]));
-const room1 = new Location(...Object.values(roomsList[1]));
-const room2 = new Location(...Object.values(roomsList[2]));
-const room3 = new Location(...Object.values(roomsList[3]));
-const room4 = new Location(...Object.values(roomsList[4]));
-const room5 = new Location(...Object.values(roomsList[5]));
-const room6 = new Location(...Object.values(roomsList[6]));
+// const room0 = new Location(...Object.values(roomsList[0]));
+// const room1 = new Location(...Object.values(roomsList[1]));
+// const room2 = new Location(...Object.values(roomsList[2]));
+// const room3 = new Location(...Object.values(roomsList[3]));
+// const room4 = new Location(...Object.values(roomsList[4]));
+// const room5 = new Location(...Object.values(roomsList[5]));
+// const room6 = new Location(...Object.values(roomsList[6]));
 
 const sign = new Item(...Object.values(itemsList[0]));
 const paper = new Item(...Object.values(itemsList[1]));
@@ -76,29 +76,26 @@ let commandFunctionLookUp = {
   endGame: endGame
 };
 
-let locationLookUp = {
-  startRoom: startRoom,
-  room1: room1,
-  room2: room2,
-  room3: room3,
-  room4: room4,
-  room5: room5,
-  room6: room6,
-};
+let locationLookUp = {};
+(function initilize(){
+  for (let i = 0; i < rooms.length; i++) {
+    const key = "room" + i;
+    locationLookUp[key] = new Location(...Object.values(roomsList[i]));
+}})();
 
 let locationState = {
-  startRoom: ["room1"], // outside
-  room1: ["startRoom", "room2", "room4"], // church
+  room0: ["room1"], // outside
+  room1: ["room0", "room2", "room4"], // church
   room2: ["room1", "room3"], // floor1
   room3: ["room2"], // floor2
   room4: ["room1", "room5"], // basement1
-  room5: ["room4", "room6"], // basement2
+  room5: ["room4", "room6"], // basement2 
   room6: ["room5"], // finnal room
 };
 
 // Future feature: should write a function to deal with these case sensitive room's names
 let roomNameLookup = {
-  startRoom: ["street", "outside"],
+  room0: ["street", "outside"],
   room1: ["church"],
   room2: ["floor1", "floor one", "first floor", "grand door", "door", "Grand door", "granddoor", "floor 1","Floor one"],
   room3: ["floor2", "floor two", "second floor", "floor 2", "Floor two"],

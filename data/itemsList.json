@@ -2,7 +2,7 @@
     {
         "name": "sign",
         "description": "The sign says \"Welcome to the Mystical Church of Wonders! If the door is locked, use the code 12345.\"",
-        "location": "startRoom",
+        "location": "room0",
         "isTakeable": false
     },
     {
