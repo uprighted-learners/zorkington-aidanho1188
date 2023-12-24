@@ -4,9 +4,10 @@ const {Item} = require("./classes/Item");
 const {Location} = require("./classes/Location");
 const {Player} = require("./classes/Player");
 const {Puzzle} = require("./classes/Puzzle");
-const {roomNameLookup, locationState} = require("./lookUp");
-const {itemNameLookUp, commandLookUp} = require("./lookUp");
-const {displayRoom} = require("./displayRoom");
+const {roomNameLookup, locationState, itemNameLookUp} = require("./helpers/lookUps");
+const {displayRoom} = require("./helpers/displayRoom");
+const {getCommand, validateCommandKey, getObjectName, getTarget} = require("./helpers/getFunctions");
+const {print} = require("./helpers/print");
 
 const roomsJsonData = fs.readFileSync("./data/roomsList.json");
 const itemsJsonData = fs.readFileSync("./data/itemsList.json");
@@ -32,7 +33,6 @@ const hiddenPassage = new Puzzle(...Object.values(puzzlesList[2]));
 const oldAltar = new Puzzle(...Object.values(puzzlesList[3]));
 
 const player = new Player();
-exports.player = player;
 
 let itemLookUp = {
   sign: sign,
@@ -41,7 +41,6 @@ let itemLookUp = {
   amulet: amulet,
 };
 
-// Future feature: write a help function to display all the commands
 let commandFunctionLookUp = {
   read: read,
   look: look,
@@ -54,14 +53,6 @@ let commandFunctionLookUp = {
 };
 
 let locationLookUp = {};
-exports.locationLookUp = locationLookUp;
-
-function initialize() {
-  for (let i = 0; i < rooms.length; i++) {
-    const key = "room" + i;
-    locationLookUp[key] = new Location(...Object.values(roomsList[i]));
-  }
-}
 
 let puzzleLocation = {
   room1: lockpad,
@@ -70,13 +61,19 @@ let puzzleLocation = {
   room6: oldAltar,
 };
 
+function initialize() {
+  for (let i = 0; i < rooms.length; i++) {
+    const key = "room" + i;
+    locationLookUp[key] = new Location(...Object.values(roomsList[i]));
+  }
+}
+
 start();
 
 // * Main game logics
 async function start() {
-  // const player = new Player();
   initialize();
-  displayRoom(getCurrentLocation());
+  displayRoom(getCurrentLocation(player));
   await gameLoop(player);
   process.exit();
 }
@@ -85,7 +82,7 @@ async function gameLoop(player) {
   do {
     let answer = await prompt();
     await handleUserCommand(answer);
-    displayRoom(getCurrentLocation());
+    displayRoom(getCurrentLocation(player));
   } while (player.answer !== "exit");
 }
 
@@ -135,7 +132,7 @@ async function use(item, targetedRoom) {
     } else if (puzzle.name === "oldAltar" && item.name === "paper") {
       // special case for the last puzzle
       print("You burned the magical paper");
-      removeItemFromPlayer(item);
+      removeItemFromPlayer(player, item);
       promptForLastPuzzle(puzzle);
       return true;
     }
@@ -162,7 +159,11 @@ function read(item) {
   }
 }
 
-async function look() {
+async function look(args) {
+  if (args != null) {
+    console.log(`I can't look at this "${args}"`);
+    return;
+  }
   let room = locationLookUp[player.location];
   print(`${room.description1}`);
   await ask("Press enter to continue...");
@@ -198,7 +199,7 @@ function take(item) {
 
 function drop(item) {
   if (itemLookUp.hasOwnProperty(item) && [...player.inventory].includes(item)) {
-    removeItemFromPlayer(item);
+    removeItemFromPlayer(player, item);
     addItemToRoom(player.location, itemNameLookUp[item][0]);
     return print(`You dropped a ${item} 🤚`);
   } else if (![...player.inventory].includes(item)) {
@@ -264,11 +265,7 @@ async function displayRoomPuzzle(targetedRoom) {
 function hasUseCommand(input) {
   let inputArr = input.trim().split(" ");
   let command = getCommand(inputArr);
-  if (validateCommandKey(command)) {
-    return true;
-  } else {
-    return false;
-  }
+  return validateCommandKey(command);
 }
 
 function setPuzzleIsSolved(puzzle, targetedRoom) {
@@ -285,53 +282,11 @@ function ask(questionText) {
   });
 }
 
-function validateCommandKey(command) {
-  return Object.keys(commandLookUp).find((key) => commandLookUp[key].includes(command)) || false;
-}
-
-function getObjectName(item, nameLookUp) {
-  return Object.keys(nameLookUp).find((key) => nameLookUp[key].includes(item));
-}
-
-function getCommand(input) {
-  return input[0].toLowerCase();
-}
-
-function getTarget(input) {
-  if (input.length > 1) {
-    return input.splice(1).join(" ");
-  } else {
-    return null;
-  }
-}
-
-function removeItemFromPlayer(item) {
+function removeItemFromPlayer(player, item) {
   itemIndex = player.inventory.indexOf(item);
   player.inventory.splice(itemIndex, 1);
 }
 
-function print(text) {
-  let wordArr = text.split(" ");
-  let size = 0;
-  let phrase = "";
-
-  for (let i = 0; i < wordArr.length; i++) {
-    if (size <= 80) {
-      phrase += wordArr[i] + " ";
-      size += wordArr[i].length + 1;
-    } else {
-      console.log(phrase);
-      size = 0;
-      phrase = "";
-      i--;
-    }
-  }
-
-  if (phrase.trim() !== "") {
-    console.log(phrase);
-  }
-}
-
-function getCurrentLocation() {
+function getCurrentLocation(player) {
   return locationLookUp[player.location];
 }

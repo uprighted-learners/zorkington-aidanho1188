@@ -1,4 +1,4 @@
-let locationState = {
+const locationState = {
   room0: ["room1"], // outside
   room1: ["room0", "room2", "room4"], // church
   room2: ["room1", "room3"], // floor1
@@ -10,7 +10,7 @@ let locationState = {
 exports.locationState = locationState;
 
 // Future feature: should write a function to deal with these case sensitive room's names
-let roomNameLookup = {
+const roomNameLookup = {
   room0: ["street", "outside"],
   room1: ["church"],
   room2: ["floor1", "floor one", "first floor", "grand door", "door", "Grand door", "granddoor", "floor 1", "Floor one"],
@@ -22,7 +22,7 @@ let roomNameLookup = {
 exports.roomNameLookup = roomNameLookup;
 
 // future feature: display item name in a more descriptive way
-let itemNameLookUp = {
+const itemNameLookUp = {
   sign: ["sign"],
   paper: ["piece of paper", "paper"],
   key: ["ornate key", "key"],
@@ -30,7 +30,7 @@ let itemNameLookUp = {
 };
 exports.itemNameLookUp = itemNameLookUp;
 
-let commandLookUp = {
+const commandLookUp = {
   read: ["r", "read"],
   look: ["l", "look", "examine"],
   inventory: ["i", "inventory"],
