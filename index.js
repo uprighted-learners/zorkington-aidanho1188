@@ -4,6 +4,9 @@ const {Item} = require("./classes/Item");
 const {Location} = require("./classes/Location");
 const {Player} = require("./classes/Player");
 const {Puzzle} = require("./classes/Puzzle");
+const {roomNameLookup, locationState} = require("./lookUp");
+const {itemNameLookUp, commandLookUp} = require("./lookUp");
+const {displayRoom} = require("./displayRoom");
 
 const roomsJsonData = fs.readFileSync("./data/roomsList.json");
 const itemsJsonData = fs.readFileSync("./data/itemsList.json");
@@ -29,31 +32,13 @@ const hiddenPassage = new Puzzle(...Object.values(puzzlesList[2]));
 const oldAltar = new Puzzle(...Object.values(puzzlesList[3]));
 
 const player = new Player();
+exports.player = player;
 
 let itemLookUp = {
   sign: sign,
   paper: paper,
   key: key,
-  amulet: amulet
-};
-
-// future feature: display item name in a more descriptive way
-let itemNameLookUp = {
-  sign: ["sign"],
-  paper: ["piece of paper", "paper"],
-  key: ["ornate key", "key"],
-  amulet: ["amulet", "shadow amulet"]
-};
-
-let commandLookUp = {
-  read: ["r", "read"],
-  look: ["l", "look", "examine"],
-  inventory: ["i", "inventory"],
-  use: ["use", "u", "burn"],
-  drop: ["d", "drop"],
-  take: ["t", "take"],
-  go: ["go", "g", "move", "open", "o", "enter"],
-  endGame: ["exit"],
+  amulet: amulet,
 };
 
 // Future feature: write a help function to display all the commands
@@ -65,36 +50,18 @@ let commandFunctionLookUp = {
   drop: drop,
   take: take,
   go: moveRoom,
-  endGame: endGame
+  endGame: endGame,
 };
 
 let locationLookUp = {};
-(function initilize(){
+exports.locationLookUp = locationLookUp;
+
+function initialize() {
   for (let i = 0; i < rooms.length; i++) {
     const key = "room" + i;
     locationLookUp[key] = new Location(...Object.values(roomsList[i]));
-}})();
-
-let locationState = {
-  room0: ["room1"], // outside
-  room1: ["room0", "room2", "room4"], // church
-  room2: ["room1", "room3"], // floor1
-  room3: ["room2"], // floor2
-  room4: ["room1", "room5"], // basement1
-  room5: ["room4", "room6"], // basement2 
-  room6: ["room5"], // finnal room
-};
-
-// Future feature: should write a function to deal with these case sensitive room's names
-let roomNameLookup = {
-  room0: ["street", "outside"],
-  room1: ["church"],
-  room2: ["floor1", "floor one", "first floor", "grand door", "door", "Grand door", "granddoor", "floor 1","Floor one"],
-  room3: ["floor2", "floor two", "second floor", "floor 2", "Floor two"],
-  room4: ["basement1", "basement 1", "basement one", "first basement", "Basement one"],
-  room5: ["basement2", "basement 2", "basement two", "second basement", "Basement two", "passage", "hidden passage", "Hidden passage"],
-  room6: ["basement3", "basement 3", "basement three", "altar", "Altar"]
-};
+  }
+}
 
 let puzzleLocation = {
   room1: lockpad,
@@ -107,21 +74,18 @@ start();
 
 // * Main game logics
 async function start() {
-  displayRoom();
+  // const player = new Player();
+  initialize();
+  displayRoom(getCurrentLocation());
   await gameLoop(player);
   process.exit();
-}
-
-function displayRoom() {
-  let room = locationLookUp[player.location];
-  return console.log(`\n\n\n\nRoom name: ${room.name}   Available items: ${room.inventory}    Commands: go, i, look, read, open, burn, drop, use...`);
 }
 
 async function gameLoop(player) {
   do {
     let answer = await prompt();
     await handleUserCommand(answer);
-    displayRoom();
+    displayRoom(getCurrentLocation());
   } while (player.answer !== "exit");
 }
 
@@ -133,7 +97,7 @@ async function handleUserCommand(answer) {
   let answerArr = answer.trim().split(" ");
   let command = getCommand(answerArr);
   let target = getTarget(answerArr);
-  let commandKey = validateCommandKey(command); 
+  let commandKey = validateCommandKey(command);
   let commandFunction = commandFunctionLookUp[commandKey];
   try {
     await commandFunction(target);
@@ -168,7 +132,8 @@ async function use(item, targetedRoom) {
     if (item.puzzleCode === puzzle.answer) {
       setPuzzleIsSolved(puzzle, targetedRoom);
       return true;
-    } else if (puzzle.name === "oldAltar" && item.name === "paper"){ // special case for the last puzzle
+    } else if (puzzle.name === "oldAltar" && item.name === "paper") {
+      // special case for the last puzzle
       print("You burned the magical paper");
       removeItemFromPlayer(item);
       promptForLastPuzzle(puzzle);
@@ -180,7 +145,7 @@ async function use(item, targetedRoom) {
 
 async function promptForLastPuzzle(puzzle) {
   let answer = await ask("Now you must recite the ancient incantation: ");
-  if(puzzle.answer === answer){
+  if (puzzle.answer === answer) {
     print(puzzle.solvedMessage);
   } else {
     print(puzzle.wrongAnswer);
@@ -206,7 +171,7 @@ async function look() {
 }
 
 function endGame() {
-  return player.answer = "exit";
+  return (player.answer = "exit");
 }
 
 function showPlayerInventory() {
@@ -224,7 +189,7 @@ function take(item) {
     player.inventory.push(itemObjectName);
     removeItemFromRoom(player.location, itemObjectName);
     return print(`You take a ${item} 🤚`);
-  } else if (item === null){
+  } else if (item === null) {
     return print(`You can't take nothing 🚫`);
   } else {
     return print(`You can't take this ${item} 🚫`);
@@ -236,7 +201,7 @@ function drop(item) {
     removeItemFromPlayer(item);
     addItemToRoom(player.location, itemNameLookUp[item][0]);
     return print(`You dropped a ${item} 🤚`);
-  } else if(![...player.inventory].includes(item)){
+  } else if (![...player.inventory].includes(item)) {
     return print(`You don't have this ${item} to drop 😕`);
   } else {
     return print(`You can't drop this ${itemName} 🚫`);
@@ -244,15 +209,15 @@ function drop(item) {
 }
 
 // helper functions for take/drop functions
-function itemIsPresent(item){
+function itemIsPresent(item) {
   let itemObjectName = getObjectName(item, itemNameLookUp);
   let locationItems = locationLookUp[player.location].inventory;
-  return itemLookUp.hasOwnProperty(itemObjectName) &&  checkAvailableItem(itemObjectName, locationItems);
+  return itemLookUp.hasOwnProperty(itemObjectName) && checkAvailableItem(itemObjectName, locationItems);
 }
 
 function checkAvailableItem(itemObjectName, availableItems) {
   for (var i = 0; i < availableItems.length; i++) {
-    if(getObjectName(availableItems[i], itemNameLookUp) == itemObjectName) {
+    if (getObjectName(availableItems[i], itemNameLookUp) == itemObjectName) {
       return true;
     }
   }
@@ -273,7 +238,7 @@ function addItemToRoom(currentLocation, addedItem) {
 
 // * Puzzle functions
 async function displayRoomPuzzle(targetedRoom) {
-  let puzzle = puzzleLocation[targetedRoom]
+  let puzzle = puzzleLocation[targetedRoom];
   print(`${puzzle.message}`);
   // prompt for password / back / use items
   while (!puzzle.isSolved) {
@@ -283,12 +248,12 @@ async function displayRoomPuzzle(targetedRoom) {
       return true;
     } else if (input === "back") {
       return false;
-    } else if(hasUseCommand(input)) {
+    } else if (hasUseCommand(input)) {
       let inputArr = input.trim().split(" "); // bad code, should write this in another function
       let item = getTarget(inputArr);
       let usuable = await use(item, targetedRoom);
-      if(usuable === true) {
-        return true; 
+      if (usuable === true) {
+        return true;
       }
     } else {
       print(puzzle.wrongAnswer);
@@ -299,7 +264,7 @@ async function displayRoomPuzzle(targetedRoom) {
 function hasUseCommand(input) {
   let inputArr = input.trim().split(" ");
   let command = getCommand(inputArr);
-  if(validateCommandKey(command)){
+  if (validateCommandKey(command)) {
     return true;
   } else {
     return false;
@@ -365,4 +330,8 @@ function print(text) {
   if (phrase.trim() !== "") {
     console.log(phrase);
   }
+}
+
+function getCurrentLocation() {
+  return locationLookUp[player.location];
 }
