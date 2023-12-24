@@ -18,14 +18,6 @@ let roomsList = {...rooms};
 let itemsList = {...items};
 let puzzlesList = {...puzzles};
 
-// const room0 = new Location(...Object.values(roomsList[0]));
-// const room1 = new Location(...Object.values(roomsList[1]));
-// const room2 = new Location(...Object.values(roomsList[2]));
-// const room3 = new Location(...Object.values(roomsList[3]));
-// const room4 = new Location(...Object.values(roomsList[4]));
-// const room5 = new Location(...Object.values(roomsList[5]));
-// const room6 = new Location(...Object.values(roomsList[6]));
-
 const sign = new Item(...Object.values(itemsList[0]));
 const paper = new Item(...Object.values(itemsList[1]));
 const key = new Item(...Object.values(itemsList[2]));
