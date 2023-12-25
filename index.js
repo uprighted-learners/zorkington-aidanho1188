@@ -8,6 +8,7 @@ const {roomNameLookup, locationState, itemNameLookUp} = require("./helpers/lookU
 const {displayRoom} = require("./helpers/displayRoom");
 const {getCommand, validateCommandKey, getObjectName, getTarget} = require("./helpers/getFunctions");
 const {print} = require("./helpers/print");
+const {moveRoom} = require("./commands/moveRoom");
 
 const roomsJsonData = fs.readFileSync("./data/roomsList.json");
 const itemsJsonData = fs.readFileSync("./data/itemsList.json");
@@ -48,7 +49,7 @@ let commandFunctionLookUp = {
   use: use,
   drop: drop,
   take: take,
-  go: moveRoom,
+  go: tryMoveRoom,
   endGame: endGame,
 };
 
@@ -68,11 +69,11 @@ function initialize() {
   }
 }
 
+initialize();
 start();
 
 // * Main game logics
 async function start() {
-  initialize();
   displayRoom(getCurrentLocation(player));
   await gameLoop(player);
   process.exit();
@@ -104,21 +105,10 @@ async function handleUserCommand(answer) {
 }
 
 // * User in game commands functions
-async function moveRoom(targetedRoom) {
-  let currentRoom = player.location;
+async function tryMoveRoom(targetedRoom) {
   targetedRoom = getObjectName(targetedRoom, roomNameLookup);
-  try {
-    let isUnLocked = locationLookUp[targetedRoom].isUnlocked;
-    if (locationState[currentRoom].includes(targetedRoom) && isUnLocked) {
-      player.location = targetedRoom;
-    } else if (locationState[currentRoom].includes(targetedRoom) && isUnLocked === false) {
-      print("\n\n\nPlease solve this puzzle first!");
-      await displayRoomPuzzle(targetedRoom);
-    } else {
-      print("You can't move to this room! 🚫");
-    }
-  } catch (error) {
-    print(`This room does not exist! 🚫`);
+  if (!moveRoom(player, targetedRoom)) {
+    await displayRoomPuzzle(targetedRoom);
   }
 }
 
