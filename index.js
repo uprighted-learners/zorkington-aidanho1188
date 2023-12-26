@@ -1,25 +1,26 @@
 const fs = require("fs");
 const readline = require("readline");
 const {Item} = require("./classes/Item");
-const {Location} = require("./classes/Location");
+// const {Location} = require("./classes/Location");
 const {Player} = require("./classes/Player");
 const {Puzzle} = require("./classes/Puzzle");
-const {roomNameLookup, locationState, itemNameLookUp} = require("./helpers/lookUps");
+const {roomNameLookup, locationState, itemNameLookUp, locationLookUp} = require("./helpers/lookUps");
 const {displayRoom} = require("./helpers/displayRoom");
 const {getCommand, validateCommandKey, getObjectName, getTarget} = require("./helpers/getFunctions");
 const {print} = require("./helpers/print");
 const {moveRoom} = require("./commands/moveRoom");
+const {MoveRoomError, NotUnlockedError} = require("../zorkington-aidanho1188/errors/moveRoomErrors");
 
-const roomsJsonData = fs.readFileSync("./data/roomsList.json");
+// const roomsJsonData = fs.readFileSync("./data/roomsList.json");
 const itemsJsonData = fs.readFileSync("./data/itemsList.json");
 const puzzleJsonData = fs.readFileSync("./data/puzzleList.json");
 
 const items = JSON.parse(itemsJsonData);
-const rooms = JSON.parse(roomsJsonData);
+// const rooms = JSON.parse(roomsJsonData);
 const puzzles = JSON.parse(puzzleJsonData);
 const readlineInterface = readline.createInterface(process.stdin, process.stdout);
 
-let roomsList = {...rooms};
+// let roomsList = {...rooms};
 let itemsList = {...items};
 let puzzlesList = {...puzzles};
 
@@ -53,7 +54,7 @@ let commandFunctionLookUp = {
   endGame: endGame,
 };
 
-let locationLookUp = {};
+// let locationLookUp = {};
 
 let puzzleLocation = {
   room1: lockpad,
@@ -62,14 +63,14 @@ let puzzleLocation = {
   room6: oldAltar,
 };
 
-function initialize() {
-  for (let i = 0; i < rooms.length; i++) {
-    const key = "room" + i;
-    locationLookUp[key] = new Location(...Object.values(roomsList[i]));
-  }
-}
+// function initialize() {
+//   for (let i = 0; i < rooms.length; i++) {
+//     const key = "room" + i;
+//     locationLookUp[key] = new Location(...Object.values(roomsList[i]));
+//   }
+// }
 
-initialize();
+// initialize();
 start();
 
 // * Main game logics
@@ -107,8 +108,15 @@ async function handleUserCommand(answer) {
 // * User in game commands functions
 async function tryMoveRoom(targetedRoom) {
   targetedRoom = getObjectName(targetedRoom, roomNameLookup);
-  if (!moveRoom(player, targetedRoom)) {
-    await displayRoomPuzzle(targetedRoom);
+  try {
+    moveRoom(player, targetedRoom);
+  } catch (error) {
+    if (error instanceof NotUnlockedError) {
+      console.log(error.message);
+      await displayRoomPuzzle(targetedRoom);
+    } else {
+      console.log(error.message);
+    }
   }
 }
 

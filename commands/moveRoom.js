@@ -1,27 +1,31 @@
-const {locationState} = require("./helpers./lookUps.js"); // module not found error
-const {locationLookUp} = require("index.js");
+const {locationState, locationLookUp} = require("../helpers/lookUps");
+const {RoomDoesntExistError, MoveRoomError, NotUnlockedError} = require("../errors/moveRoomErrors");
 
-async function moveRoom(player, targetedRoom) {
+function moveRoom(player, targetedRoom) {
   let currentRoom = player.location;
   try {
-    validateMove(player, currentRoom, targetedRoom);
+    validateMove(currentRoom, targetedRoom);
     player.location = targetedRoom;
     return true;
   } catch (error) {
-    console.error(error.message);
-    return false;
+    throw error;
   }
 }
 
-function validateMove(player, currentRoom, targetedRoom) {
+function validateMove(currentRoom, targetedRoom) {
+  const roomExist = locationLookUp.hasOwnProperty(targetedRoom);
+  if (!roomExist) {
+    throw new RoomDoesntExistError("Room does not exist!");
+  }
+
   let isUnLocked = locationLookUp[targetedRoom].isUnlocked;
-  const isValidMove = locationState[currentRoom].includes(targetedRoom) && isUnLocked;
+  const isValidMove = locationState[currentRoom].includes(targetedRoom);
 
   if (!isValidMove) {
-    throw new Error("You can't move to this room! 🚫");
+    throw new MoveRoomError("You can't move to this room! 🚫");
   }
-  if (!isUnLocked) {
-    throw new Error("Please solve the puzzle first!");
+  if (isValidMove && !isUnLocked) {
+    throw new NotUnlockedError("Please solve the puzzle first!");
   }
 }
 exports.moveRoom = moveRoom;

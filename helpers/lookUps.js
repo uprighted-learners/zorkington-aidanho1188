@@ -41,3 +41,17 @@ const commandLookUp = {
   endGame: ["exit"],
 };
 exports.commandLookUp = commandLookUp;
+
+const fs = require("fs");
+const {Location} = require("../classes/location");
+const roomsJsonData = fs.readFileSync("./data/roomsList.json");
+const rooms = JSON.parse(roomsJsonData);
+let roomsList = {...rooms};
+let locationLookUp = {};
+(function initialize() {
+  for (let i = 0; i < rooms.length; i++) {
+    const key = "room" + i;
+    locationLookUp[key] = new Location(...Object.values(roomsList[i]));
+  }
+})();
+exports.locationLookUp = locationLookUp;
