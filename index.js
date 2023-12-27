@@ -1,47 +1,18 @@
 const fs = require("fs");
 const readline = require("readline");
 const {Item} = require("./classes/Item");
-// const {Location} = require("./classes/Location");
 const {Player} = require("./classes/Player");
-const {Puzzle} = require("./classes/Puzzle");
 const {roomNameLookup, locationState, itemNameLookUp, locationLookUp} = require("./helpers/lookUps");
+const {puzzleLookup} = require("./helpers/puzzleLookup");
+const {itemLookUp} = require("./helpers/itemLookUp");
 const {displayRoom} = require("./helpers/displayRoom");
 const {getCommand, validateCommandKey, getObjectName, getTarget} = require("./helpers/getFunctions");
 const {print} = require("./helpers/print");
 const {moveRoom} = require("./commands/moveRoom");
 const {MoveRoomError, NotUnlockedError} = require("../zorkington-aidanho1188/errors/moveRoomErrors");
 
-// const roomsJsonData = fs.readFileSync("./data/roomsList.json");
-const itemsJsonData = fs.readFileSync("./data/itemsList.json");
-const puzzleJsonData = fs.readFileSync("./data/puzzleList.json");
-
-const items = JSON.parse(itemsJsonData);
-// const rooms = JSON.parse(roomsJsonData);
-const puzzles = JSON.parse(puzzleJsonData);
 const readlineInterface = readline.createInterface(process.stdin, process.stdout);
-
-// let roomsList = {...rooms};
-let itemsList = {...items};
-let puzzlesList = {...puzzles};
-
-const sign = new Item(...Object.values(itemsList[0]));
-const paper = new Item(...Object.values(itemsList[1]));
-const key = new Item(...Object.values(itemsList[2]));
-const amulet = new Item(...Object.values(itemsList[3]));
-
-const lockpad = new Puzzle(...Object.values(puzzlesList[0]));
-const grandDoor = new Puzzle(...Object.values(puzzlesList[1]));
-const hiddenPassage = new Puzzle(...Object.values(puzzlesList[2]));
-const oldAltar = new Puzzle(...Object.values(puzzlesList[3]));
-
 const player = new Player();
-
-let itemLookUp = {
-  sign: sign,
-  paper: paper,
-  key: key,
-  amulet: amulet,
-};
 
 let commandFunctionLookUp = {
   read: read,
@@ -53,24 +24,6 @@ let commandFunctionLookUp = {
   go: tryMoveRoom,
   endGame: endGame,
 };
-
-// let locationLookUp = {};
-
-let puzzleLocation = {
-  room1: lockpad,
-  room2: grandDoor,
-  room5: hiddenPassage,
-  room6: oldAltar,
-};
-
-// function initialize() {
-//   for (let i = 0; i < rooms.length; i++) {
-//     const key = "room" + i;
-//     locationLookUp[key] = new Location(...Object.values(roomsList[i]));
-//   }
-// }
-
-// initialize();
 start();
 
 // * Main game logics
@@ -106,6 +59,7 @@ async function handleUserCommand(answer) {
 }
 
 // * User in game commands functions
+// maybe move this to handleUserCommand
 async function tryMoveRoom(targetedRoom) {
   targetedRoom = getObjectName(targetedRoom, roomNameLookup);
   try {
@@ -121,7 +75,7 @@ async function tryMoveRoom(targetedRoom) {
 }
 
 async function use(item, targetedRoom) {
-  let puzzle = puzzleLocation[targetedRoom];
+  let puzzle = puzzleLookup[targetedRoom];
   if (itemLookUp.hasOwnProperty(item) && [...player.inventory].includes(item)) {
     item = itemLookUp[item];
     if (item.puzzleCode === puzzle.answer) {
@@ -237,7 +191,7 @@ function addItemToRoom(currentLocation, addedItem) {
 
 // * Puzzle functions
 async function displayRoomPuzzle(targetedRoom) {
-  let puzzle = puzzleLocation[targetedRoom];
+  let puzzle = puzzleLookup[targetedRoom];
   print(`${puzzle.message}`);
   // prompt for password / back / use items
   while (!puzzle.isSolved) {

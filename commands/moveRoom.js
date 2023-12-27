@@ -13,8 +13,7 @@ function moveRoom(player, targetedRoom) {
 }
 
 function validateMove(currentRoom, targetedRoom) {
-  const roomExist = locationLookUp.hasOwnProperty(targetedRoom);
-  if (!roomExist) {
+  if (!checkRoomExists(targetedRoom)) {
     throw new RoomDoesntExistError("Room does not exist!");
   }
 
@@ -27,5 +26,9 @@ function validateMove(currentRoom, targetedRoom) {
   if (isValidMove && !isUnLocked) {
     throw new NotUnlockedError("Please solve the puzzle first!");
   }
+}
+
+function checkRoomExists(targetedRoom) {
+  return locationLookUp.hasOwnProperty(targetedRoom);
 }
 exports.moveRoom = moveRoom;
