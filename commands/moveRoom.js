@@ -1,5 +1,5 @@
 const {locationState, locationLookUp} = require("../helpers/lookUps");
-const {RoomDoesntExistError, MoveRoomError, NotUnlockedError} = require("../errors/moveRoomErrors");
+const {RoomDoesntExistError, MoveRoomError, NotUnlockedError} = require("../errors/roomErrors");
 const {movePlayer} = require("../helpers/movePlayer");
 
 function moveRoom(player, targetedRoom) {

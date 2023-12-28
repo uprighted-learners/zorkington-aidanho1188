@@ -8,19 +8,21 @@ const {displayRoom} = require("./helpers/displayRoom");
 const {getCommand, validateCommandKey, getObjectName, getTarget, getCurrentLocation} = require("./helpers/getFunctions");
 const {print} = require("./helpers/print");
 const {moveRoom} = require("./commands/moveRoom");
-const {MoveRoomError, NotUnlockedError} = require("../zorkington-aidanho1188/errors/moveRoomErrors");
+const {MoveRoomError, NotUnlockedError} = require("./errors/roomErrors");
 const {setPuzzleIsSolved} = require("./helpers/setPuzzleIsSolved");
 const {use} = require("./commands/useItem");
 const {movePlayer} = require("./helpers/movePlayer");
 const {ask, prompt} = require("./helpers/prompt");
 const {itemIsPresent} = require("./helpers/itemIsPresent");
 const {read} = require("./commands/readItem");
+const {look} = require("./commands/look");
 
 const player = new Player();
+exports.player = player;
 
 const commandFunctionLookUp = {
   read: attemptRead,
-  look: look,
+  look: attemptLook,
   inventory: showPlayerInventory,
   use: attemptUse,
   drop: drop,
@@ -86,6 +88,7 @@ async function attemptUse(item, targetedRoom) {
     console.log(error.message);
   }
 }
+
 // * ready to transfer to handleUserCommands
 function attemptRead(item) {
   try {
@@ -95,16 +98,13 @@ function attemptRead(item) {
   }
 }
 
-async function look(args) {
-  if (args != null) {
-    console.log(`I can't look at this "${args}"`);
-    return;
+// * ready to transfer to handleUserCommands
+async function attemptLook(args) {
+  try {
+    await look(player, args);
+  } catch (error) {
+    console.log(error.message);
   }
-  let room = locationLookUp[player.location];
-  print(`${room.description1}`);
-  await ask("Press enter to continue...");
-  print(`${room.description2}`);
-  await ask("Press enter to continue...");
 }
 
 function endGame() {
