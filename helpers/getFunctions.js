@@ -1,4 +1,4 @@
-const {commandLookUp} = require("./lookUps");
+const {commandLookUp, locationLookUp} = require("./lookUps");
 
 function validateCommandKey(command) {
   return Object.keys(commandLookUp).find((key) => commandLookUp[key].includes(command)) || false;
@@ -19,7 +19,13 @@ function getTarget(input) {
     return null;
   }
 }
+
+function getCurrentLocation(player) {
+  return locationLookUp[player.location];
+}
+
 exports.validateCommandKey = validateCommandKey;
 exports.getObjectName = getObjectName;
 exports.getCommand = getCommand;
 exports.getTarget = getTarget;
+exports.getCurrentLocation = getCurrentLocation;

@@ -2,10 +2,10 @@ const fs = require("fs");
 const {Item} = require("./classes/Item");
 const {Player} = require("./classes/Player");
 const {roomNameLookup, locationState, itemNameLookUp, locationLookUp} = require("./helpers/lookUps");
-const {puzzleLookup} = require("./helpers/puzzleLookup");
-const {itemLookUp} = require("./helpers/itemLookUp");
+const {puzzleLookup} = require("./helpers/puzzlesLookup");
+const {itemLookUp} = require("./helpers/itemsLookUp");
 const {displayRoom} = require("./helpers/displayRoom");
-const {getCommand, validateCommandKey, getObjectName, getTarget} = require("./helpers/getFunctions");
+const {getCommand, validateCommandKey, getObjectName, getTarget, getCurrentLocation} = require("./helpers/getFunctions");
 const {print} = require("./helpers/print");
 const {moveRoom} = require("./commands/moveRoom");
 const {MoveRoomError, NotUnlockedError} = require("../zorkington-aidanho1188/errors/moveRoomErrors");
@@ -13,12 +13,13 @@ const {setPuzzleIsSolved} = require("./helpers/setPuzzleIsSolved");
 const {use} = require("./commands/useItem");
 const {movePlayer} = require("./helpers/movePlayer");
 const {ask, prompt} = require("./helpers/prompt");
+const {itemIsPresent} = require("./helpers/itemIsPresent");
+const {read} = require("./commands/readItem");
 
 const player = new Player();
-exports.player = player;
 
-let commandFunctionLookUp = {
-  read: read,
+const commandFunctionLookUp = {
+  read: attemptRead,
   look: look,
   inventory: showPlayerInventory,
   use: attemptUse,
@@ -59,8 +60,10 @@ async function handleUserCommand(answer) {
   }
 }
 
-// * User in game commands functions
+// ? User in game commands functions
 // maybe move this to handleUserCommand
+
+// * ready to transfer to handleUserCommands
 async function attemptMoveRoom(targetedRoom) {
   targetedRoom = getObjectName(targetedRoom, roomNameLookup);
   try {
@@ -75,6 +78,7 @@ async function attemptMoveRoom(targetedRoom) {
   }
 }
 
+// * ready to transfer to handleUserCommands
 async function attemptUse(item, targetedRoom) {
   try {
     use(player, item, targetedRoom);
@@ -82,13 +86,12 @@ async function attemptUse(item, targetedRoom) {
     console.log(error.message);
   }
 }
-
-function read(item) {
-  if (itemIsPresent(item)) {
-    item = itemLookUp[item];
-    return print(item.description);
-  } else {
-    return print(`You can't read this ${item} 😔`);
+// * ready to transfer to handleUserCommands
+function attemptRead(item) {
+  try {
+    read(player, item);
+  } catch (error) {
+    console.log(error.message);
   }
 }
 
@@ -119,7 +122,7 @@ function showPlayerInventory() {
 // ? take/drop functions
 function take(item) {
   let itemObjectName = getObjectName(item, itemNameLookUp);
-  if (itemIsPresent(item) && itemLookUp[itemObjectName].isTakeable) {
+  if (itemIsPresent(player, item) && itemLookUp[itemObjectName].isTakeable) {
     player.inventory.push(itemObjectName);
     removeItemFromRoom(player.location, itemObjectName);
     return print(`You take a ${item} 🤚`);
@@ -142,22 +145,6 @@ function drop(item) {
   }
 }
 
-// helper functions for take/drop functions
-function itemIsPresent(item) {
-  let itemObjectName = getObjectName(item, itemNameLookUp);
-  let locationItems = locationLookUp[player.location].inventory;
-  return itemLookUp.hasOwnProperty(itemObjectName) && checkAvailableItem(itemObjectName, locationItems);
-}
-
-function checkAvailableItem(itemObjectName, availableItems) {
-  for (var i = 0; i < availableItems.length; i++) {
-    if (getObjectName(availableItems[i], itemNameLookUp) == itemObjectName) {
-      return true;
-    }
-  }
-  return false;
-}
-
 function removeItemFromRoom(currentLocation, removeItem) {
   removeItem = getObjectName(removeItem, itemNameLookUp);
   let location = locationLookUp[currentLocation];
@@ -172,6 +159,7 @@ function addItemToRoom(currentLocation, addedItem) {
 
 // * Puzzle functions
 async function displayRoomPuzzle(targetedRoom) {
+  // need reword, at puzzle state ex.: when say read key, it still unlock ther door
   let puzzle = puzzleLookup[targetedRoom];
   print(`${puzzle.message}`);
   // prompt for password / back / use items
@@ -200,9 +188,4 @@ function hasUseCommand(input) {
   let inputArr = input.trim().split(" ");
   let command = getCommand(inputArr);
   return validateCommandKey(command);
-}
-
-// * Helper functions
-function getCurrentLocation(player) {
-  return locationLookUp[player.location];
 }

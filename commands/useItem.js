@@ -1,7 +1,6 @@
-const {locationState, locationLookUp} = require("../helpers/lookUps");
-const {puzzleLookup} = require("../helpers/puzzleLookup");
-const {itemLookUp} = require("../helpers/itemLookUp");
-const {ItemDoesntExist, PlayerDoesntHaveItem, UseItemError} = require("../errors/useItemError");
+const {puzzleLookup} = require("../helpers/puzzlesLookup");
+const {itemLookUp} = require("../helpers/itemsLookUp");
+const {ItemDoesntExist, PlayerDoesntHaveItem, ItemIsUnusable} = require("../errors/itemErrors");
 const {setPuzzleIsSolved} = require("../helpers/setPuzzleIsSolved");
 const {print} = require("../helpers/print");
 const {movePlayer} = require("../helpers/movePlayer");
@@ -27,13 +26,13 @@ async function use(player, item, targetedRoom) {
 
 function validateUse(player, item, puzzle) {
   if (!checkItemExist(item)) {
-    throw new ItemDoesntExist(`This item doesn't exists`);
+    throw new ItemDoesntExist("This item doesn't exists");
   }
   if (!playerHasItem(player, item)) {
-    throw new PlayerDoesntHaveItem(`Player doesn't have this item`);
+    throw new PlayerDoesntHaveItem("Player doesn't have this item");
   }
   if (!usuable(puzzle, item)) {
-    throw new UseItemError(`You can't use this item here`);
+    throw new ItemIsUnusable("You can't use this item here");
   }
 }
 

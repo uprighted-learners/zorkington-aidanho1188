@@ -12,10 +12,17 @@ class PlayerDoesntHaveItem extends Error {
   }
 }
 
-class UseItemError extends Error {
+class ItemIsUnusable extends Error {
   constructor(message) {
     super(message);
     this.name = "UseItemError";
   }
 }
-module.exports = {UseItemError, PlayerDoesntHaveItem, ItemDoesntExist};
+
+class ItemIsUnreadable extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "ItemIsUnreadable";
+  }
+}
+module.exports = {ItemDoesntExist, PlayerDoesntHaveItem, ItemIsUnusable, ItemIsUnreadable};

@@ -31,7 +31,7 @@ const itemNameLookUp = {
 exports.itemNameLookUp = itemNameLookUp;
 
 const commandLookUp = {
-  read: ["r", "read"],
+  read: ["r", "read","inspect"],
   look: ["l", "look", "examine"],
   inventory: ["i", "inventory"],
   use: ["use", "u", "burn"],
