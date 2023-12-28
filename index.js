@@ -1,5 +1,4 @@
 const fs = require("fs");
-const readline = require("readline");
 const {Item} = require("./classes/Item");
 const {Player} = require("./classes/Player");
 const {roomNameLookup, locationState, itemNameLookUp, locationLookUp} = require("./helpers/lookUps");
@@ -10,18 +9,22 @@ const {getCommand, validateCommandKey, getObjectName, getTarget} = require("./he
 const {print} = require("./helpers/print");
 const {moveRoom} = require("./commands/moveRoom");
 const {MoveRoomError, NotUnlockedError} = require("../zorkington-aidanho1188/errors/moveRoomErrors");
+const {setPuzzleIsSolved} = require("./helpers/setPuzzleIsSolved");
+const {use} = require("./commands/useItem");
+const {movePlayer} = require("./helpers/movePlayer");
+const {ask, prompt} = require("./helpers/prompt");
 
-const readlineInterface = readline.createInterface(process.stdin, process.stdout);
 const player = new Player();
+exports.player = player;
 
 let commandFunctionLookUp = {
   read: read,
   look: look,
   inventory: showPlayerInventory,
-  use: use,
+  use: attemptUse,
   drop: drop,
   take: take,
-  go: tryMoveRoom,
+  go: attemptMoveRoom,
   endGame: endGame,
 };
 start();
@@ -41,10 +44,6 @@ async function gameLoop(player) {
   } while (player.answer !== "exit");
 }
 
-async function prompt(question = "") {
-  return ask(`${question}>_ `);
-}
-
 async function handleUserCommand(answer) {
   let answerArr = answer.trim().split(" ");
   let command = getCommand(answerArr);
@@ -54,13 +53,15 @@ async function handleUserCommand(answer) {
   try {
     await commandFunction(target);
   } catch (error) {
-    print(`I don't know this "${command}" command. 😕`);
+    // maybe add a list of errors here
+    // print(`I don't know this "${error}" command. 😕`);
+    console.error(error);
   }
 }
 
 // * User in game commands functions
 // maybe move this to handleUserCommand
-async function tryMoveRoom(targetedRoom) {
+async function attemptMoveRoom(targetedRoom) {
   targetedRoom = getObjectName(targetedRoom, roomNameLookup);
   try {
     moveRoom(player, targetedRoom);
@@ -74,32 +75,12 @@ async function tryMoveRoom(targetedRoom) {
   }
 }
 
-async function use(item, targetedRoom) {
-  let puzzle = puzzleLookup[targetedRoom];
-  if (itemLookUp.hasOwnProperty(item) && [...player.inventory].includes(item)) {
-    item = itemLookUp[item];
-    if (item.puzzleCode === puzzle.answer) {
-      setPuzzleIsSolved(puzzle, targetedRoom);
-      return true;
-    } else if (puzzle.name === "oldAltar" && item.name === "paper") {
-      // special case for the last puzzle
-      print("You burned the magical paper");
-      removeItemFromPlayer(player, item);
-      promptForLastPuzzle(puzzle);
-      return true;
-    }
+async function attemptUse(item, targetedRoom) {
+  try {
+    use(player, item, targetedRoom);
+  } catch (error) {
+    console.log(error.message);
   }
-  print(`You can't use this item here 😔`);
-}
-
-async function promptForLastPuzzle(puzzle) {
-  let answer = await ask("Now you must recite the ancient incantation: ");
-  if (puzzle.answer === answer) {
-    print(puzzle.solvedMessage);
-  } else {
-    print(puzzle.wrongAnswer);
-  }
-  process.exit();
 }
 
 function read(item) {
@@ -198,13 +179,14 @@ async function displayRoomPuzzle(targetedRoom) {
     let input = await prompt(puzzle.promptMessage);
     if (input === puzzle.answer) {
       setPuzzleIsSolved(puzzle, targetedRoom);
+      movePlayer(player, targetedRoom);
       return true;
     } else if (input === "back") {
       return false;
     } else if (hasUseCommand(input)) {
       let inputArr = input.trim().split(" "); // bad code, should write this in another function
       let item = getTarget(inputArr);
-      let usuable = await use(item, targetedRoom);
+      let usuable = await use(player, item, targetedRoom);
       if (usuable === true) {
         return true;
       }
@@ -220,25 +202,7 @@ function hasUseCommand(input) {
   return validateCommandKey(command);
 }
 
-function setPuzzleIsSolved(puzzle, targetedRoom) {
-  locationLookUp[targetedRoom].isUnlocked = true;
-  player.location = targetedRoom;
-  puzzle.isSolved = true;
-  print(`${puzzle.solvedMessage}`);
-}
-
 // * Helper functions
-function ask(questionText) {
-  return new Promise((resolve, reject) => {
-    readlineInterface.question(questionText, resolve);
-  });
-}
-
-function removeItemFromPlayer(player, item) {
-  itemIndex = player.inventory.indexOf(item);
-  player.inventory.splice(itemIndex, 1);
-}
-
 function getCurrentLocation(player) {
   return locationLookUp[player.location];
 }
