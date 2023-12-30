@@ -16,9 +16,9 @@ const {ask, prompt} = require("./helpers/prompt");
 const {itemIsPresent} = require("./helpers/itemIsPresent");
 const {read} = require("./commands/readItem");
 const {look} = require("./commands/look");
+const {endGame} = require("./commands/endGame");
 
 const player = new Player();
-exports.player = player;
 
 const commandFunctionLookUp = {
   read: attemptRead,
@@ -28,7 +28,7 @@ const commandFunctionLookUp = {
   drop: drop,
   take: take,
   go: attemptMoveRoom,
-  endGame: endGame,
+  endGame: attemptEndGame,
 };
 start();
 
@@ -107,8 +107,13 @@ async function attemptLook(args) {
   }
 }
 
-function endGame() {
-  return (player.answer = "exit");
+// * ready to transfer to handleUserCommands
+function attemptEndGame(args) {
+  try {
+    endGame(player, args); // future feature, should ask if user want to exist game or room
+  } catch (error) {
+    console.log(error.message);
+  }
 }
 
 function showPlayerInventory() {

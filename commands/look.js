@@ -2,15 +2,13 @@ const {locationLookUp} = require("../helpers/lookUps");
 const {print} = require("../helpers/print");
 const {ask} = require("../helpers/prompt");
 const {getCurrentLocation} = require("../helpers/getFunctions");
+const {RoomDoesntExistError} = require("../errors/roomErrors");
+const {invalidArgs} = require("../errors/inputErrors");
 
-async function look(player, ...args) {
-  // if (args != null) {
-  //   console.log(`I can't look at this "${args}"`);
-  //   return;
-  // }
+async function look(player, args) {
   try {
     const room = getCurrentLocation(player);
-    validateLook(room, ...args);
+    validateLook(room, args);
     print(`${room.description1}`);
     await ask("Press enter to continue...");
     print(`${room.description2}`);
@@ -26,7 +24,7 @@ function validateLook(room, args) {
     throw new RoomDoesntExistError("Room does not exist.");
   }
   if (args) {
-    throw new Error('I can\'t look at this, please try with just "look".');
+    throw new invalidArgs('I can\'t look at this, please try with just "look".');
   }
 }
 
