@@ -1,9 +1,8 @@
 const fs = require("fs");
 const {Item} = require("./classes/Item");
 const {Player} = require("./classes/Player");
-const {roomNameLookup, locationState, itemNameLookUp, locationLookUp} = require("./helpers/lookUps");
+const {roomNameLookup, locationState,} = require("./helpers/lookUps");
 const {puzzleLookup} = require("./helpers/puzzlesLookup");
-const {itemLookUp} = require("./helpers/itemsLookUp");
 const {displayRoom} = require("./helpers/displayRoom");
 const {getCommand, validateCommandKey, getObjectName, getTarget, getCurrentLocation} = require("./helpers/getFunctions");
 const {print} = require("./helpers/print");
@@ -13,20 +12,25 @@ const {setPuzzleIsSolved} = require("./helpers/setPuzzleIsSolved");
 const {use} = require("./commands/useItem");
 const {movePlayer} = require("./helpers/movePlayer");
 const {ask, prompt} = require("./helpers/prompt");
-const {itemIsPresent} = require("./helpers/itemIsPresent");
 const {read} = require("./commands/readItem");
 const {look} = require("./commands/look");
 const {endGame} = require("./commands/endGame");
+const {showPlayerInventory} = require("./commands/showPlayerInventory");
+const {take} = require("./commands/takeItem");
+const {, removeItemFromRoom} = require("./helpers/roomItems");
+const { drop } = require("./commands/dropItem");
 
 const player = new Player();
+exports.player = player;
+// exports.player = player;
 
 const commandFunctionLookUp = {
   read: attemptRead,
   look: attemptLook,
-  inventory: showPlayerInventory,
+  inventory: attemptOpenInventory,
   use: attemptUse,
   drop: drop,
-  take: take,
+  take: attemptTake,
   go: attemptMoveRoom,
   endGame: attemptEndGame,
 };
@@ -110,56 +114,27 @@ async function attemptLook(args) {
 // * ready to transfer to handleUserCommands
 function attemptEndGame(args) {
   try {
-    endGame(player, args); // future feature, should ask if user want to exist game or room
+    endGame(player, args); // future feature, should ask if user want to exist game or room, use stacks?
   } catch (error) {
     console.log(error.message);
   }
 }
 
-function showPlayerInventory() {
-  if (player.inventory.length) {
-    console.log(`Your inventory: ${[...player.inventory].map((item) => item)}`);
-  } else {
-    print(`Your inventory is empty 😔`);
+// * ready to transfer to handleUserCommands
+function attemptOpenInventory() {
+  try {
+    showPlayerInventory(player);
+  } catch (error) {
+    console.log(error.message);
   }
 }
 
-// ? take/drop functions
-function take(item) {
-  let itemObjectName = getObjectName(item, itemNameLookUp);
-  if (itemIsPresent(player, item) && itemLookUp[itemObjectName].isTakeable) {
-    player.inventory.push(itemObjectName);
-    removeItemFromRoom(player.location, itemObjectName);
-    return print(`You take a ${item} 🤚`);
-  } else if (item === null) {
-    return print(`You can't take nothing 🚫`);
-  } else {
-    return print(`You can't take this ${item} 🚫`);
+function attemptTake(item) {
+  try {
+    take(player, item);
+  } catch (error) {
+    console.log(error.message);
   }
-}
-
-function drop(item) {
-  if (itemLookUp.hasOwnProperty(item) && [...player.inventory].includes(item)) {
-    removeItemFromPlayer(player, item);
-    addItemToRoom(player.location, itemNameLookUp[item][0]);
-    return print(`You dropped a ${item} 🤚`);
-  } else if (![...player.inventory].includes(item)) {
-    return print(`You don't have this ${item} to drop 😕`);
-  } else {
-    return print(`You can't drop this ${itemName} 🚫`);
-  }
-}
-
-function removeItemFromRoom(currentLocation, removeItem) {
-  removeItem = getObjectName(removeItem, itemNameLookUp);
-  let location = locationLookUp[currentLocation];
-  let itemIndex = location.inventory.indexOf(removeItem);
-  location.inventory.splice(itemIndex, 1);
-}
-
-function addItemToRoom(currentLocation, addedItem) {
-  let location = locationLookUp[currentLocation];
-  location.inventory.push(addedItem);
 }
 
 // * Puzzle functions

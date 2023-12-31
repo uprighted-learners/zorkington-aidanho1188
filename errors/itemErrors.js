@@ -25,4 +25,25 @@ class ItemIsUnreadable extends Error {
     this.name = "ItemIsUnreadable";
   }
 }
-module.exports = {ItemDoesntExist, PlayerDoesntHaveItem, ItemIsUnusable, ItemIsUnreadable};
+
+class EmptyInventory extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "EmptyInventory";
+  }
+}
+
+class ItemIsNotPresent extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "ItemIsNotPresent";
+  }
+}
+
+class ItemIsNotTabkeable extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "ItemIsNotTabkeable";
+  }
+}
+module.exports = {ItemDoesntExist, PlayerDoesntHaveItem, ItemIsUnusable, ItemIsUnreadable, EmptyInventory, ItemIsNotPresent, ItemIsNotTabkeable};

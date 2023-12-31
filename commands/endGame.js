@@ -2,14 +2,14 @@ const {invalidArgs} = require("../errors/inputErrors");
 
 function endGame(player, args) {
   try {
-    validateEndGame(player, args);
+    validateEndGame(args);
     return (player.answer = "exit");
   } catch (error) {
     throw error;
   }
 }
 
-function validateEndGame(player, args) {
+function validateEndGame(args) {
   if (args) {
     throw new invalidArgs("Incorrect command, type 'exit' to end game.");
   }

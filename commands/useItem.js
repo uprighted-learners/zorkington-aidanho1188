@@ -5,6 +5,7 @@ const {setPuzzleIsSolved} = require("../helpers/setPuzzleIsSolved");
 const {print} = require("../helpers/print");
 const {movePlayer} = require("../helpers/movePlayer");
 const {ask} = require("../helpers/prompt");
+const {checkItemExist} = require("../helpers/checkItemExist");
 
 async function use(player, item, targetedRoom) {
   let puzzle = puzzleLookup[targetedRoom];
@@ -34,10 +35,6 @@ function validateUse(player, item, puzzle) {
   if (!usuable(puzzle, item)) {
     throw new ItemIsUnusable("You can't use this item here");
   }
-}
-
-function checkItemExist(item) {
-  return itemLookUp.hasOwnProperty(item);
 }
 
 function playerHasItem(player, item) {
