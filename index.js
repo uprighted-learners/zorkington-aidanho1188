@@ -1,24 +1,22 @@
-const {Item} = require('./classes/Item')
-const {Player} = require('./classes/Player')
-const {roomNameLookup, locationState} = require('./helpers/lookUps')
-const {puzzleLookup} = require('./helpers/puzzlesLookup')
-const {displayRoom} = require('./helpers/displayRoom')
-const {getCommand, validateCommandKey, getTarget, getCurrentLocation} = require('./helpers/getFunctions')
-const {print} = require('./helpers/print')
-const {moveRoom} = require('./commands/moveRoom')
-const {setPuzzleIsSolved} = require('./helpers/setPuzzleIsSolved')
-const {use} = require('./commands/useItem')
-const {movePlayer} = require('./helpers/movePlayer')
-const {prompt} = require('./helpers/prompt')
-const {read} = require('./commands/readItem')
-const {look} = require('./commands/look')
-const {endGame} = require('./commands/endGame')
-const {showPlayerInventory} = require('./commands/showPlayerInventory')
-const {take} = require('./commands/takeItem')
-const {removeItemFromRoom} = require('./helpers/roomItems')
-const {drop} = require('./commands/dropItem')
-
-const player = new Player()
+import {Item} from './classes/Item'
+import {Player} from './classes/Player'
+import {roomNameLookup, locationState} from './helpers/lookUps'
+import {puzzleLookup} from './helpers/puzzlesLookup'
+import {displayRoom} from './helpers/displayRoom'
+import {getCommand, validateCommandKey, getTarget, getCurrentLocation} from './helpers/getFunctions'
+import {print} from './helpers/print'
+import {moveRoom} from './commands/moveRoom'
+import {setPuzzleIsSolved} from './helpers/setPuzzleIsSolved'
+import {use} from './commands/useItem'
+import {movePlayer} from './helpers/movePlayer'
+// import {prompt} from './helpers/prompt'
+import {read} from './commands/readItem'
+import {look} from './commands/look'
+import {endGame} from './commands/endGame'
+import {showPlayerInventory} from './commands/showPlayerInventory'
+import {take} from './commands/takeItem'
+import {removeItemFromRoom} from './helpers/roomItems'
+import {drop} from './commands/dropItem'
 
 const commandFunctionLookUp = {
   read: read,
@@ -30,24 +28,24 @@ const commandFunctionLookUp = {
   go: moveRoom,
   endGame: endGame,
 }
-start()
+// start()
 
 // * Main game logics
-async function start() {
-  displayRoom(getCurrentLocation(player))
-  await gameLoop(player)
-  process.exit()
-}
+// export async function start() {
+//   let result = displayRoom(getCurrentLocation(player))
+//   await gameLoop(player)
+//   process.exit()
+// }
 
-async function gameLoop(player) {
-  do {
-    let answer = await prompt()
-    await handleUserCommand(answer)
-    displayRoom(getCurrentLocation(player))
-  } while (player.answer !== 'exit')
-}
+// export async function gameLoop(player) {
+//   do {
+//     let answer = await prompt()
+//     await handleUserCommand(answer)
+//     displayRoom(getCurrentLocation(player))
+//   } while (player.answer !== 'exit')
+// }
 
-async function handleUserCommand(answer) {
+export async function handleUserCommand(player, answer) {
   let answerArr = answer.trim().split(' ')
   let command = getCommand(answerArr)
   let target = getTarget(answerArr)
@@ -57,9 +55,9 @@ async function handleUserCommand(answer) {
     await commandFunction(player, target)
   } catch (error) {
     if (!commandFunction) {
-      console.log(answer, 'is not a valid command')
+      return `${answer} is not a valid command`
     } else {
-      console.log(error.message)
+      return `${error.message}`
     }
   }
 }
