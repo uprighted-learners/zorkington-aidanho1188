@@ -27,6 +27,14 @@ body {
   margin-bottom: 10px;
 }
 
+#input-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 580px;
+  gap: 10px;
+}
+
 #input {
   width: 100%;
   max-width: 580px;
@@ -36,4 +44,8 @@ body {
   outline: none;
   border-radius: 5px;
   border: none;
+}
+
+#input-prefix {
+  color: #00ff00;
 }
