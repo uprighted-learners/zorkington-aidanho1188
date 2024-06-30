@@ -1,7 +1,7 @@
 {
   "name": "zorkington",
   "version": "1.0.0",
-  "description": "Instructions: http://bootcamp.burlingtoncodeacademy.com/projects/zorkington",
+  "description": "Instructions: https://github.com/uprighted-learners/zorkington-aidanho1188/blob/main/README.md",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BurlingtonCodeAcademy/zorkington.git"
+    "url": "git+https://github.com/uprighted-learners/zorkington-aidanho1188.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/BurlingtonCodeAcademy/zorkington/issues"
+    "url": "https://github.com/uprighted-learners/zorkington-aidanho1188/issues"
   },
-  "homepage": "https://github.com/BurlingtonCodeAcademy/zorkington#readme",
+  "homepage": "https://github.com/uprighted-learners/zorkington-aidanho1188",
   "devDependencies": {
     "@babel/core": "^7.24.7",
     "@babel/preset-env": "^7.24.7",
