@@ -49,10 +49,12 @@ document.addEventListener('DOMContentLoaded', function () {
       case 'exit':
         result = 'Goodbye!'
         break
+      default:
+        result = await handleUserCommand(player, command)
+        printOutput(displayRoom(getCurrentLocation(player)))
+        break
     }
 
-    result = await handleUserCommand(player, command)
-    printOutput(displayRoom(getCurrentLocation(player)))
     printOutput(result)
   }
 
