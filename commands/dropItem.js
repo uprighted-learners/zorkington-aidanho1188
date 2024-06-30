@@ -1,18 +1,29 @@
 const {itemNameLookUp} = require("../helpers/lookUps");
-const {itemLookUp} = require("../helpers/itemsLookUp");
-const {print} = require("../helpers/print");
 const {addItemToRoom} = require("../helpers/roomItems");
-const {player} = require("..");
+const {removeItemFromPlayer} = require("../helpers/removeItemFromPlayer");
+const {ItemDoesntExist, PlayerDoesntHaveItem} = require("../errors/itemErrors");
+const {checkItemExist} = require("../helpers/checkItemExist");
 
 function drop(player, item) {
-  if (itemLookUp.hasOwnProperty(item) && [...player.inventory].includes(item)) {
+  try {
+    validateDrop(player, item);
     removeItemFromPlayer(player, item);
     addItemToRoom(player.location, itemNameLookUp[item][0]);
-    return print(`You dropped a ${item} 🤚`);
-  } else if (![...player.inventory].includes(item)) {
-    return print(`You don't have this ${item} to drop 😕`);
-  } else {
-    return print(`You can't drop this ${itemName} 🚫`);
+  } catch (error) {
+    throw error;
   }
+}
+
+function validateDrop(player, item) {
+  if (!checkItemExist(item)) {
+    throw new ItemDoesntExist("This item does not exist.");
+  }
+  if (!hasItem(player, item)) {
+    throw new PlayerDoesntHaveItem("You don't have this item to drop!");
+  }
+}
+
+function hasItem(player, item) {
+  return [...player.inventory].includes(item);
 }
 exports.drop = drop;

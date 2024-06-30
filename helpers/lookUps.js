@@ -24,14 +24,14 @@ exports.roomNameLookup = roomNameLookup;
 // future feature: display item name in a more descriptive way
 const itemNameLookUp = {
   sign: ["sign"],
-  paper: ["piece of paper", "paper"],
-  key: ["ornate key", "key"],
+  paper: ["paper", "piece of paper"],
+  key: ["key", "ornate key"],
   amulet: ["amulet", "shadow amulet"],
 };
 exports.itemNameLookUp = itemNameLookUp;
 
 const commandLookUp = {
-  read: ["r", "read","inspect"],
+  read: ["r", "read", "inspect"],
   look: ["l", "look", "examine"],
   inventory: ["i", "inventory"],
   use: ["use", "u", "burn"],

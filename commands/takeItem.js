@@ -20,7 +20,7 @@ function take(player, item) {
 
 function validateTake(player, item) {
   if (!itemIsPresent(player, item)) {
-    throw new ItemIsNotPresent("You can't take , ItemIsNotTabkeablethis item.");
+    throw new ItemIsNotPresent("You can't take this item! It doesn't exist in this room.");
   }
   if (!checkItemExist(item)) {
     throw new ItemDoesntExist("This item does not exist.");
@@ -31,6 +31,7 @@ function validateTake(player, item) {
 }
 
 function isTakeable(item) {
+  item = itemLookUp[item];
   return item.isTakeable;
 }
 
