@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   })
 
-  function executeCommand(command) {
+  async function executeCommand(command) {
     let result
     // console.log('command', command)
     switch (command.toLowerCase()) {
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
         break
     }
 
-    result = handleUserCommand(player, command)
+    result = await handleUserCommand(player, command)
     printOutput(displayRoom(getCurrentLocation(player)))
     printOutput(result)
   }
