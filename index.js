@@ -32,7 +32,7 @@ const commandFunctionLookUp = {
 
 // * Main game logics
 // export async function start() {
-//   let result = displayRoom(getCurrentLocation(player))
+//   displayRoom(getCurrentLocation(player))
 //   await gameLoop(player)
 //   process.exit()
 // }
@@ -50,9 +50,11 @@ export async function handleUserCommand(player, answer) {
   let command = getCommand(answerArr)
   let target = getTarget(answerArr)
   let commandKey = validateCommandKey(command)
+  console.log('commandKey', commandKey)
   let commandFunction = commandFunctionLookUp[commandKey]
+  console.log('commandFunction', commandFunction)
   try {
-    await commandFunction(player, target)
+    return await commandFunction(player, target)
   } catch (error) {
     if (!commandFunction) {
       return `${answer} is not a valid command`
