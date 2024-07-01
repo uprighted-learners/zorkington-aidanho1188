@@ -32,7 +32,7 @@ export const itemNameLookUp = {
 
 export const commandLookUp = {
   read: ['r', 'read', 'inspect'],
-  look: ['l', 'look', 'examine'],
+  look: ['l', 'lore', 'look', 'examine'],
   inventory: ['i', 'inventory'],
   use: ['use', 'u', 'burn'],
   drop: ['d', 'drop'],

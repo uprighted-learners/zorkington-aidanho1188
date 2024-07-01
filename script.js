@@ -23,6 +23,8 @@ const player = new Player()
 document.addEventListener('DOMContentLoaded', function () {
   const input = document.getElementById('input')
   const output = document.getElementById('output')
+  // print welcome message
+  printOutput(displayRoom(getCurrentLocation(player)))
 
   input.addEventListener('keydown', function (event) {
     if (event.key === 'Enter') {
@@ -34,9 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   async function executeCommand(command) {
     let result
-    // console.log('command', command)
     switch (command.toLowerCase()) {
-      // console.log('command', command)
       case 'start':
         result = 'Starting the game...'
         break
@@ -51,10 +51,9 @@ document.addEventListener('DOMContentLoaded', function () {
         break
       default:
         result = await handleUserCommand(player, command)
-        printOutput(displayRoom(getCurrentLocation(player)))
         break
     }
-
+    printOutput(`> ${command}`)
     printOutput(result)
   }
 

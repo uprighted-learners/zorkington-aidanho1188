@@ -17,11 +17,10 @@ async function use(player, item, targetedRoom) {
       return await promptForLastPuzzle(puzzle)
     }
     validateUse(player, item, puzzle)
-    setPuzzleIsSolved(puzzle, targetedRoom)
     movePlayer(player, targetedRoom)
-    return true
+    return setPuzzleIsSolved(puzzle, targetedRoom)
   } catch (error) {
-    throw error
+    return error.message
   }
 }
 
@@ -58,9 +57,9 @@ function verifyLastPuzzle(puzzle, item) {
 async function promptForLastPuzzle(puzzle) {
   let answer = await ask('Now you must recite the ancient incantation: ')
   if (puzzle.answer === answer) {
-    print(puzzle.solvedMessage)
+    return puzzle.solvedMessage
   } else {
-    print(puzzle.wrongAnswer)
+    return puzzle.wrongAnswer
   }
   return process.exit()
 }
