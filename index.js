@@ -50,9 +50,9 @@ export async function handleUserCommand(player, answer) {
   let command = getCommand(answerArr)
   let target = getTarget(answerArr)
   let commandKey = validateCommandKey(command)
-  console.log('commandKey', commandKey)
+  // console.log('commandKey', commandKey)
   let commandFunction = commandFunctionLookUp[commandKey]
-  console.log('commandFunction', commandFunction)
+  // console.log('commandFunction', commandFunction)
   try {
     return await commandFunction(player, target)
   } catch (error) {
@@ -62,12 +62,4 @@ export async function handleUserCommand(player, answer) {
       return `${error.message}`
     }
   }
-}
-
-// * Puzzle functions
-
-function hasUseCommand(input) {
-  let inputArr = input.trim().split(' ')
-  let command = getCommand(inputArr)
-  return validateCommandKey(command)
 }

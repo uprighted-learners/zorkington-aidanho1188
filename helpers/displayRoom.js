@@ -1,4 +1,5 @@
 function displayRoom(room) {
-  return `\n\n\n\nRoom name: ${room.name}   Available items: ${room.inventory}    Commands: go, i, lore, read, open, burn, drop, use...`
+  // TODO: return an array of strings is better than a single string
+  return `Room name: ${room.name} \b Available items: ${room.inventory}  Commands: go, i, lore, read, open, burn, drop, use...`
 }
 exports.displayRoom = displayRoom
