@@ -3,20 +3,23 @@ const {RoomDoesntExistError, MoveRoomError, NotUnlockedError} = require('../erro
 const {movePlayer} = require('../helpers/movePlayer')
 const {getObjectName} = require('../helpers/getFunctions')
 const {puzzleLookup} = require('../helpers/puzzlesLookup')
+const {printOutput} = require('../helpers/printOutput')
+const {displayRoomPuzzle} = require('../helpers/displayPuzzle')
 
 async function moveRoom(player, targetedRoom) {
   targetedRoom = getObjectName(targetedRoom, roomNameLookup)
   let currentRoom = player.location
   try {
     validateMove(currentRoom, targetedRoom)
-    movePlayer(player, targetedRoom)
-    return `You moved to ${targetedRoom}... 🚶‍♂️`
+    return movePlayer(player, targetedRoom)
   } catch (error) {
     if (error instanceof NotUnlockedError) {
       let puzzle = puzzleLookup[targetedRoom]
-      console.log(error.message)
-      targetedRoom = getObjectName(targetedRoom, roomNameLookup)
-      return `${puzzle.message}`
+      IS_PUZZLE = true
+      printOutput(error.message)
+      await displayRoomPuzzle(player, targetedRoom)
+      IS_PUZZLE = false
+      return
     } else {
       throw error
     }
@@ -51,35 +54,4 @@ function solvePuzzle(currentRoom, targetedRoom) {
   return !(checkValidMove(currentRoom, targetedRoom) && !checkUnlocked(targetedRoom))
 }
 
-// legacy code, will need to refactor
-// async function displayRoomPuzzle(targetedRoom) {
-//   let puzzle = puzzleLookup[targetedRoom]
-//   print(`${puzzle.message}`)
-//   while (!puzzle.isSolved) {
-//     let input = await prompt(puzzle.promptMessage)
-//     if (input === puzzle.answer) {
-//       setPuzzleIsSolved(puzzle, targetedRoom)
-//       movePlayer(player, targetedRoom)
-//       return true
-//     } else if (input === 'back') {
-//       return false
-//     } else if (hasUseCommand(input)) {
-//       let inputArr = input.trim().split(' ') // bad code, should write this in another function
-//       let item = getTarget(inputArr)
-//       let usuable = await use(player, item, targetedRoom)
-//       if (usuable === true) {
-//         return true
-//       }
-//     } else {
-//       print(puzzle.wrongAnswer)
-//     }
-//   }
-// }
-
-// function hasUseCommand(input) {
-//   let inputArr = input.trim().split(' ')
-//   let command = getCommand(inputArr)
-//   return validateCommandKey(command)
-// }
-
-exports.moveRoom = moveRoom
+export {moveRoom}

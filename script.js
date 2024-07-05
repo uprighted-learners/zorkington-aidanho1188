@@ -17,8 +17,10 @@ import {showPlayerInventory} from './commands/showPlayerInventory'
 import {take} from './commands/takeItem'
 import {removeItemFromRoom} from './helpers/roomItems'
 import {drop} from './commands/dropItem'
+import {printOutput} from './helpers/printOutput'
 
 const player = new Player()
+window.IS_PUZZLE = false
 
 document.addEventListener('DOMContentLoaded', function () {
   const input = document.getElementById('input')
@@ -27,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
   printOutput(displayRoom(getCurrentLocation(player)))
 
   input.addEventListener('keydown', function (event) {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && !IS_PUZZLE) {
       const command = input.value
       executeCommand(command)
       input.value = ''
@@ -36,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   async function executeCommand(command) {
     let result
+    printOutput(`> ${command}`)
     switch (command.toLowerCase()) {
       case 'start':
         result = 'Starting the game...'
@@ -53,14 +56,8 @@ document.addEventListener('DOMContentLoaded', function () {
         result = await handleUserCommand(player, command)
         break
     }
-    printOutput(`> ${command}`)
     printOutput(result)
   }
-
-  function printOutput(text) {
-    const outputDiv = document.createElement('div')
-    outputDiv.textContent = text
-    output.appendChild(outputDiv)
-    output.scrollTop = output.scrollHeight
-  }
 })
+
+export default printOutput

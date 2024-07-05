@@ -25,4 +25,8 @@ module.exports = {
     fs: 'null',
     readline: 'null',
   },
+  devServer: {
+    contentBase: './dist',
+    hot: true,
+  },
 }
