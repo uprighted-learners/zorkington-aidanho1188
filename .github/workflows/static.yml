@@ -25,9 +25,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: List directory contents
-        run: ls -R
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -41,12 +38,12 @@ jobs:
           node --version
           npm --version
 
-      - name: Build the project
-        run: npm run build || (echo "Build failed, outputting detailed error information:" && npm run build -- --stats-error-details)
+      # - name: Build the project
+      #   run: npm run build || (echo "Build failed, outputting detailed error information:" && npm run build -- --stats-error-details)
 
       - name: Start server
         run: |
-          npm start > server.log 2>&1 &
+          npm run build:prod > server.log 2>&1 &
           echo "Waiting for server to start..."
           while ! nc -z localhost $SERVER_PORT; do
             sleep 10
