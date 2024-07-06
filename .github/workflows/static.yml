@@ -1,5 +1,4 @@
 name: CI/CD Pipeline
-
 on:
   push:
     branches: [ review ]
@@ -17,45 +16,6 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-and-test:
-    runs-on: ubuntu-latest
-    env:
-      SERVER_PORT: 5500
-    # steps:
-    #   - name: Checkout code
-    #     uses: actions/checkout@v4
-
-    #   - name: Set up Node.js
-    #     uses: actions/setup-node@v3
-    #     with:
-    #       node-version: '20'
-
-    #   - name: Install dependencies
-    #     run: npm install
-
-    #   - name: Verify Node.js and npm versions
-    #     run: |
-    #       node --version
-    #       npm --version
-
-    #   - name: Install serve
-    #     run: npm install -g serve
-
-    #   - name: Build the project
-    #     run: npm run build
-
-    #   - name: Start server and run tests
-    #     run: |
-    #       serve -s build -l $SERVER_PORT &
-    #       echo "Waiting for server to start..."
-    #       sleep 10  # Adjust the wait time as needed
-    #       npm test  # Assuming your tests are configured to run using `npm test`
-
-    #   - name: Run tests with Cypress
-    #     run: |
-    #       export CYPRESS_baseUrl=http://localhost:$SERVER_PORT
-    #       npm test
-
   deploy:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
