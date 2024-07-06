@@ -1,27 +1,19 @@
-name: CI/CD Pipeline
+name: Build and Test
 
 on:
   push:
-    branches: 
-      - "main"
-      - "review"
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
 jobs:
-  run-tests:
-    if: github.ref == 'refs/heads/review'
+  build-and-test:
     runs-on: ubuntu-latest
     env:
-      SERVER_PORT: 5500 
+      SERVER_PORT: 5500
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -29,21 +21,27 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20.6.1'
+          node-version: '20'  # Specify the Node.js version
 
       - name: Install dependencies
         run: npm install
 
-      - name: Build with webpack
+      - name: Verify Node.js and npm versions
         run: |
-          npm install
-          npm run build:prod
+          node --version
+          npm --version
+
+      - name: Build the project
+        run: npm run build
 
       - name: Start server
         run: |
-          npm start &
+          npm start > server.log 2>&1 &
           echo "Waiting for server to start..."
-          while ! nc -z localhost $SERVER_PORT; do sleep 1; done
+          while ! nc -z localhost $SERVER_PORT; do
+            sleep 10
+            cat server.log  # Output server logs for debugging
+          done
           echo "Server started!"
 
       - name: Run tests
@@ -51,22 +49,6 @@ jobs:
           export CYPRESS_baseUrl=http://localhost:$SERVER_PORT
           npm test
 
-
-  deploy:
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: '.'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      - name: Output server logs if failed
+        if: failure()
+        run: cat server.log
