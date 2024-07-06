@@ -20,6 +20,8 @@ jobs:
   run-tests:
     if: github.ref == 'refs/heads/review'
     runs-on: ubuntu-latest
+    env:
+      SERVER_PORT: 5500 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -27,16 +29,22 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '14' # Specify your Node.js version
+          node-version: '20' # Specify your Node.js version
 
       - name: Install dependencies
         run: npm install
-        
-      - name: Install Cypress
-        run: npm install cypress --save-dev
+
+      - name: Start server
+        run: |
+          npm start &
+          echo "Waiting for server to start..."
+          while ! nc -z localhost $SERVER_PORT; do sleep 1; done
+          echo "Server started!"
 
       - name: Run tests
-        run: npm test
+        run: |
+          export CYPRESS_baseUrl=http://localhost:$SERVER_PORT
+          npm test
 
   deploy:
     if: github.ref == 'refs/heads/main'
