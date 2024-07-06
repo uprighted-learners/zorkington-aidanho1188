@@ -30,6 +30,11 @@ module.exports = {
     hot: true,
   },
   resolve: {
+    alias: {
+      '@classes': path.resolve(__dirname, 'classes/'),
+      '@helpers': path.resolve(__dirname, 'helpers/'),
+      '@commands': path.resolve(__dirname, 'commands/'),
+    },
     extensions: ['.js', '.json'],
   },
   stats: {
