@@ -18,7 +18,7 @@ async function displayRoomPuzzle(player, targetedRoom) {
       movePlayer(player, targetedRoom)
       break
     } else if (input === 'back') {
-      printOutput('You have returned to the room.')
+      printOutput('You have exited the puzzle.')
       break
     } else if (hasUseCommand(input)) {
       let inputArr = input.trim().split(' ') // TODO: write this in another function
@@ -28,9 +28,7 @@ async function displayRoomPuzzle(player, targetedRoom) {
         return true
       }
     } else {
-      console.log('input:', input)
       printOutput(puzzle.wrongAnswer)
-      console.log('this is working')
     }
   }
   document.getElementById('input').value = ''

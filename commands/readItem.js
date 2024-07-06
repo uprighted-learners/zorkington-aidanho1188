@@ -1,13 +1,13 @@
 const {itemLookUp} = require('../helpers/itemsLookUp')
 const {itemIsPresent} = require('../helpers/itemIsPresent')
-const {ItemDoesntExist, ItemIsUnreadable, PlayerDoesntHaveItem} = require('../errors/itemErrors')
+const {NoItemSelected, ItemDoesntExist, ItemIsUnreadable, PlayerDoesntHaveItem} = require('../errors/itemErrors')
 const {print} = require('../helpers/print')
 
 function read(player, item) {
   try {
+    console.log('item', item)
     validateRead(player, item)
     item = itemLookUp[item]
-    // print(item.description);
     return `${item.description}`
   } catch (error) {
     throw error
@@ -15,6 +15,9 @@ function read(player, item) {
 }
 
 function validateRead(player, item) {
+  if (!item) {
+    throw new NoItemSelected('Please provide an item to read.')
+  }
   if (!itemDoesExist(item)) {
     throw new ItemDoesntExist('This item does not exist.')
   }

@@ -1,5 +1,5 @@
 const {locationState, locationLookUp, roomNameLookup} = require('../helpers/lookUps')
-const {RoomDoesntExistError, MoveRoomError, NotUnlockedError} = require('../errors/roomErrors')
+const {NoRoomSelected, RoomDoesntExistError, MoveRoomError, NotUnlockedError} = require('../errors/roomErrors')
 const {movePlayer} = require('../helpers/movePlayer')
 const {getObjectName} = require('../helpers/getFunctions')
 const {puzzleLookup} = require('../helpers/puzzlesLookup')
@@ -27,6 +27,9 @@ async function moveRoom(player, targetedRoom) {
 }
 
 function validateMove(currentRoom, targetedRoom) {
+  if (!currentRoom) {
+    throw new NoRoomSelected('No room selected! 🚫')
+  }
   if (!checkRoomExists(targetedRoom)) {
     throw new RoomDoesntExistError('Room does not exist!')
   }
