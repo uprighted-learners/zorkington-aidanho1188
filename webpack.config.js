@@ -4,7 +4,7 @@ module.exports = {
   mode: 'development', // Use 'production' for production builds
   entry: './script.js', // Entry point of your application
   output: {
-    path: path.resolve(__dirname, 'dist'), // Output directory
+    path: path.resolve(__dirname, 'public/dist'), // Output directory
     filename: 'bundle.js', // Output file name
   },
   module: {
@@ -26,7 +26,7 @@ module.exports = {
     readline: 'null',
   },
   devServer: {
-    contentBase: './dist',
+    contentBase: './public/dist',
     hot: true,
   },
   resolve: {
