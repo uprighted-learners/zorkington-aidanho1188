@@ -35,9 +35,9 @@ jobs:
         run: npm install
 
       - name: Build with webpack
-          run: |
-            npm install
-            npm run build -- --progress --colors --stats-detailed
+        run: |
+          npm install
+          npm run build -- --progress --colors --stats-detailed
 
       - name: Start server
         run: |
