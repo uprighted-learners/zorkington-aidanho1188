@@ -34,15 +34,15 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Build
+        run: npm run build
+
       - name: Start server
         run: |
           npm start &
           echo "Waiting for server to start..."
           while ! nc -z localhost $SERVER_PORT; do sleep 1; done
           echo "Server started!"
-
-      - name: Build
-        run: npm run build
 
       - name: Run tests
         run: |
