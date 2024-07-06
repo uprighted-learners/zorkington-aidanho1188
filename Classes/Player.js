@@ -25,4 +25,5 @@ class Player {
     return this._answer;
   }
 }
+
 exports.Player = Player;

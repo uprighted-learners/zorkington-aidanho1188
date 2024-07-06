@@ -66,4 +66,5 @@ async function promptForLastPuzzle(puzzle) {
   }
   return process.exit()
 }
+
 exports.use = use
