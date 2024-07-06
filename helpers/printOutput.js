@@ -1,7 +1,9 @@
 export function printOutput(text) {
-  var lineBreak = document.createElement('br')
+  const output = document.getElementById('output-container')
+  const lineBreak = document.createElement('br')
   const outputDiv = document.createElement('div')
   outputDiv.innerHTML = applyNextLine(text)
+  outputDiv.classList.add('output')
   output.appendChild(outputDiv)
   output.scrollTop = output.scrollHeight
 }

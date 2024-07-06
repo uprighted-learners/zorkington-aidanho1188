@@ -21,7 +21,7 @@ body {
   justify-content: center;
 }
 
-#output {
+#output-container {
   height: 80vh;
   overflow-y: auto;
   margin-bottom: 10px;

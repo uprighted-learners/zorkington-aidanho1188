@@ -24,7 +24,6 @@ window.IS_PUZZLE = false
 
 document.addEventListener('DOMContentLoaded', function () {
   const input = document.getElementById('input')
-  const output = document.getElementById('output')
   // print welcome message
   printOutput(displayRoom(getCurrentLocation(player)))
 
@@ -59,5 +58,3 @@ document.addEventListener('DOMContentLoaded', function () {
     printOutput(result)
   }
 })
-
-export default printOutput
