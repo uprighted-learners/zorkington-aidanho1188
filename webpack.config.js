@@ -31,9 +31,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      '@classes': path.resolve(__dirname, 'classes/'),
-      '@helpers': path.resolve(__dirname, 'helpers/'),
-      '@commands': path.resolve(__dirname, 'commands/'),
+      '@': path.resolve(__dirname),
     },
     extensions: ['.js', '.json'],
   },

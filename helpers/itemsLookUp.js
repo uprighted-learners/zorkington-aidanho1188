@@ -1,4 +1,4 @@
-import Item from '../classes/Item'
+import Item from '@/classes/Item'
 import items from '../data/itemsList.js'
 
 let itemsList = {...items}

@@ -1,5 +1,5 @@
 // const fs = require("fs");
-import Puzzle from '../classes/Puzzle'
+import Puzzle from '@/classes/Puzzle'
 import puzzles from '../data/puzzleList.js'
 // const puzzles = JSON.parse(puzzleJsonData)
 
