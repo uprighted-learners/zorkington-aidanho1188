@@ -43,7 +43,7 @@ export const commandLookUp = {
 // exports.commandLookUp = commandLookUp
 
 // Export the result of the initialize function
-import Location from '../classes/location.js'
+import Location from '../classes/Location.js'
 import rooms from '../data/roomsList.js'
 
 // const rooms = JSON.parse(roomsJsonData)
