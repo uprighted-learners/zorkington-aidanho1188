@@ -29,7 +29,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20' # Specify your Node.js version
+          node-version: '14'
 
       - name: Install dependencies
         run: npm install
@@ -41,10 +41,14 @@ jobs:
           while ! nc -z localhost $SERVER_PORT; do sleep 1; done
           echo "Server started!"
 
+      - name: Build
+        run: npm run build
+
       - name: Run tests
         run: |
           export CYPRESS_baseUrl=http://localhost:$SERVER_PORT
           npm test
+
 
   deploy:
     if: github.ref == 'refs/heads/main'
