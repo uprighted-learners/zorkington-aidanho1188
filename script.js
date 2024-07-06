@@ -25,7 +25,7 @@ window.IS_PUZZLE = false
 document.addEventListener('DOMContentLoaded', function () {
   const input = document.getElementById('input')
   // print welcome message
-  printOutput(displayRoom(getCurrentLocation(player)))
+  printOutput('Welcome to Zorkington!')
 
   input.addEventListener('keydown', function (event) {
     if (event.key === 'Enter' && !IS_PUZZLE) {

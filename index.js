@@ -55,7 +55,9 @@ export async function handleUserCommand(player, answer) {
   try {
     return await commandFunction(player, target)
   } catch (error) {
-    if (!commandFunction) {
+    if (!answer) {
+      return 'Please enter a command'
+    } else if (!commandFunction) {
       return `${answer} is not a valid command`
     } else {
       return `${error.message}`
