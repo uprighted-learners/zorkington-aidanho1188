@@ -1,4 +1,4 @@
-class Item {
+export default class Item {
   constructor(name, description, location, isTakeable, puzzleCode = null) {
     this._name = name
     this._description = description
@@ -27,5 +27,3 @@ class Item {
     return this._puzzleCode
   }
 }
-
-export default Item

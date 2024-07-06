@@ -1,4 +1,4 @@
-class Puzzle {
+export default class Puzzle {
   constructor(name, location, message, promptMessage, solvedMessage, answer, wrongAnswer, isSolved) {
     this._name = name
     this._location = location
@@ -46,4 +46,3 @@ class Puzzle {
     this._isSolved = value
   }
 }
-exports.Puzzle = Puzzle

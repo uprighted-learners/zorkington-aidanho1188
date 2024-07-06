@@ -1,6 +1,6 @@
 import {handleUserCommand} from './index.js'
-import {Item} from './classes/Item'
-import {Player} from './classes/Player'
+import Item from './classes/Item'
+import Player from './classes/Player'
 import {roomNameLookup, locationState} from './helpers/lookUps'
 import {puzzleLookup} from './helpers/puzzlesLookup'
 import {displayRoom} from './helpers/displayRoom'
