@@ -17,74 +17,74 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-name: Build and Test
+  name: Build and Test
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch:
+  on:
+    push:
+      branches:
+        - main
+    pull_request:
+      branches:
+        - main
+    workflow_dispatch:
 
-jobs:
-  build-and-test:
-    runs-on: ubuntu-latest
-    env:
-      SERVER_PORT: 5500
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+  jobs:
+    build-and-test:
+      runs-on: ubuntu-latest
+      env:
+        SERVER_PORT: 5500
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20' 
+        - name: Set up Node.js
+          uses: actions/setup-node@v3
+          with:
+            node-version: '20' 
 
-      - name: Install dependencies
-        run: npm install
+        - name: Install dependencies
+          run: npm install
 
-      - name: Verify Node.js and npm versions
-        run: |
-          node --version
-          npm --version
+        - name: Verify Node.js and npm versions
+          run: |
+            node --version
+            npm --version
 
-      - name: Build the project
-        run: npm run build || (echo "Build failed, outputting detailed error information:" && npm run build -- --stats-error-details)
-
-
-      - name: Start server
-        run: |
-          npm start > server.log 2>&1 &
-          echo "Waiting for server to start..."
-          while ! nc -z localhost $SERVER_PORT; do
-            sleep 10
-            cat server.log  # Output server logs for debugging
-          done
-          echo "Server started!"
-
-      - name: Run tests
-        run: |
-          export CYPRESS_baseUrl=http://localhost:$SERVER_PORT
-          npm test
+        - name: Build the project
+          run: npm run build || (echo "Build failed, outputting detailed error information:" && npm run build -- --stats-error-details)
 
 
-  deploy:
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: '.'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+        - name: Start server
+          run: |
+            npm start > server.log 2>&1 &
+            echo "Waiting for server to start..."
+            while ! nc -z localhost $SERVER_PORT; do
+              sleep 10
+              cat server.log  # Output server logs for debugging
+            done
+            echo "Server started!"
+
+        - name: Run tests
+          run: |
+            export CYPRESS_baseUrl=http://localhost:$SERVER_PORT
+            npm test
+
+
+    deploy:
+      if: github.ref == 'refs/heads/main'
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+        - name: Setup Pages
+          uses: actions/configure-pages@v5
+        - name: Upload artifact
+          uses: actions/upload-pages-artifact@v3
+          with:
+            path: '.'
+        - name: Deploy to GitHub Pages
+          id: deployment
+          uses: actions/deploy-pages@v4
+      environment:
+        name: github-pages
+        url: ${{ steps.deployment.outputs.page_url }}
