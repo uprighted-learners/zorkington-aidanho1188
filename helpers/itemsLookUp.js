@@ -1,7 +1,5 @@
-// const fs = require("fs");
-const {Item} = require('../classes/Item')
+import Item from '@/classes/Item'
 import items from '../data/itemsList.js'
-// const items = JSON.parse(itemsJsonData)
 
 let itemsList = {...items}
 

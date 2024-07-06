@@ -1,3 +1,5 @@
+<details>
+<summary>Zorkington V1</summary>
 # Zorkington
 
 ![zork game west of house splash screen](https://res.cloudinary.com/btvca/image/upload/v1623935793/zork-west-of-house_ugpgww.jpg "Zork, West of House")
@@ -328,3 +330,29 @@ Each room should have:
 * Have a **status line** exist at the bottom of the screen, showing room name.
 
 * Write a **word wrapping** function and use it to wrap all printed output to a maximum 80 characters per line. See the [Wikipedia article](https://en.wikipedia.org/wiki/Characters_per_line) for more history on this subject.
+</details>
+
+<!-- <details>
+<summary>Zorkington V2</summary> -->
+
+# Zorkington V2
+
+## New Features
+
+### Bringing JavaScript Console Game to Web-Based Console Game
+
+You can now experience Zorkington, the JavaScript console game, in a web-based console environment. Enjoy the following features:
+
+- Interactive interface: Play the game using a simulated console input and output.
+- HTML integration: Enhance the game interface with the power of HTML.
+- Seamless transition: Maintain the game logic by linking the existing Zorkington JavaScript file.
+
+### Unit Testing for Input and Output
+
+Ensure the reliability of the Zorkington console game with comprehensive unit testing. Highlights include:
+
+- Test case coverage: Define scenarios for different user inputs and expected outputs.
+- Mock user input: Simulate user interactions to validate game responses.
+- Automated testing: Streamline the testing process with CI pipelines or test runners.
+
+<!-- </details> -->

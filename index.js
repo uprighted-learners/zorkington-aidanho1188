@@ -1,5 +1,5 @@
-import {Item} from './classes/Item'
-import {Player} from './classes/Player'
+import Item from '@/classes/Item'
+import Player from '@/classes/Player'
 import {roomNameLookup, locationState} from './helpers/lookUps'
 import {puzzleLookup} from './helpers/puzzlesLookup'
 import {displayRoom} from './helpers/displayRoom'
@@ -9,7 +9,6 @@ import {moveRoom} from './commands/moveRoom'
 import {setPuzzleIsSolved} from './helpers/setPuzzleIsSolved'
 import {use} from './commands/useItem'
 import {movePlayer} from './helpers/movePlayer'
-// import {prompt} from './helpers/prompt'
 import {read} from './commands/readItem'
 import {look} from './commands/look'
 import {endGame} from './commands/endGame'
@@ -50,24 +49,18 @@ export async function handleUserCommand(player, answer) {
   let command = getCommand(answerArr)
   let target = getTarget(answerArr)
   let commandKey = validateCommandKey(command)
-  console.log('commandKey', commandKey)
+  // console.log('commandKey', commandKey)
   let commandFunction = commandFunctionLookUp[commandKey]
-  console.log('commandFunction', commandFunction)
+  // console.log('commandFunction', commandFunction)
   try {
     return await commandFunction(player, target)
   } catch (error) {
-    if (!commandFunction) {
+    if (!answer) {
+      return 'Please enter a command'
+    } else if (!commandFunction) {
       return `${answer} is not a valid command`
     } else {
       return `${error.message}`
     }
   }
-}
-
-// * Puzzle functions
-
-function hasUseCommand(input) {
-  let inputArr = input.trim().split(' ')
-  let command = getCommand(inputArr)
-  return validateCommandKey(command)
 }

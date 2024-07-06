@@ -1,21 +1,28 @@
+class NoRoomSelected extends Error {
+  constructor(message) {
+    super(message)
+    this.name = 'NoRoomSelected'
+  }
+}
+
 class RoomDoesntExistError extends Error {
   constructor(message) {
-    super(message);
-    this.name = "RoomDoesntExistError";
+    super(message)
+    this.name = 'RoomDoesntExistError'
   }
 }
 
 class MoveRoomError extends Error {
   constructor(message) {
-    super(message);
-    this.name = "MoveRoomError";
+    super(message)
+    this.name = 'MoveRoomError'
   }
 }
 
 class NotUnlockedError extends Error {
   constructor(message) {
-    super(message);
-    this.name = "NotUnlockedError";
+    super(message)
+    this.name = 'NotUnlockedError'
   }
 }
-module.exports = {RoomDoesntExistError, MoveRoomError, NotUnlockedError};
+module.exports = {NoRoomSelected, RoomDoesntExistError, MoveRoomError, NotUnlockedError}

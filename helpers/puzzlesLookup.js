@@ -1,5 +1,5 @@
 // const fs = require("fs");
-const {Puzzle} = require('../classes/Puzzle')
+import Puzzle from '@/classes/Puzzle'
 import puzzles from '../data/puzzleList.js'
 // const puzzles = JSON.parse(puzzleJsonData)
 
@@ -16,4 +16,3 @@ export let puzzleLookup = {
   room5: hiddenPassage,
   room6: oldAltar,
 }
-// exports.puzzleLookup = puzzleLookup
