@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode development",
-    "build:prod": "webpack --mode production",
-    "start": "webpack --watch",
+    "start": "webpack --mode production",
+    "dev": "webpack --watch",
     "test": "npx cypress run",
     "open:test": "npx cypress open"
   },
