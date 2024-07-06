@@ -32,4 +32,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.json'],
   },
+  stats: {
+    errorDetails: true,
+  },
 }

@@ -1,3 +1,22 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: 
+      - "main"
+      - "review"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
 name: Build and Test
 
 on:
@@ -32,7 +51,8 @@ jobs:
           npm --version
 
       - name: Build the project
-        run: npm run build
+        run: npm run build || (echo "Build failed, outputting detailed error information:" && npm run build -- --stats-error-details)
+
 
       - name: Start server
         run: |
@@ -48,3 +68,23 @@ jobs:
         run: |
           export CYPRESS_baseUrl=http://localhost:$SERVER_PORT
           npm test
+
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
