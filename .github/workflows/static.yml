@@ -48,7 +48,3 @@ jobs:
         run: |
           export CYPRESS_baseUrl=http://localhost:$SERVER_PORT
           npm test
-
-      - name: Output server logs if failed
-        if: failure()
-        run: cat server.log
