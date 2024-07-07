@@ -1,4 +1,4 @@
-describe('Zorkington Game Read Command', () => {
+describe('Zorkington Game Read Command Error Tests', () => {
   beforeEach(() => {
     cy.visit('http://localhost:5500')
   })
@@ -19,5 +19,13 @@ describe('Zorkington Game Read Command', () => {
       .last()
       .invoke('text')
       .should('match', /A spell scroll with intricate symbols/)
+  })
+
+  it('should display a message when reading a locked item', () => {
+    cy.get('input').type('read grandKey{enter}')
+    cy.get('.output')
+      .last()
+      .invoke('text')
+      .should('match', /Please solve the puzzle first/)
   })
 })
