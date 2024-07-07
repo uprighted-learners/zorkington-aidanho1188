@@ -45,7 +45,7 @@ const commandFunctionLookUp = {
 // }
 
 export async function handleUserCommand(player, answer) {
-  let answerArr = answer.trim().split(' ')
+  let answerArr = answer.trim().split(' ').filter(Boolean)
   let command = getCommand(answerArr)
   let target = getTarget(answerArr)
   let commandKey = validateCommandKey(command)

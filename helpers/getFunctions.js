@@ -11,12 +11,12 @@ function getObjectName(item, nameLookUp) {
 }
 
 function getCommand(input) {
-  return input[0].toLowerCase()
+  return input[0] ? input[0].toLowerCase() : ''
 }
 
 function getTarget(input) {
   if (input.length > 1) {
-    return input.splice(1).join(' ')
+    return input.splice(1).join(' ').toLowerCase()
   } else {
     return ''
   }

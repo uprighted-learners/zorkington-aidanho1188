@@ -17,8 +17,8 @@ async function use(player, item, targetedRoom) {
       return await promptForLastPuzzle(puzzle)
     }
     validateUse(player, item, puzzle)
-    movePlayer(player, targetedRoom)
-    return setPuzzleIsSolved(puzzle, targetedRoom)
+    setPuzzleIsSolved(puzzle, targetedRoom)
+    return movePlayer(player, targetedRoom)
   } catch (error) {
     return error.message
   }

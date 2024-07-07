@@ -15,6 +15,14 @@ describe('Zorkington Game Go Command Error Tests', () => {
       .should('match', /No room selected! 🚫/)
   })
 
+  it('should display an error message when moving selecting an empty spaces as room', () => {
+    cy.get('input').type('go  {enter}')
+    cy.get('.output')
+      .last()
+      .invoke('text')
+      .should('match', /No room selected! 🚫/)
+  })
+
   it('should display an error message when moving to an invalid room', () => {
     cy.get('input').type('go home{enter}')
     cy.get('.output')
