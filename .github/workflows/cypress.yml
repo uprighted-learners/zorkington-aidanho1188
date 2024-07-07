@@ -7,7 +7,11 @@ on:
 
 jobs:
   cypress-run:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false 
+      matrix:
+        containers: [1, 2]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -18,3 +22,6 @@ jobs:
         with:
           build: npm run build
           start: npm start
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
