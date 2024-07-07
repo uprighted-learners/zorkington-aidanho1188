@@ -55,6 +55,8 @@ document.addEventListener('DOMContentLoaded', function () {
         result = await handleUserCommand(player, command)
         break
     }
-    printOutput(result)
+    if (result) {
+      printOutput(result)
+    }
   }
 })

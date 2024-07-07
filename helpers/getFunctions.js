@@ -5,6 +5,8 @@ function validateCommandKey(command) {
 }
 
 function getObjectName(item, nameLookUp) {
+  if (!item) return false
+
   return Object.keys(nameLookUp).find((key) => nameLookUp[key].includes(item))
 }
 
@@ -16,7 +18,7 @@ function getTarget(input) {
   if (input.length > 1) {
     return input.splice(1).join(' ')
   } else {
-    return null
+    return ''
   }
 }
 

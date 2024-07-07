@@ -49,9 +49,7 @@ export async function handleUserCommand(player, answer) {
   let command = getCommand(answerArr)
   let target = getTarget(answerArr)
   let commandKey = validateCommandKey(command)
-  // console.log('commandKey', commandKey)
   let commandFunction = commandFunctionLookUp[commandKey]
-  // console.log('commandFunction', commandFunction)
   try {
     return await commandFunction(player, target)
   } catch (error) {

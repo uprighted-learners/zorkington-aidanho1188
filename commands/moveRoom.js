@@ -7,7 +7,9 @@ const {printOutput} = require('../helpers/printOutput')
 const {displayRoomPuzzle} = require('../helpers/displayPuzzle')
 
 async function moveRoom(player, targetedRoom) {
+  console.log(typeof targetedRoom)
   targetedRoom = getObjectName(targetedRoom, roomNameLookup)
+  console.log(typeof targetedRoom)
   let currentRoom = player.location
   try {
     validateMove(currentRoom, targetedRoom)
@@ -27,17 +29,17 @@ async function moveRoom(player, targetedRoom) {
 }
 
 function validateMove(currentRoom, targetedRoom) {
-  if (!currentRoom) {
+  if (!targetedRoom && typeof targetedRoom === 'boolean') {
     throw new NoRoomSelected('No room selected! 🚫')
   }
   if (!checkRoomExists(targetedRoom)) {
-    throw new RoomDoesntExistError('Room does not exist!')
+    throw new RoomDoesntExistError('Room does not exist! 🚫')
   }
   if (!checkValidMove(currentRoom, targetedRoom)) {
     throw new MoveRoomError("You can't move to this room! 🚫")
   }
   if (!solvePuzzle(currentRoom, targetedRoom)) {
-    throw new NotUnlockedError('Please solve the puzzle first!')
+    throw new NotUnlockedError('Please solve the puzzle first! 🧩')
   }
 }
 

@@ -38,4 +38,12 @@ describe('Zorkington Game Basic Input/Output', () => {
       .invoke('text')
       .should('match', /Goodbye!/)
   })
+
+  it('should display invalid command message', () => {
+    cy.get('input').type('asdjfklasdjfkl{enter}')
+    cy.get('.output')
+      .last()
+      .invoke('text')
+      .should('match', /asdjfklasdjfkl is not a valid command/)
+  })
 })

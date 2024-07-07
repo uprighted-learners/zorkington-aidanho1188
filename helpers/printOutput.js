@@ -12,6 +12,6 @@ function applyNextLine(text) {
   if (typeof text === 'string') {
     return text.replace(/\n/g, '<br>')
   } else {
-    return ''
+    return 'No output provided.'
   }
 }

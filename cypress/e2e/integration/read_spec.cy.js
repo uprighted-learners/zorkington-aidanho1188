@@ -12,8 +12,7 @@ describe('Zorkington Game Read Command', () => {
   })
 
   it('should display a message when reading an item in the inventory', () => {
-    cy.get('input').type('go church{enter}')
-    cy.get('input').type('12345{enter}')
+    cy.solveLockpad()
     cy.get('input').type('take paper{enter}')
     cy.get('input').type('read paper{enter}')
     cy.get('.output')
