@@ -1,4 +1,4 @@
-describe('Zorkington Game Read Command Error Tests', () => {
+describe('Read Command Error Tests', () => {
   it('should display am error message when reading an item without selecting an item', () => {
     cy.get('input').type('read{enter}')
     cy.get('.output')
@@ -28,11 +28,11 @@ describe('Zorkington Game Read Command Error Tests', () => {
     cy.get('.output')
       .last()
       .invoke('text')
-      .should('match', /You don't have this item./)
+      .should('match', /You don't have this item. 🚫/)
   })
 })
 
-describe('Zorkington Game Read Command Tests', () => {
+describe('Read Command Tests', () => {
   it('should display a message when reading an item in the room', () => {
     cy.get('input').type('read sign{enter}')
     cy.get('.output')

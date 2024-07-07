@@ -1,4 +1,4 @@
-describe('Zorkington Game Go Command Error Tests', () => {
+describe('Go Command Error Tests', () => {
   it('should display an error message when moving to a locked room', () => {
     cy.get('input').type('go church{enter}')
     cy.get('.output')
@@ -41,7 +41,7 @@ describe('Zorkington Game Go Command Error Tests', () => {
   })
 })
 
-describe('Zorkington Game Go Command Tests', () => {
+describe('Go Command Tests', () => {
   it('should display a success message when moving to a valid room', () => {
     cy.solveLockpad()
     cy.get('input').type('go outside{enter}')

@@ -20,16 +20,16 @@ function take(player, item) {
 
 function validateTake(player, item) {
   if (!item) {
-    throw new NoItemSelected('Please provide an item to take.')
+    throw new NoItemSelected('Please provide an item to take. 📚')
   }
   if (!itemIsPresent(player, item)) {
-    throw new ItemIsNotPresent("You can't take this item! It doesn't exist in this room.")
+    throw new ItemIsNotPresent("You can't take this item! It doesn't exist in this room. 🔄")
   }
   if (!checkItemExist(item)) {
-    throw new ItemDoesntExist('This item does not exist.')
+    throw new ItemDoesntExist('This item does not exist. Please try again. 🔄')
   }
   if (!isTakeable(item)) {
-    throw new ItemIsNotTabkeable('You are not allow to take this item.')
+    throw new ItemIsNotTabkeable('You are not allow to take this item. 🚫')
   }
 }
 

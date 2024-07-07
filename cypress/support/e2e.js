@@ -12,9 +12,11 @@
 // You can read more here:
 // https://on.cypress.io/configuration
 // ***********************************************************
+import 'cypress-runner-themes'
 
 // Import commands.js using ES2015 syntax:
 import './commands'
+
 beforeEach(() => {
   cy.visit('http://localhost:5500')
 })

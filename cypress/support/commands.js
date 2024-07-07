@@ -24,25 +24,22 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-// solveLockpad puzzle command
+// ? puzzle solving commands
 Cypress.Commands.add('solveLockpad', () => {
   cy.get('input').type('go church{enter}')
   cy.get('input').type('12345{enter}')
 })
 
-// solveGrandDoor puzzle command
 Cypress.Commands.add('solveGrandDoor', () => {
   cy.get('input').type('go door{enter}')
   cy.get('input').type('1999{enter}')
 })
 
-// solveHiddenPassage puzzle command
 Cypress.Commands.add('solveHiddenPassage', () => {
   cy.get('input').type('go passage{enter}')
   cy.get('input').type('0981{enter}')
 })
 
-// solveOldAltar puzzle command
 Cypress.Commands.add('solveOldAltar', () => {
   cy.get('input').type('go altar{enter}')
   cy.get('input').type('In shadows bound, secrets unchain. Speak the words to unveil the path.{enter}')

@@ -30,7 +30,7 @@ function validateRead(player, item) {
     throw new ItemIsUnreadable('Item description not available. Please try again. 🔄')
   }
   if (!itemIsPresent(player, item)) {
-    throw new PlayerDoesntHaveItem("You don't have this item.")
+    throw new PlayerDoesntHaveItem("You don't have this item. 🚫")
   }
 }
 

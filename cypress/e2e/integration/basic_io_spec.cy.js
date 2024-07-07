@@ -1,4 +1,4 @@
-describe('Zorkington Game Basic Input/Output', () => {
+describe('Basic Input/Output Test', () => {
   beforeEach(() => {
     cy.visit('http://localhost:5500')
   })
@@ -48,7 +48,7 @@ describe('Zorkington Game Basic Input/Output', () => {
   })
 })
 
-describe('Zorkington Game case insensitive commands', () => {
+describe('Case Insensitive Commands Test', () => {
   it('should accept lowercase commands', () => {
     cy.get('input').type('read sign{enter}')
     cy.get('.output')
