@@ -5,18 +5,20 @@ function validateCommandKey(command) {
 }
 
 function getObjectName(item, nameLookUp) {
+  if (!item) return false
+
   return Object.keys(nameLookUp).find((key) => nameLookUp[key].includes(item))
 }
 
 function getCommand(input) {
-  return input[0].toLowerCase()
+  return input[0] ? input[0].toLowerCase() : ''
 }
 
 function getTarget(input) {
   if (input.length > 1) {
-    return input.splice(1).join(' ')
+    return input.splice(1).join(' ').toLowerCase()
   } else {
-    return null
+    return ''
   }
 }
 

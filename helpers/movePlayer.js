@@ -1,5 +1,6 @@
 const {printOutput} = require('./printOutput')
 const {roomNameLookup} = require('./lookUps')
+const {getObjectName} = require('./getFunctions')
 
 function movePlayer(player, targetedRoom) {
   player.location = targetedRoom

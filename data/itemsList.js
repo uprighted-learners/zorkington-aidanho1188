@@ -12,14 +12,14 @@ const itemsList = [
     isTakeable: true,
   },
   {
-    name: 'grandKey',
+    name: 'ornate key',
     description: 'An intricately crafted key with mystical symbols. It feels heavy in your hand, hinting at its significance.',
     location: 'room4',
     isTakeable: true,
     puzzleCode: '1999',
   },
   {
-    name: 'shadowAmulet',
+    name: 'shadow amulet',
     description: 'An ornate amulet with a dark gem at its center. It exudes an otherworldly aura, and intricate engravings adorn its surface.',
     location: 'room3',
     isTakeable: true,

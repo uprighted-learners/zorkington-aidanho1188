@@ -38,4 +38,62 @@ describe('Zorkington Game Basic Input/Output', () => {
       .invoke('text')
       .should('match', /Goodbye!/)
   })
+
+  it('should display invalid command message', () => {
+    cy.get('input').type('asdjfklasdjfkl{enter}')
+    cy.get('.output')
+      .last()
+      .invoke('text')
+      .should('match', /asdjfklasdjfkl is not a valid command/)
+  })
+})
+
+describe('Zorkington Game case insensitive commands', () => {
+  it('should accept lowercase commands', () => {
+    cy.get('input').type('read sign{enter}')
+    cy.get('.output')
+      .last()
+      .invoke('text')
+      .should('match', /Welcome to the Mystical Church of Wonders!/)
+  })
+
+  it('should accept uppercase commands', () => {
+    cy.get('input').type('READ SIGN{enter}')
+    cy.get('.output')
+      .last()
+      .invoke('text')
+      .should('match', /Welcome to the Mystical Church of Wonders!/)
+  })
+
+  it('should accept mixed case commands', () => {
+    cy.get('input').type('rEaD SiGn{enter}')
+    cy.get('.output')
+      .last()
+      .invoke('text')
+      .should('match', /Welcome to the Mystical Church of Wonders!/)
+  })
+
+  it('should accept commands with extra spaces', () => {
+    cy.get('input').type('  read sign  {enter}')
+    cy.get('.output')
+      .last()
+      .invoke('text')
+      .should('match', /Welcome to the Mystical Church of Wonders!/)
+  })
+
+  it('should accept commands with extra spaces and mixed case', () => {
+    cy.get('input').type('  rEaD SiGn  {enter}')
+    cy.get('.output')
+      .last()
+      .invoke('text')
+      .should('match', /Welcome to the Mystical Church of Wonders!/)
+  })
+
+  it('should accept commands with extra spaces in between', () => {
+    cy.get('input').type('read   sign{enter}')
+    cy.get('.output')
+      .last()
+      .invoke('text')
+      .should('match', /Welcome to the Mystical Church of Wonders!/)
+  })
 })
