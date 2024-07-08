@@ -40,15 +40,17 @@ describe('Take Item Error Test ', () => {
   })
 
   it('should display an error message when taking an item that is already in the inventory', () => {
+    cy.solveLockpad()
     cy.get('input').type('take paper{enter}')
     cy.get('input').type('take paper{enter}')
     cy.get('.output')
       .last()
       .invoke('text')
-      .should('match', /You already have this item. 🚫/)
+      .should('match', /You already have this item in your inventory. 🚫/)
   })
 })
 
+// TODO: Need to handle on success message
 describe('Take Item Test', () => {
   it('should display a success message when taking an item', () => {
     cy.solveLockpad()

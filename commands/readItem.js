@@ -1,9 +1,10 @@
 const {itemLookUp} = require('../helpers/itemsLookUp')
 const {itemIsPresent} = require('../helpers/itemIsPresent')
-const {NoItemSelected, ItemDoesntExist, ItemIsUnreadable, PlayerDoesntHaveItem} = require('../errors/itemErrors')
+const {NoItemSelected, ItemDoesntExist, ItemIsUnreadable, PlayerDoesntHaveItem, ItemIsNotPresent} = require('../errors/itemErrors')
 const {print} = require('../helpers/print')
 const {itemNameLookUp} = require('../helpers/lookUps')
 const {getObjectName} = require('../helpers/getFunctions')
+const {playerHasItem} = require('../helpers/playerHasItem')
 
 function read(player, item) {
   item = getObjectName(item, itemNameLookUp)
@@ -18,7 +19,6 @@ function read(player, item) {
 }
 
 function validateRead(player, item) {
-  console.log('item', item)
   if (!item && typeof item === 'boolean') {
     throw new NoItemSelected('Please provide an item to read. 📚')
   }
@@ -29,8 +29,11 @@ function validateRead(player, item) {
   if (!readable(item)) {
     throw new ItemIsUnreadable('Item description not available. Please try again. 🔄')
   }
+
   if (!itemIsPresent(player, item)) {
-    throw new PlayerDoesntHaveItem("You don't have this item. 🚫")
+    if (!playerHasItem(player, item)) {
+      throw new ItemIsNotPresent("You don't have access to this item. 🚫")
+    }
   }
 }
 

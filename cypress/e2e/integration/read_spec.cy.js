@@ -28,7 +28,7 @@ describe('Read Command Error Tests', () => {
     cy.get('.output')
       .last()
       .invoke('text')
-      .should('match', /You don't have this item. 🚫/)
+      .should('match', /You don't have access to this item. 🚫/)
   })
 })
 
