@@ -90,4 +90,26 @@ describe('Take Item Test', () => {
       .invoke('text')
       .should('match', /You took the amulet. 📚/)
   })
+
+  it('should take the amulet and display the amulet in the inventory', () => {
+    cy.solveLockpad()
+    cy.solveGrandDoor()
+    cy.get('input').type('take amulet{enter}')
+    cy.get('input').type('i{enter}')
+    cy.get('.output')
+      .last()
+      .invoke('text')
+      .should('match', /amulet/)
+  })
+
+  it('should take the amulet and remove the amulet from the room', () => {
+    cy.solveLockpad()
+    cy.solveGrandDoor()
+    cy.get('input').type('take amulet{enter}')
+    cy.get('input').type('look{enter}')
+    cy.get('.output')
+      .eq(-3)
+      .invoke('text')
+      .should('not.match', /amulet/)
+  })
 })

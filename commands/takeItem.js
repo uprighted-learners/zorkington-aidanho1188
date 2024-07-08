@@ -11,16 +11,17 @@ const {playerHasItem} = require('../helpers/playerHasItem')
 function take(player, item) {
   const itemObjectName = getObjectName(item, itemNameLookUp)
   try {
-    validateTake(player, item)
+    validateTake(player, itemObjectName)
     player.inventory.push(itemObjectName)
     removeItemFromRoom(player.location, itemObjectName)
+    return `You took the ${itemObjectName}. 📚`
   } catch (error) {
     throw error
   }
 }
 
 function validateTake(player, item) {
-  if (!item) {
+  if (!item && typeof item === 'boolean') {
     throw new NoItemSelected('Please provide an item to take. 📚')
   }
   if (!checkItemExist(item)) {
