@@ -1,8 +1,4 @@
 describe('Basic Input/Output Test', () => {
-  beforeEach(() => {
-    cy.visit('http://localhost:5500')
-  })
-
   it('should display a welcome message', () => {
     cy.get('.output').first().invoke('text').should('contain', 'Welcome to Zorkington!')
   })
