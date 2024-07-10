@@ -1,4 +1,4 @@
-name: Cypress Tests
+name: Cypress Tests on PRs
 
 on:
   push:
@@ -8,17 +8,36 @@ on:
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        container: [1, 2, 3]
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      # Install npm dependencies, cache them correctly
-      # and run all Cypress tests
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Start application
+        run: npm start &
+        run: sleep 10
+
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
           record: true
-          build: npm run build
-          start: npm start
+          parallel: true
+          group: ${{ matrix.container }}
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           CYPRESS_PROJECT_ID: ${{ secrets.PROJECT_ID }}

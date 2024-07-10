@@ -16,10 +16,10 @@ function drop(player, item) {
 
 function validateDrop(player, item) {
   if (!checkItemExist(item)) {
-    throw new ItemDoesntExist("This item does not exist.");
+    throw new ItemDoesntExist("This item does not exist. Please try again. 🔄");
   }
   if (!hasItem(player, item)) {
-    throw new PlayerDoesntHaveItem("You don't have this item to drop!");
+    throw new PlayerDoesntHaveItem("You can't drop this item! It doesn't exist in your inventory. 🔄");
   }
 }
 
