@@ -1,6 +1,6 @@
 const {itemLookUp} = require('./itemsLookUp')
 
-function checkItemExist(item) {
+function validateItem(item) {
   if (!item && typeof item === 'boolean') {
     throw new Error('No item selected! 🚫')
   }
@@ -10,4 +10,4 @@ function checkItemExist(item) {
   return true
 }
 
-exports.checkItemExist = checkItemExist
+exports.validateItem = validateItem

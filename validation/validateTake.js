@@ -2,11 +2,11 @@ const {itemLookUp} = require('../helpers/itemsLookUp')
 const {getObjectName} = require('../helpers/getFunctions')
 const {itemIsPresent} = require('../helpers/itemIsPresent')
 const {NoItemSelected, ItemIsNotPresent, ItemDoesntExist, ItemIsNotTabkeable} = require('../errors/itemErrors')
-const {checkItemExist} = require('../helpers/checkItemExist')
+const {validateItem} = require('../helpers/validateItem')
 const {playerHasItem} = require('../helpers/playerHasItem')
 
 function validateTake(player, item) {
-  checkItemExist(item)
+  validateItem(item)
   if (!itemIsPresent(player, item)) {
     if (playerHasItem(player, item)) {
       throw new ItemIsNotTabkeable('You already have this item in your inventory. 🚫')

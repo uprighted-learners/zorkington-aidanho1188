@@ -2,10 +2,10 @@ const {itemLookUp} = require('../helpers/itemsLookUp')
 const {itemIsPresent} = require('../helpers/itemIsPresent')
 const {NoItemSelected, ItemDoesntExist, ItemIsUnreadable, ItemIsNotPresent} = require('../errors/itemErrors')
 const {playerHasItem} = require('../helpers/playerHasItem')
-const {checkItemExist} = require('../helpers/checkItemExist')
+const {validateItem} = require('../helpers/validateItem')
 
 function validateRead(player, item) {
-  checkItemExist(item)
+  validateItem(item)
   // dead code: all items are readable atm
   if (!readable(item)) {
     throw new ItemIsUnreadable('Item description not available. Please try again. 🔄')

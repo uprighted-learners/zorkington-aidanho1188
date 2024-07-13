@@ -5,7 +5,7 @@ const {setPuzzleIsSolved} = require('../helpers/setPuzzleIsSolved')
 const {print} = require('../helpers/print')
 const {movePlayer} = require('../helpers/movePlayer')
 const {ask} = require('../helpers/prompt')
-const {checkItemExist} = require('../helpers/checkItemExist')
+const {validateItem} = require('../helpers/validateItem')
 const {removeItemFromPlayer} = require('../helpers/removeItemFromPlayer')
 
 async function use(player, item, targetedRoom) {
@@ -25,12 +25,7 @@ async function use(player, item, targetedRoom) {
 }
 
 function validateUse(player, item, puzzle) {
-  if (!item) {
-    throw new NoItemSelected('Please provide an item to use.')
-  }
-  if (!checkItemExist(item)) {
-    throw new ItemDoesntExist(`This item (${item}) doesn't exists.`)
-  }
+  validateItem(item)
   if (!playerHasItem(player, item)) {
     throw new PlayerDoesntHaveItem(`Player doesn't have this item (${item}).`)
   }

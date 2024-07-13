@@ -1,6 +1,7 @@
 const {getCurrentLocation} = require('../helpers/getFunctions')
 const {displayRoom} = require('../helpers/displayRoom')
 const {printOutput} = require('../helpers/printOutput')
+const {validateLook} = require('../validation/validateLook')
 
 async function look(player, args) {
   try {

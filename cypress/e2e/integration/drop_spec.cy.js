@@ -41,7 +41,7 @@ describe('Drop Item Test', () => {
     cy.get('.output')
       .last()
       .invoke('text')
-      .should('match', /You dropped the amulet. 📚/)
+      .should('match', /You dropped the shadow amulet. 📚/)
   })
 
   it('should drop an item from the inventory and add it to the room', () => {
@@ -84,26 +84,29 @@ describe('Drop Item Test', () => {
   it('should successfully drop more than one item', () => {
     cy.solveLockpad()
     cy.get('input').type('take paper{enter}')
+    cy.solveGrandDoor()
     cy.get('input').type('take amulet{enter}')
+    cy.get('input').type('go church{enter}')
+    cy.get('input').type('go outside{enter}')
     cy.get('input').type('drop paper{enter}')
     cy.get('input').type('drop amulet{enter}')
     cy.get('.output')
-      .eq(-2)
+      .eq(-3)
       .invoke('text')
-      .should('match', /You dropped the amulet. 📚/)
+      .should('match', /You dropped the paper. 📚/)
 
     cy.get('.output')
       .last()
       .invoke('text')
-      .should('match', /You dropped the paper. 📚/)
+      .should('match', /You dropped the shadow amulet. 📚/)
   })
 
-  it('should drop ornate key in the room', () => {
+  it('should drop the ornate key in the outside', () => {
     cy.solveLockpad()
     cy.get('input').type('go basement one{enter}')
+    cy.get('input').type('take ornate key{enter}')
     cy.get('input').type('go church{enter}')
     cy.get('input').type('go outside{enter}')
-    cy.get('input').type('take ornate key{enter}')
     cy.get('input').type('drop ornate key{enter}')
     cy.get('.output')
       .last()
