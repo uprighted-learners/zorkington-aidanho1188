@@ -214,7 +214,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \********************************/
 /***/ ((__unused_webpack_module, exports) => {
 
-eval("function displayRoom(room) {\n  // TODO: return an array of strings is better than a single string\n  return \"Room name: \".concat(room.name, \" \\b Available items: \").concat(room.inventory);\n}\nexports.displayRoom = displayRoom;\n\n//# sourceURL=webpack://zorkington/./helpers/displayRoom.js?");
+eval("function displayRoom(room) {\n  // TODO: return an array of strings is better than a single string\n  var roomInventory = room.inventory.join(', ');\n  return \"Room name: \".concat(room.name, \" \\b Available items: \").concat(roomInventory);\n}\nexports.displayRoom = displayRoom;\n\n//# sourceURL=webpack://zorkington/./helpers/displayRoom.js?");
 
 /***/ }),
 

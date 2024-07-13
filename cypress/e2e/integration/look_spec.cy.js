@@ -126,10 +126,11 @@ describe('Look Test: Floor 1', () => {
     cy.get('.output')
       .eq(-3)
       .invoke('text')
-      .should('include', /Available items: shadow amulet, paper/)
+      .should('match', /Available items: shadow amulet, paper/)
   })
 
   it('should display the room description', () => {
+    cy.solveGrandDoor()
     cy.get('input').type('look{enter}')
     cy.get('.output')
       .last()
