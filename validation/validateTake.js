@@ -23,4 +23,4 @@ function isTakeable(item) {
   return item.isTakeable
 }
 
-module.exports = {validateTake, isTakeable}
+module.exports = {validateTake}

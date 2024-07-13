@@ -1,12 +1,11 @@
 const {puzzleLookup} = require('../helpers/puzzlesLookup')
-const {itemLookUp} = require('../helpers/itemsLookUp')
 const {ItemDoesntExist, PlayerDoesntHaveItem, ItemIsUnusable, NoItemSelected} = require('../errors/itemErrors')
 const {setPuzzleIsSolved} = require('../helpers/setPuzzleIsSolved')
 const {print} = require('../helpers/print')
 const {movePlayer} = require('../helpers/movePlayer')
 const {ask} = require('../helpers/prompt')
 const {validateItem} = require('../helpers/validateItem')
-const { removeItemFromPlayer } = require('../helpers/removeItemFromPlayer')
+const {removeItemFromPlayer} = require('../helpers/removeItemFromPlayer')
 const {getObjectName} = require('../helpers/getFunctions')
 
 async function use(player, item, targetedRoom) {
@@ -24,25 +23,6 @@ async function use(player, item, targetedRoom) {
   } catch (error) {
     return error.message
   }
-}
-
-function validateUse(player, item, puzzle) {
-  validateItem(item)
-  if (!playerHasItem(player, item)) {
-    throw new PlayerDoesntHaveItem(`Player doesn't have this item (${item}).`)
-  }
-  if (!usuable(puzzle, item)) {
-    throw new ItemIsUnusable("You can't use this item here.")
-  }
-}
-
-function playerHasItem(player, item) {
-  return [...player.inventory].includes(item)
-}
-
-function usuable(puzzle, item) {
-  item = itemLookUp[item]
-  return item.puzzleCode === puzzle.answer
 }
 
 function verifyLastPuzzle(puzzle, item) {
