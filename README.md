@@ -52,7 +52,7 @@ You can now experience Zorkington, the JavaScript console game, in a web-based c
 - **Smooth Upgrade**: Preserve game mechanics by integrating the existing Zorkington JavaScript code.
 - **Enhanced Iconography**: Elevate the user experience with intuitive and engaging icons throughout the game interface.
 
-### Unit Testing for Input and Output
+### Unit Testing for Input and Output (Black-box Testing)
 
 Ensure the reliability of the Zorkington console game with comprehensive unit testing. Highlights include:
 

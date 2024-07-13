@@ -51,7 +51,11 @@ document.addEventListener('DOMContentLoaded', function () {
       case 'exit game':
         result = 'Goodbye!'
         // document.getElementById('input').disabled = true
-        window.location.href = '/'
+        printOutput(result)
+        printOutput('You will be redirected to the home page in 5 seconds...')
+        setTimeout(() => {
+          window.location.href = '/'
+        }, 5000)
         return
       default:
         result = await handleUserCommand(player, command)
