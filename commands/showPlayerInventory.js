@@ -1,3 +1,5 @@
+const {validateInventory} = require('../validation/validateInventory')
+
 function showPlayerInventory(player) {
   try {
     validateInventory(player)
