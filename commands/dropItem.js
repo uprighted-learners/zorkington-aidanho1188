@@ -11,10 +11,10 @@ function drop(player, item) {
   item = getObjectName(item, itemNameLookUp)
   try {
     validateDrop(player, item)
+    item = itemLookUp[item].name
     removeItemFromPlayer(player, item)
-    let itemName = itemLookUp[item].name
-    addItemToRoom(player.location, itemName)
-    return `You dropped the ${itemName}. 📚`
+    addItemToRoom(player.location, item)
+    return `You dropped the ${item}. 📚`
   } catch (error) {
     throw error
   }
