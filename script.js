@@ -43,14 +43,16 @@ document.addEventListener('DOMContentLoaded', function () {
         result = 'Starting the game...'
         break
       case 'help':
-        result = 'Available commands: start, help, about, go, i, look, read, open, burn, drop, use, exit'
+        result = 'Available commands: start, help, about, go, i, look, read, open, burn, drop, use, exit game'
         break
       case 'about':
         result = 'This is a JavaScript game console.'
         break
-      case 'exit':
+      case 'exit game':
         result = 'Goodbye!'
-        break
+        // document.getElementById('input').disabled = true
+        window.location.href = '/'
+        return
       default:
         result = await handleUserCommand(player, command)
         break

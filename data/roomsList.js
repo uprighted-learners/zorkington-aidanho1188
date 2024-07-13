@@ -14,7 +14,7 @@ const roomsList = [
     isUnlocked: false,
   },
   {
-    name: 'First Floor',
+    name: 'Floor One',
     description1:
       'You find yourself on the first floor of the building. The air is filled with a quiet hum, and soft footsteps echo in the distance. The walls are adorned with framed artwork, and large windows allow sunlight to filter into the corridor. A reception desk is situated near the entrance, and hallways lead to various rooms and offices. You notice a staircase nearby, hinting at more levels to explore. Take a moment to absorb the atmosphere of this bustling and organized first floor.',
     description2: 'In one corner of the room, a display case draws your attention. Within it rests an intriguing item: the Shadow Amulet. The Shadow Amulet is the key to unlocking the hidden passage in the basement. When you possess the amulet, you can use it in proximity to the peculiar wall, and it will reveal the entrance to the next level.',
@@ -22,7 +22,7 @@ const roomsList = [
     isUnlocked: false,
   },
   {
-    name: 'Second Floor',
+    name: 'Floor Two',
     description1: 'As you ascend the staircases, you find yourself on the second floor, a place steeped in mystery and ancient secrets. The air is thick with the scent of old books and the soft glow of mystical runes illuminates the walls.',
     description2: "You notice a writing of cryptic phrases repeating on the walls: 'In shadows bound, secrets unchain. Speak the words to unveil the path.' The building seems to respond to these arcane words.",
     inventory: [''],

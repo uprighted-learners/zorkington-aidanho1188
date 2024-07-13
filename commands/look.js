@@ -10,7 +10,6 @@ async function look(player, args) {
     printOutput('<br>')
     validateLook(room, args)
     return `${room.description1} ${room.description2}`
-    // return true
   } catch (error) {
     throw error
   }

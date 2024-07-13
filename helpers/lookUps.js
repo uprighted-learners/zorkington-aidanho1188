@@ -38,7 +38,7 @@ export const commandLookUp = {
   drop: ['d', 'drop'],
   take: ['t', 'take'],
   go: ['go', 'g', 'move', 'open', 'o', 'enter'],
-  endGame: ['exit'],
+  // endGame: ['exit'],
 }
 // exports.commandLookUp = commandLookUp
 
