@@ -4,7 +4,7 @@ describe('Take Item Error Test ', () => {
     cy.get('.output')
       .last()
       .invoke('text')
-      .should('match', /Please provide an item to take. 📚/)
+      .should('match', /No item selected! 🚫/)
   })
 
   it('should display an error message when taking an item selecting an empty spaces as item', () => {
@@ -12,7 +12,7 @@ describe('Take Item Error Test ', () => {
     cy.get('.output')
       .last()
       .invoke('text')
-      .should('match', /Please provide an item to take. 📚/)
+      .should('match', /No item selected! 🚫/)
   })
 
   it('should display an error message when taking a nonexistence item', () => {
@@ -20,7 +20,7 @@ describe('Take Item Error Test ', () => {
     cy.get('.output')
       .last()
       .invoke('text')
-      .should('match', /This item does not exist. Please try again. 🔄/)
+      .should('match', /Item not found. Please try again. 🔄/)
   })
 
   it('should display an error message when taking an item that is not available', () => {

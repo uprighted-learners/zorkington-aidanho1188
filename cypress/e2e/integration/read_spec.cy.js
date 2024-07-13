@@ -4,7 +4,7 @@ describe('Read Command Error Tests', () => {
     cy.get('.output')
       .last()
       .invoke('text')
-      .should('match', /Please provide an item to read. 📚/)
+      .should('match', /No item selected! 🚫/)
   })
 
   it('should display an error message when reading an item selecting an empty spaces as item', () => {
@@ -12,7 +12,7 @@ describe('Read Command Error Tests', () => {
     cy.get('.output')
       .last()
       .invoke('text')
-      .should('match', /Please provide an item to read. 📚/)
+      .should('match', /No item selected! 🚫/)
   })
 
   it('should display an error message when reading a nonexistence item', () => {

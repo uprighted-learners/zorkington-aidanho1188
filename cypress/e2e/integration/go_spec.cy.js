@@ -78,7 +78,7 @@ describe('Go Command Tests', () => {
       .should('match', /You moved to floor2... 🚶‍♂️/)
   })
 
-  it('should display a success message when moving to basement1', () => {
+  it('should display a success message when moving to basement1 one', () => {
     cy.solveLockpad()
     cy.get('input').type('go basement1{enter}')
     cy.get('.output')

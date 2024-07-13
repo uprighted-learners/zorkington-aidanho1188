@@ -4,7 +4,7 @@ describe('Drop Item Error Test', () => {
     cy.get('.output')
       .last()
       .invoke('text')
-      .should('match', /Please provide an item to drop. 📚/)
+      .should('match', /No item selected! 🚫/)
   })
 
   it('should display an error message when dropping an item selecting an empty spaces as item', () => {
@@ -12,7 +12,7 @@ describe('Drop Item Error Test', () => {
     cy.get('.output')
       .last()
       .invoke('text')
-      .should('match', /Please provide an item to drop. 📚/)
+      .should('match', /No item selected! 🚫/)
   })
 
   it('should display an error message when dropping a nonexistence item', () => {
@@ -20,7 +20,7 @@ describe('Drop Item Error Test', () => {
     cy.get('.output')
       .last()
       .invoke('text')
-      .should('match', /This item does not exist. Please try again. 🔄/)
+      .should('match', /Item not found. Please try again. 🔄/)
   })
 
   it('should display an error message when dropping an item that is not in the inventory', () => {
@@ -66,5 +66,53 @@ describe('Drop Item Test', () => {
       .last()
       .invoke('text')
       .should('not.match', /amulet/)
+  })
+
+  it('should successfully drop a piece of paper in another room', () => {
+    cy.solveLockpad()
+    cy.get('input').type('take paper{enter}')
+    cy.get('input').type('go basement one{enter}')
+    cy.get('input').type('drop paper{enter}')
+    cy.get('.output')
+      .last()
+      .invoke('text')
+      .should('match', /You dropped the paper. 📚/)
+    cy.get('input').type('look{enter}')
+    cy.get('.output').eq(-3).invoke('text').should('match', /paper/)
+  })
+
+  it('should successfully drop more than one item', () => {
+    cy.solveLockpad()
+    cy.get('input').type('take paper{enter}')
+    cy.get('input').type('take amulet{enter}')
+    cy.get('input').type('drop paper{enter}')
+    cy.get('input').type('drop amulet{enter}')
+    cy.get('.output')
+      .eq(-2)
+      .invoke('text')
+      .should('match', /You dropped the amulet. 📚/)
+
+    cy.get('.output')
+      .last()
+      .invoke('text')
+      .should('match', /You dropped the paper. 📚/)
+  })
+
+  it('should drop ornate key in the room', () => {
+    cy.solveLockpad()
+    cy.get('input').type('go basement one{enter}')
+    cy.get('input').type('go church{enter}')
+    cy.get('input').type('go outside{enter}')
+    cy.get('input').type('take ornate key{enter}')
+    cy.get('input').type('drop ornate key{enter}')
+    cy.get('.output')
+      .last()
+      .invoke('text')
+      .should('match', /You dropped the ornate key. 📚/)
+    cy.get('input').type('look{enter}')
+    cy.get('.output')
+      .eq(-3)
+      .invoke('text')
+      .should('match', /ornate key/)
   })
 })
