@@ -12,15 +12,13 @@
 // You can read more here:
 // https://on.cypress.io/configuration
 // ***********************************************************
+import 'cypress-runner-themes'
 
 // Import commands.js using ES2015 syntax:
+// Alternatively you can use CommonJS syntax:
+// require('./commands')
 import './commands'
+
 beforeEach(() => {
   cy.visit('http://localhost:5500')
 })
-
-afterEach(() => {
-  cy.reload()
-})
-// Alternatively you can use CommonJS syntax:
-// require('./commands')

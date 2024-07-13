@@ -1,5 +1,4 @@
-const {EmptyInventory} = require('../errors/itemErrors')
-const {print} = require('../helpers/print')
+const {validateInventory} = require('../validation/validateInventory')
 
 function showPlayerInventory(player) {
   try {
@@ -10,13 +9,4 @@ function showPlayerInventory(player) {
   }
 }
 
-function validateInventory(player) {
-  if (!hasItem(player.inventory)) {
-    throw new EmptyInventory('You inventory is empty')
-  }
-}
-
-function hasItem(inventory) {
-  return inventory.length > 0
-}
 exports.showPlayerInventory = showPlayerInventory

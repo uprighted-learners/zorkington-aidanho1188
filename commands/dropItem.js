@@ -1,29 +1,23 @@
-const {itemNameLookUp} = require("../helpers/lookUps");
-const {addItemToRoom} = require("../helpers/roomItems");
-const {removeItemFromPlayer} = require("../helpers/removeItemFromPlayer");
-const {ItemDoesntExist, PlayerDoesntHaveItem} = require("../errors/itemErrors");
-const {checkItemExist} = require("../helpers/checkItemExist");
+const {itemNameLookUp} = require('../helpers/lookUps')
+const {addItemToRoom} = require('../helpers/roomItems')
+const {removeItemFromPlayer} = require('../helpers/removeItemFromPlayer')
+const {ItemDoesntExist, PlayerDoesntHaveItem, NoItemSelected} = require('../errors/itemErrors')
+const {validateItem} = require('../helpers/validateItem')
+const {getObjectName} = require('../helpers/getFunctions')
+const {validateDrop} = require('../validation/validateDrop')
+const {itemLookUp} = require('../helpers/itemsLookUp')
 
 function drop(player, item) {
+  item = getObjectName(item, itemNameLookUp)
   try {
-    validateDrop(player, item);
-    removeItemFromPlayer(player, item);
-    addItemToRoom(player.location, itemNameLookUp[item][0]);
+    validateDrop(player, item)
+    removeItemFromPlayer(player, item)
+    let itemName = itemLookUp[item].name
+    addItemToRoom(player.location, itemName)
+    return `You dropped the ${itemName}. 📚`
   } catch (error) {
-    throw error;
+    throw error
   }
 }
 
-function validateDrop(player, item) {
-  if (!checkItemExist(item)) {
-    throw new ItemDoesntExist("This item does not exist.");
-  }
-  if (!hasItem(player, item)) {
-    throw new PlayerDoesntHaveItem("You don't have this item to drop!");
-  }
-}
-
-function hasItem(player, item) {
-  return [...player.inventory].includes(item);
-}
-exports.drop = drop;
+exports.drop = drop
