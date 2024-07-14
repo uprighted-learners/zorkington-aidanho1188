@@ -25,4 +25,12 @@ class NotUnlockedError extends Error {
     this.name = 'NotUnlockedError'
   }
 }
-module.exports = {NoRoomSelected, RoomDoesntExistError, MoveRoomError, NotUnlockedError}
+
+class InvalidLocation extends Error {
+  constructor(message) {
+    super(message)
+    this.name = 'InvalidLocation'
+  }
+}
+
+module.exports = {NoRoomSelected, RoomDoesntExistError, MoveRoomError, NotUnlockedError, InvalidLocation}

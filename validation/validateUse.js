@@ -1,22 +1,23 @@
 const {ItemDoesntExist, PlayerDoesntHaveItem, ItemIsUnusable, NoItemSelected} = require('../errors/itemErrors')
-const {validateItem} = require('../helpers/validateItem')
+const {InvalidLocation} = require('../errors/roomErrors')
 const {itemLookUp} = require('../helpers/itemsLookUp')
+const {validateItem} = require('../helpers/validateItem')
+const {playerHasItem} = require('../helpers/playerHasItem')
 
-function validateUse(player, item, puzzle) {
+function validateUse(player, item, puzzle = null) {
   validateItem(item)
   if (!playerHasItem(player, item)) {
-    throw new PlayerDoesntHaveItem(`Player doesn't have this item (${item}).`)
+    throw new PlayerDoesntHaveItem(`You don't have access to this item. 🚫`)
   }
-  if (!usuable(puzzle, item)) {
-    throw new ItemIsUnusable("You can't use this item here.")
+  if (!puzzle) {
+    throw new InvalidLocation("You can't use this item here. 🔄")
+  }
+  if (!isUsable(puzzle, item)) {
+    throw new ItemIsUnusable("You can't use this item here. 🔄")
   }
 }
 
-function playerHasItem(player, item) {
-  return [...player.inventory].includes(item)
-}
-
-function usuable(puzzle, item) {
+function isUsable(puzzle, item) {
   item = itemLookUp[item]
   return item.puzzleCode === puzzle.answer
 }
