@@ -67,13 +67,10 @@ async function playAgain() {
   if (answer.toLowerCase() === 'yes') {
     printOutput("Great! Let's play again! 🎮")
     printOutput('Game restarting...')
-    document.getElementById('input').disabled = true
-
     setTimeout(() => {
       window.location.href = '/'
     }, 3000)
   } else {
-    document.getElementById('input').disabled = true
     return printOutput('Thank you for playing! 🎉')
   }
 }
