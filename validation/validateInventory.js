@@ -2,7 +2,7 @@ const {EmptyInventory} = require('../errors/itemErrors')
 
 function validateInventory(player) {
   if (!hasItem(player.inventory)) {
-    throw new EmptyInventory('You inventory is empty')
+    throw new EmptyInventory('Your inventory is empty.')
   }
 }
 

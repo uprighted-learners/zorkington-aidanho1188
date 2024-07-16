@@ -1,5 +1,6 @@
 function displayRoom(room) {
   // TODO: return an array of strings is better than a single string
-  return `Room name: ${room.name} \b Available items: ${room.inventory}`
+  let roomInventory = room.inventory.join(', ')
+  return `Room name: ${room.name} \b Available items: ${roomInventory}`
 }
 exports.displayRoom = displayRoom

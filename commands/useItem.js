@@ -1,18 +1,23 @@
 const {puzzleLookup} = require('../helpers/puzzlesLookup')
-const {itemLookUp} = require('../helpers/itemsLookUp')
 const {ItemDoesntExist, PlayerDoesntHaveItem, ItemIsUnusable, NoItemSelected} = require('../errors/itemErrors')
 const {setPuzzleIsSolved} = require('../helpers/setPuzzleIsSolved')
 const {print} = require('../helpers/print')
 const {movePlayer} = require('../helpers/movePlayer')
-const {ask} = require('../helpers/prompt')
 const {validateItem} = require('../helpers/validateItem')
 const {removeItemFromPlayer} = require('../helpers/removeItemFromPlayer')
+const {getObjectName} = require('../helpers/getFunctions')
+const {itemNameLookUp} = require('../helpers/lookUps')
+const {itemLookUp} = require('../helpers/itemsLookUp')
+const {validateUse} = require('../validation/validateUse')
+const {printOutput} = require('../helpers/printOutput')
+const {promptInput} = require('../helpers/displayPuzzle')
 
 async function use(player, item, targetedRoom) {
   let puzzle = puzzleLookup[targetedRoom]
+  item = getObjectName(item, itemNameLookUp)
   try {
     if (verifyLastPuzzle(puzzle, item)) {
-      print('You burned the magical paper')
+      printOutput('You burned the magical paper')
       removeItemFromPlayer(player, item)
       return await promptForLastPuzzle(puzzle)
     }
@@ -22,25 +27,6 @@ async function use(player, item, targetedRoom) {
   } catch (error) {
     return error.message
   }
-}
-
-function validateUse(player, item, puzzle) {
-  validateItem(item)
-  if (!playerHasItem(player, item)) {
-    throw new PlayerDoesntHaveItem(`Player doesn't have this item (${item}).`)
-  }
-  if (!usuable(puzzle, item)) {
-    throw new ItemIsUnusable("You can't use this item here.")
-  }
-}
-
-function playerHasItem(player, item) {
-  return [...player.inventory].includes(item)
-}
-
-function usuable(puzzle, item) {
-  item = itemLookUp[item]
-  return item.puzzleCode === puzzle.answer
 }
 
 function verifyLastPuzzle(puzzle, item) {
@@ -53,13 +39,16 @@ function verifyLastPuzzle(puzzle, item) {
 }
 
 async function promptForLastPuzzle(puzzle) {
-  let answer = await ask('Now you must recite the ancient incantation: ')
-  if (puzzle.answer === answer) {
-    return puzzle.solvedMessage
+  let answer = await promptInput('Now you must recite the ancient incantation: ')
+  printOutput(`> ${answer}`)
+  if (answer === puzzle.answer) {
+    printOutput(puzzle.solvedMessage)
   } else {
-    return puzzle.wrongAnswer
+    printOutput(puzzle.wrongAnswer)
+    printOutput('Game over. You have been enveloped by a malevolent force. 😱')
   }
-  return process.exit()
+  document.getElementById('input').value = ''
+  return 'endGame!'
 }
 
 exports.use = use

@@ -28,9 +28,9 @@ describe('Basic Input/Output Test', () => {
   })
 
   it('should display a goodbye message', () => {
-    cy.get('input').type('exit{enter}')
+    cy.get('input').type('exit game{enter}')
     cy.get('.output')
-      .last()
+      .eq(-2)
       .invoke('text')
       .should('match', /Goodbye!/)
   })

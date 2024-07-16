@@ -6,7 +6,7 @@ function validateLook(room, args) {
     throw new RoomDoesntExistError('Room does not exist.')
   }
   if (args) {
-    throw new invalidArgs('I can\'t look at this, please try with just "look".')
+    throw new invalidArgs('Please try with just "look". 🔄')
   }
 }
 

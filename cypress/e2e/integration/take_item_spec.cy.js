@@ -68,7 +68,7 @@ describe('Take Item Test', () => {
     cy.get('.output')
       .last()
       .invoke('text')
-      .should('match', /You took the key. 📚/)
+      .should('match', /You took the ornate key. 📚/)
   })
 
   it('should display a success message when taking an item with a short name', () => {
@@ -78,7 +78,7 @@ describe('Take Item Test', () => {
     cy.get('.output')
       .last()
       .invoke('text')
-      .should('match', /You took the key. 📚/)
+      .should('match', /You took the ornate key. 📚/)
   })
 
   it('should display a success message when taking the amulet', () => {
@@ -88,7 +88,7 @@ describe('Take Item Test', () => {
     cy.get('.output')
       .last()
       .invoke('text')
-      .should('match', /You took the amulet. 📚/)
+      .should('match', /You took the shadow amulet. 📚/)
   })
 
   it('should take the amulet and display the amulet in the inventory', () => {

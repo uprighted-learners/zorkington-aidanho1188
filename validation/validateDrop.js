@@ -4,16 +4,13 @@ const {removeItemFromPlayer} = require('../helpers/removeItemFromPlayer')
 const {ItemDoesntExist, PlayerDoesntHaveItem, NoItemSelected} = require('../errors/itemErrors')
 const {validateItem} = require('../helpers/validateItem')
 const {getObjectName} = require('../helpers/getFunctions')
+const {playerHasItem} = require('../helpers/playerHasItem')
 
 function validateDrop(player, item) {
   validateItem(item)
-  if (!hasItem(player, item)) {
+  if (!playerHasItem(player, item)) {
     throw new PlayerDoesntHaveItem("You can't drop this item! It doesn't exist in your inventory. 🔄")
   }
-}
-
-function hasItem(player, item) {
-  return [...player.inventory].includes(item)
 }
 
 module.exports = {validateDrop}

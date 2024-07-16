@@ -1,0 +1,67 @@
+describe('Show Inventory Test', () => {
+  it('should display an inventory when use i command', () => {
+    cy.get('input').type('i{enter}')
+    cy.get('.output')
+      .last()
+      .invoke('text')
+      .should('match', /Your inventory is empty./)
+  })
+
+  it('should display an empty inventory', () => {
+    cy.get('input').type('inventory{enter}')
+    cy.get('.output')
+      .last()
+      .invoke('text')
+      .should('match', /Your inventory is empty./)
+  })
+
+  it('should display inventory with an item after pickup', () => {
+    cy.solveLockpad()
+    cy.get('input').type('take paper{enter}')
+    cy.get('input').type('inventory{enter}')
+    cy.get('.output')
+      .last()
+      .invoke('text')
+      .should('match', /You are carrying: paper/)
+  })
+
+  it('should display an inventory with multiple items', () => {
+    cy.solveLockpad()
+    cy.get('input').type('take paper{enter}')
+    cy.get('input').type('go basement one{enter}')
+    cy.get('input').type('take key{enter}')
+    cy.get('input').type('inventory{enter}')
+    cy.get('.output')
+      .last()
+      .invoke('text')
+      .should('match', /You are carrying: paper, ornate key/)
+  })
+
+  it('should display an empty inventory after dropping all items', () => {
+    cy.solveLockpad()
+    cy.get('input').type('take paper{enter}')
+    cy.get('input').type('go basement one{enter}')
+    cy.get('input').type('take key{enter}')
+    cy.get('input').type('drop paper{enter}')
+    cy.get('input').type('drop key{enter}')
+    cy.get('input').type('inventory{enter}')
+    cy.get('.output')
+      .last()
+      .invoke('text')
+      .should('match', /Your inventory is empty./)
+  })
+
+  it('should display an inventory with items after a puzzle', () => {
+    cy.solveLockpad()
+    cy.get('input').type('go basement one{enter}')
+    cy.get('input').type('take key{enter}')
+    cy.get('input').type('go church{enter}')
+    cy.get('input').type('open door{enter}')
+    cy.get('input').type('use key{enter}')
+    cy.get('input').type('i{enter}')
+    cy.get('.output')
+      .last()
+      .invoke('text')
+      .should('match', /You are carrying: ornate key/)
+  })
+})
