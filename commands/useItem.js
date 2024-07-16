@@ -10,6 +10,7 @@ const {itemNameLookUp} = require('../helpers/lookUps')
 const {itemLookUp} = require('../helpers/itemsLookUp')
 const {validateUse} = require('../validation/validateUse')
 const {printOutput} = require('../helpers/printOutput')
+const {promptInput} = require('../helpers/displayPuzzle')
 
 async function use(player, item, targetedRoom) {
   let puzzle = puzzleLookup[targetedRoom]
@@ -38,13 +39,16 @@ function verifyLastPuzzle(puzzle, item) {
 }
 
 async function promptForLastPuzzle(puzzle) {
-  let answer = await ask('Now you must recite the ancient incantation: ')
-  if (puzzle.answer === answer) {
-    return puzzle.solvedMessage
+  let answer = await promptInput('Now you must recite the ancient incantation: ')
+  printOutput(`> ${answer}`)
+  if (answer === puzzle.answer) {
+    printOutput(puzzle.solvedMessage)
   } else {
-    return puzzle.wrongAnswer
+    printOutput(puzzle.wrongAnswer)
+    printOutput('Game over. You have been enveloped by a malevolent force. 😱')
   }
-  return process.exit()
+  document.getElementById('input').value = ''
+  return 'endGame!'
 }
 
 exports.use = use

@@ -13,11 +13,11 @@ export const locationState = {
 export const roomNameLookup = {
   room0: ['street', 'outside'],
   room1: ['church'],
-  room2: ['floor1', 'floor one', 'first floor', 'grand door', 'door', 'Grand door', 'granddoor', 'floor 1', 'Floor one'],
-  room3: ['floor2', 'floor two', 'second floor', 'floor 2', 'Floor two'],
-  room4: ['basement1', 'basement 1', 'basement one', 'first basement', 'Basement one'],
-  room5: ['basement2', 'basement 2', 'basement two', 'second basement', 'Basement two', 'passage', 'hidden passage', 'Hidden passage'],
-  room6: ['basement3', 'basement 3', 'basement three', 'altar', 'Altar'],
+  room2: ['floor one', 'Floor one', 'floor1', 'first floor', 'grand door', 'door', 'Grand door', 'granddoor', 'floor 1'],
+  room3: ['floor two', 'Floor two', 'floor2', 'second floor', 'floor 2'],
+  room4: ['basement one', 'basement1', 'basement 1', 'first basement', 'Basement one'],
+  room5: ['basement two', 'basement2', 'basement 2', 'Basement two', 'second basement', 'passage', 'hidden passage', 'Hidden passage'],
+  room6: ['portal', 'Portal', 'basement3', 'basement 3', 'basement three', 'altar', 'Altar'],
 }
 // exports.roomNameLookup = roomNameLookup
 
