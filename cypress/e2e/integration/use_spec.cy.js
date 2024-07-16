@@ -75,6 +75,7 @@ describe('Use Item Test', () => {
 
   it('should open the portal with the magical artifact', () => {
     cy.solveLockpad()
+    cy.get('input').type('take paper{enter}')
     cy.get('input').type('go basement one{enter}')
     cy.solveHiddenPassage()
     cy.get('input').type('go altar{enter}')

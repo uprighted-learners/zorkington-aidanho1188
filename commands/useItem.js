@@ -11,15 +11,24 @@ const {itemLookUp} = require('../helpers/itemsLookUp')
 const {validateUse} = require('../validation/validateUse')
 const {printOutput} = require('../helpers/printOutput')
 const {promptInput} = require('../helpers/displayPuzzle')
+const {playerHasItem} = require('../helpers/playerHasItem')
 
 async function use(player, item, targetedRoom) {
+  console.log('use item:', item)
   let puzzle = puzzleLookup[targetedRoom]
   item = getObjectName(item, itemNameLookUp)
   try {
+    console.log('item:', item)
+    console.log('inventory:', playerHasItem(player, item))
     if (verifyLastPuzzle(puzzle, item)) {
-      printOutput('You burned the magical paper')
-      removeItemFromPlayer(player, item)
-      return await promptForLastPuzzle(puzzle)
+      if (playerHasItem(player, item)) {
+        printOutput('You burned the magical paper')
+        removeItemFromPlayer(player, item)
+        return await promptForLastPuzzle(puzzle)
+      } else {
+        printOutput('You do not have the paper to burn. 🔥')
+        return false
+      }
     }
     validateUse(player, item, puzzle)
     setPuzzleIsSolved(puzzle, targetedRoom)
