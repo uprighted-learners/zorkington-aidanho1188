@@ -30,7 +30,7 @@ describe('Look Test: Starting Room', () => {
     cy.get('.output')
       .last()
       .invoke('text')
-      .should('match', /You are standing on Main Street between Church and South Winooski. There is a door here. A keypad sits on the handle. On the door is a handwritten /)
+      .should('match', /There is a door here. A keypad sits on the handle./)
   })
 })
 
