@@ -44,3 +44,8 @@ Cypress.Commands.add('solveOldAltar', () => {
   cy.get('input').type('go altar{enter}')
   cy.get('input').type('In shadows bound, secrets unchain. Speak the words to unveil the path.{enter}')
 })
+
+// ? start game
+Cypress.Commands.add('start', () => {
+  cy.get('input').type('start{enter}')
+})

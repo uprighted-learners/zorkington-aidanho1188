@@ -1,8 +1,8 @@
 const roomsList = [
   {
     name: 'Main Street',
-    description1: '182 Main St \nYou are standing on Main Street between Church and South Winooski.',
-    description2: 'There is a door here. A keypad sits on the handle. \nOn the door is a handwritten "sign".',
+    description1: '182 Main St \nYou are standing on Main Street between Church and South Winooski.\n',
+    description2: '(Church): There is a door here. A keypad sits on the handle. \nOn the door is a handwritten <i>sign</i>.',
     inventory: ['sign'],
     isUnlocked: true,
   },

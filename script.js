@@ -24,8 +24,9 @@ window.IS_PUZZLE = false
 
 document.addEventListener('DOMContentLoaded', function () {
   const input = document.getElementById('input')
+  let startExecuted = false
   // print welcome message
-  printOutput('Welcome to Zorkington!')
+  startGame()
 
   input.addEventListener('keydown', function (event) {
     if (event.key === 'Enter' && !IS_PUZZLE) {
@@ -37,10 +38,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
   async function executeCommand(command) {
     let result
+    let lowerCaseCommand = command.toLowerCase()
     printOutput(`> ${command}`)
-    switch (command.toLowerCase()) {
+    if (!startExecuted && lowerCaseCommand !== 'start' && lowerCaseCommand !== 'help') {
+      printOutput('Please start the game using the "start" command.')
+      return
+    }
+    switch (lowerCaseCommand) {
       case 'start':
-        result = 'Starting the game...'
+        if (!startExecuted) {
+          result = await handleUserCommand(player, 'look')
+          startExecuted = true
+        } else {
+          result = 'The game has already started.'
+        }
         break
       case 'help':
         result = 'Available commands: start, help, about, go, i, look, read, open, burn, drop, use, exit game'
@@ -50,12 +61,10 @@ document.addEventListener('DOMContentLoaded', function () {
         break
       case 'exit game':
         result = 'Goodbye!'
-        // document.getElementById('input').disabled = true
         printOutput(result)
         printOutput('You will be redirected to the home page in 5 seconds...')
-        setTimeout(() => {
-          window.location.href = '/'
-        }, 5000)
+        await disableInputTemporarily(input, 5000)
+        window.location.href = './'
         return
       default:
         result = await handleUserCommand(player, command)
@@ -66,3 +75,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 })
+
+async function disableInputTemporarily(input, time) {
+  input.disabled = true
+  await new Promise((resolve) => setTimeout(resolve, time))
+  input.disabled = false
+}
+
+function startGame() {
+  printOutput('Welcome to Zorkington!')
+  printOutput('Type "help" for a list of commands.')
+  printOutput('Type "start" to begin the game.')
+}
