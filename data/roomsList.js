@@ -24,7 +24,7 @@ const roomsList = [
   {
     name: 'Floor Two',
     description1: 'As you ascend the staircases, you find yourself on the second floor, a place steeped in mystery and ancient secrets. The air is thick with the scent of old books and the soft glow of mystical runes illuminates the walls.',
-    description2: "You notice a writing of cryptic phrases repeating on the walls: '<i>In shadows bound, secrets unchain. Speak the words to unveil the path.</i>' The building seems to respond to these arcane words.",
+    description2: "You notice a writing of cryptic phrases repeating on the walls: '<i>In shadows bound, secrets unchain. In darkness found, the path remains.</i>' The building seems to respond to these arcane words.",
     inventory: [''],
     isUnlocked: true,
   },
